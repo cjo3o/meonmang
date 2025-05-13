@@ -1,3 +1,14 @@
 .Content {
     background-color: #ccc;
+    overflow: hidden;
+}
+
+.contentBox {
+    width: 80%;
+    margin: 4rem auto;
+}
+
+.content1 {
+    display: flex;
+    gap: 2rem;
 }
