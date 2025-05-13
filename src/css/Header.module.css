@@ -1,19 +1,23 @@
 .Header {
     display: flex;
-    background-color: #ccc;
+    background-color: #fff;
     color: #000;
     justify-content: center;
+    gap: 2rem;
 }
 
 .nav {
     display: flex;
-    gap: 1rem;
-    background-color: red;
-    margin: 1rem;
+    gap: 5rem;
+    margin: 1.5rem;
+}
+
+.nav > img {
+    cursor: pointer;
 }
 
 .nav > h3 {
-    background-color: skyblue;
-    padding: 0.5rem;
+    padding: 1rem 1.5rem;
     cursor: pointer;
+    align-content: center;
 }

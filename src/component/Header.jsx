@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {Layout} from "antd";
 import styles from '/src/css/Header.module.css';
 import logo from '/src/images/Logo.svg';
 function Header(props) {
@@ -7,7 +6,7 @@ function Header(props) {
         <>
             <div className={styles.Header}>
                 <div className={styles.nav}>
-                    {/*<img src={logo} alt="logo" />*/}
+                    <img src={logo} alt="logo" width={"180px"}/>
                     <h3>먼망진창 소개</h3>
                     <h3>대기 정보</h3>
                     <h3>대기오염 알림</h3>
