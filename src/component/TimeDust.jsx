@@ -7,14 +7,17 @@ function TimeDust(props) {
             <Card
                 style={{width: '85%'}}
                 title="시간별 미세먼지 예보"
-                bordered={false}
-                headStyle={{
-                    backgroundColor: '#67D8F3',
-                    color: '#fff',
-                    textAlign: 'center',
-                    fontSize: '1.5rem',
-                    fontWeight: 'normal',
-                }}>
+                variant="borderless"
+                styles={{
+                    header: {
+                        backgroundColor: '#67D8F3',
+                        color: '#fff',
+                        textAlign: 'center',
+                        fontSize: '1.5rem',
+                        fontWeight: 'normal',
+                    }
+                }}
+            >
                 ㅇㅇㅇㅇ
             </Card>
         </>

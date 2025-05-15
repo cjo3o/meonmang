@@ -9,13 +9,15 @@ function Map(props) {
                     width: '50%',
                 }}
                 title="실시간 대기정보"
-                bordered={false}
-                headStyle={{
-                    backgroundColor: '#67D8F3',
-                    color: '#fff',
-                    textAlign: 'center',
-                    fontSize: '1.5rem',
-                    fontWeight: 'normal',
+                variant="borderless"
+                styles={{
+                    header: {
+                        backgroundColor: '#67D8F3',
+                        color: '#fff',
+                        textAlign: 'center',
+                        fontSize: '1.5rem',
+                        fontWeight: 'normal',
+                    }
                 }}
             >
                 dd
