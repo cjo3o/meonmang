@@ -1,11 +1,11 @@
 import React from 'react';
 import {Card} from "antd";
-
+import styles from "/src/css/TimeDust.module.css";
 function TimeDust(props) {
     return (
         <>
             <Card
-                style={{width: '85%'}}
+                className={styles.tdCard}
                 title="시간별 미세먼지 예보"
                 variant="borderless"
                 styles={{

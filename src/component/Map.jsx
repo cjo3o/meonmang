@@ -1,14 +1,18 @@
 import React from 'react';
 import {Card} from "antd";
+import styles from "/src/css/Map.module.css";
 
 function Map(props) {
     return (
         <>
             <Card
-                style={{
-                    width: '50%',
-                }}
-                title="실시간 대기정보"
+                className={styles.mapCard}
+                title={
+                    <div>
+                        <div>실시간 대기정보</div>
+                        <div>오늘/내일 대기정보</div>
+                    </div>
+                }
                 variant="borderless"
                 styles={{
                     header: {

@@ -6,20 +6,35 @@
     gap: 2rem;
 }
 
+.Logo {
+    align-self: center;
+}
+
 .nav {
-    width: 80%;
+    width: 40%;
     display: flex;
     justify-content: center;
-    gap: 5rem;
+    gap: 2rem;
     margin: 1.5rem;
 }
 
-.nav > img {
-    cursor: pointer;
-}
-
-.nav > h3 {
+.nav > ul {
+    display: flex;
+    list-style: none;
     padding: 1rem 1.5rem;
     cursor: pointer;
     align-content: center;
+}
+
+.kakao {
+    height: fit-content;
+    align-self: center;
+    color: #3C1E1E;
+    border-radius: 0.5rem;
+    transition: color 0.3s;
+}
+
+.nav > h3:last-child:hover {
+    color: #FAE100;
+    transition: color 0.3s;
 }
