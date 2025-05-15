@@ -1,0 +1,22 @@
+.Content {
+    background: linear-gradient(to bottom,#A7F7FF, #F3F3F3);
+    overflow: hidden;
+}
+
+.contentBox {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 70%;
+    margin: 4rem auto;
+}
+
+.content1 {
+    display: flex;
+    gap: 2rem;
+}
+
+.content2 {
+    display: flex;
+    gap: 2rem;
+}

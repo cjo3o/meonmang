@@ -1,14 +1,12 @@
 import React from 'react';
 import {Card} from "antd";
 
-function Map(props) {
+function TimeDust(props) {
     return (
         <>
             <Card
-                style={{
-                    width: '50%',
-                }}
-                title="실시간 대기정보"
+                style={{width: '85%'}}
+                title="시간별 미세먼지 예보"
                 bordered={false}
                 headStyle={{
                     backgroundColor: '#67D8F3',
@@ -16,12 +14,11 @@ function Map(props) {
                     textAlign: 'center',
                     fontSize: '1.5rem',
                     fontWeight: 'normal',
-                }}
-            >
-                dd
+                }}>
+                ㅇㅇㅇㅇ
             </Card>
         </>
     );
 }
 
-export default Map;
+export default TimeDust;
