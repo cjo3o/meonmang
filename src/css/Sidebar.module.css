@@ -9,6 +9,13 @@
     padding: 0.7rem;
     border-radius: 20px;
     cursor: pointer;
+    transition: all 0.3s;
+}
+
+.sidebar:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    transition: all 0.3s;
 }
 
 .sidebar > img {

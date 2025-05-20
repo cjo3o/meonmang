@@ -1,3 +1,32 @@
 .mapCard {
     width: 50%;
 }
+
+.mapTitle {
+    display: flex;
+    justify-content: space-around;
+    min-height: 56px;
+}
+
+.realTime {
+    flex: 1;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: #67d8f3;
+    text-align: center;
+    align-content: center;
+    font-size: 1.5rem;
+    font-weight: normal;
+    color: white;
+    cursor: pointer;
+}
+.dateInfor {
+    flex: 1;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: #fff;
+    text-align: center;
+    align-content: center;
+    font-size: 1.5rem;
+    font-weight: normal;
+    cursor: pointer;
+}
+
