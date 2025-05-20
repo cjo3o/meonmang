@@ -13,10 +13,12 @@
 
 .content1 {
     display: flex;
+    justify-content: center;
     gap: 2rem;
 }
 
 .content2 {
     display: flex;
+    justify-content: center;
     gap: 2rem;
 }
