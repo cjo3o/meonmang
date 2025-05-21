@@ -23,7 +23,74 @@
 }
 
 .active {
-    background-color: #67D8F3;
+    background-color: #006AB6;
     color: #fff;
     transition: all 0.3s;
 }
+
+.subTitle {
+    margin-top: 0.1rem;
+    padding: 0 0.5rem;
+    background-color: #67D8F3;
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.2rem;
+}
+
+/* MySelect.module.css */
+.roundSelect :global(.ant-select-selector) {
+    border-radius: 50px !important;
+    border: none !important;
+}
+
+.selectCity {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.subTitle > div > p {
+    font-size: 0.8rem;
+}
+
+.time {
+    background-color: #fff;
+    height: 2rem;
+    padding: 0 11px;
+    align-content: center;
+    border-radius: 50px;
+    font-weight: normal;
+}
+
+.selectDate {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #fff;
+    height: 2rem;
+    align-content: center;
+    border-radius: 50px;
+    font-weight: normal;
+    font-size: 14px;
+    padding: 0.3rem;
+}
+
+.today,
+.tomorrow {
+    width: 100%;
+    border-radius: 50px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.select {
+    background-color: #414d5d;
+    color: #fff;
+    transition: all 0.3s;
+}
+
