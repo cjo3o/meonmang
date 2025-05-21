@@ -1,25 +1,66 @@
 .Header {
-    display: flex;
-    background-color: #fff;
-    color: #000;
-    justify-content: center;
-    gap: 2rem;
+  background-color: #fff;
+  color: #000;
+}
+
+.headerContainer {
+  margin: 0 auto;
+  display: flex;
+  color: #000;
+  justify-content: space-between;
+  width: 70%;
+}
+
+.Logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .nav {
-    width: 80%;
-    display: flex;
-    justify-content: center;
-    gap: 5rem;
-    margin: 1.5rem;
+  align-content: center;
+  width: 50%;
 }
 
-.nav > img {
-    cursor: pointer;
+.nav > ul {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
 }
 
-.nav > h3 {
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    align-content: center;
+.nav > ul > li {
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 15px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.nav > ul > li > a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav > ul > li:hover {
+  background-color: #6effc3;
+  border-radius: 15px;
+  transition: background-color 0.3s;
+}
+
+.kakao {
+  align-content: center;
+}
+
+.kakao > h3 {
+  margin: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.kakao > h3:hover {
+  color: #fae100;
+  transition: all 0.3s;
 }

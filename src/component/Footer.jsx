@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '/src/css/Footer.module.css';
 import whiteLogo from '/src/images/WhiteLogo.svg';
 import Top from '/src/images/Top.svg';
+
 function Footer(props) {
     return (
         <>
