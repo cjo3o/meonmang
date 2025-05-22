@@ -1,0 +1,13 @@
+.itemColumn {
+  width: 7%;
+  text-align: center;
+}
+
+.centerAlign {
+  text-align: center;
+}
+
+.headerCenter {
+  text-align: center;
+  width: 100%;
+}
