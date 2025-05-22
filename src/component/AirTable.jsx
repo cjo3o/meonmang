@@ -1,8 +1,34 @@
 import { Table, ConfigProvider } from "antd";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ATable from "../css/AirTable.module.css";
+import axios from "axios";
 
 function AirTable() {
+  const [Datas, setDatas] = useState();
+  const getData = async () => {
+    const result = await axios.get(
+      "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=6MS6d4%2F7oderkazWnyA2%2B5XBYjmhv86nH%2F3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A%3D%3D&returnType=json&numOfRows=10000&pageNo=1&sidoName=전국&ver=1.4"
+    );
+    const { data, status } = result;
+
+    setDatas(data.response.body.items);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    if (Datas) {
+      console.log(Datas.map(item => item.stationName));
+    }
+  }, [Datas]);
+
+  const getGradeByCity = (stationName) => {
+    const cityData = Datas?.find((item) => item.stationName === stationName);
+    return cityData?.pm25Grade1h ?? "로딩 중";
+  };
+
   const dataSource = [
     {
       key: "1",
@@ -13,7 +39,10 @@ function AirTable() {
           (PM-2.5)
         </>
       ),
-      value: "좋음",
+      서울: getGradeByCity("종로구"),
+      인천: getGradeByCity("인천"),
+      경기북부: getGradeByCity("경기북부"),
+      경기남부: getGradeByCity("경기남부"),
     },
     {
       key: "2",
@@ -81,8 +110,8 @@ function AirTable() {
     },
     {
       title: <div className={ATable.headerCenter}>서울</div>,
-      dataIndex: "value",
-      key: "value",
+      dataIndex: "서울",
+      key: "서울",
       className: ATable.centerAlign,
     },
     {
