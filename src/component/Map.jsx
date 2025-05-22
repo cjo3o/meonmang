@@ -37,7 +37,11 @@ function Map(props) {
                     }
                 }}
             >
-                {activeTab === "realTime" ? <RealTimeMap/> : "오늘/내일 대기정보"}
+
+                    {
+                        activeTab === "realTime" ? <RealTimeMap/> : "오늘/내일 대기정보"
+                    }
+
             </Card>
         </>
     );
