@@ -1,8 +1,8 @@
 import {Card, Pagination} from "antd";
 import AlertStyle from "../../css/AirAlert.module.css";
-import React from "react";
 import AlertButton from "../../component/AlertButton.jsx";
 import AirAlertTable from "../../component/AirAlertTable.jsx";
+import React from "react";
 
 function AirAlert() {
     return (
@@ -22,7 +22,6 @@ function AirAlert() {
                         <div className={AlertStyle}>
                             <AirAlertTable/>
                         </div>
-                        <Pagination align="center" defaultCurrent={1} total={50}/>
                     </Card>
                 </div>
 
