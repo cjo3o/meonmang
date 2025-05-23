@@ -2,6 +2,7 @@ import React from 'react';
 import {Map, useKakaoLoader} from 'react-kakao-maps-sdk';
 import styles from '/src/css/Map.module.css';
 import DivideRegion from "./DivideRegion.jsx";
+import LeafletMap from "./LeafletMap.jsx";
 
 
 const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
@@ -15,15 +16,16 @@ function RealTimeMap() {
 
     return (
         <>
-            <Map className={styles.mapContainer}
-                 center={{lat: 35.9, lng: 127.5}}
-                 level={13}
-                 zoomable={false}
-                 draggable={false}
-                 disableDoubleClick={true}
-            >
-                <DivideRegion/>
-            </Map>
+            {/*<Map className={styles.mapContainer}*/}
+            {/*     center={{lat: 35.9, lng: 127.5}}*/}
+            {/*     level={13}*/}
+            {/*     zoomable={false}*/}
+            {/*     draggable={false}*/}
+            {/*     disableDoubleClick={true}*/}
+            {/*>*/}
+            {/*    <DivideRegion/>*/}
+            {/*</Map>*/}
+            <LeafletMap/>
         </>
     );
 }

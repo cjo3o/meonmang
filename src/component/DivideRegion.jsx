@@ -1,9 +1,11 @@
-import React, {useEffect} from 'react';
-import {useMap} from 'react-kakao-maps-sdk';
+import React, {useEffect, useState} from 'react';
+import {CustomOverlayMap, useMap} from 'react-kakao-maps-sdk';
 import regionData from '/RegionData.json';
 
 function DivideRegion() {
     const map = useMap();
+    const [region, setRegion] = useState(null);
+    const [overlayOpen, setOverlayOpen] = useState(false);
 
     useEffect(() => {
         if (!map || !regionData) return;
@@ -50,6 +52,7 @@ function DivideRegion() {
                     strokeWeight: 3,
                 })
                 map.getNode().style.cursor = 'pointer';
+                setRegion(name);
             });
             kakao.maps.event.addListener(polygon, 'mouseout', () => {
                 polygon.setOptions({
@@ -62,7 +65,13 @@ function DivideRegion() {
         });
     }, [map]);
 
-    return null;
+    return (
+        <>
+            <div>
+                {}
+            </div>
+        </>
+    );
 }
 
 export default DivideRegion;
