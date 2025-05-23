@@ -4,9 +4,16 @@ export const POLLUTANTS = [
   { key: "o3", label: "오존", sub: "O3", value: "o3Grade" },
   { key: "no2", label: "이산화질소", sub: "NO2", value: "no2Grade" },
   { key: "co", label: "일산화탄소", sub: "CO", value: "coGrade" },
-  { key: "so2", label: "아산화가스", sub: "SO2", value: "so2Grade" },
+  { key: "so2", label: "아산화가스", sub: "SO2", field: "so2Grade" },
   // field: "so2Grade"
 ];
+
+export const POLLUTANTS2 = [
+  { key: "pm10", label: "미세먼지", sub: "PM10", code: "PM10" },
+  { key: "pm25", label: "초미세먼지", sub: "PM2.5", code: "PM25" },
+  { key: "o3", label: "오존", sub: "O3", code: "O3" },
+];
+
 
 export const Grade = {
   1: { label: "좋음", bgColor: "#a2d8ff" },
@@ -14,6 +21,20 @@ export const Grade = {
   3: { label: "나쁨", bgColor: "#f9c97a" },
   4: { label: "매우나쁨", bgColor: "#f07c7c" },
 };
+
+// 등급별 색상 매핑
+export const Grade2 = {
+  "좋음": "#a2d8ff",
+  "보통": "#d2f29b",
+  "나쁨": "#f9c97a",
+  "매우나쁨": "#f07c7c",
+};
+
+export const inform = [
+  "PM10",
+  "PM25",
+  "O3"
+]
 
 export const Citys = [
   "서울",

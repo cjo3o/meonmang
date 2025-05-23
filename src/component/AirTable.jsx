@@ -11,7 +11,7 @@ function AirTable() {
     try {
       const requests = Citys.map((city) =>
         axios.get(
-          `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=6j4MG9vFqOJ24QdvW%2BQ1R5lChK83ym4k0UFBww6Kv%2FGKEmRsYrtwq%2FTnVYqpWX640SMT%2BQXrEdOTn2zFEzdC0g%3D%3D&returnType=json&numOfRows=100&pageNo=1&sidoName=${city}&ver=1.4`
+          // `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7%2FkDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ%3D%3D&returnType=json&numOfRows=100&pageNo=1&sidoName=${city}&ver=1.4`
         )
       );
 
