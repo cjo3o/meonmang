@@ -3,9 +3,14 @@ import {Table, Spin} from "antd";
 import axios from "axios";
 
 // 날짜와 시간을 조합하여 "YYYY-MM-DD HH:00" 형식으로 반환
-const formatDateTime = (date, time) => {
-    const hour = time.padStart(2, "0");
-    return `${date} ${hour}`;
+const formatDateTime = (date, time, isOzone = false) => {
+    if (!date || !time) return "-";
+    if (isOzone) {
+        const hour = String(time).padStart(2, "0");
+        return `${date} ${hour}:00`; // ex: "2025-05-14 14:00"
+    } else {
+        return `${date} ${time}`; // ex: "2025-04-24 23:00"
+    }
 };
 
 // 오존 경보 단계 숫자 → 문자열 매핑
@@ -32,27 +37,27 @@ const AirAlertTable = () => {
         const  fetchAllAlerts = async () => {
             setLoading(true);
             try {
-                // 초/미세먼지 API
+                // 초미세/미세먼지 API
                 const pmRes = await axios.get(
                     "http://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo",
                     {
                         params: {
                             serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
                             returnType: "json",
-                            numOfRows: pageSize,
-                            pageNo: currentPage,
+                            numOfRows: 1000,
+                            pageNo: 1,
+                            year: 2025,
                         },
                     }
                 );
-                console.log(pmRes);
                 const pmItems = pmRes.data.response.body.items.map((item, index) => ({
                     key: `pm-${index}`,
                     지역: item.districtName,
                     권역: item.moveName,
                     항목: item.itemCode,
                     경보단계: item.issueGbn,
-                    발령시간: formatDateTime(item.issueDate, item.issueTime),
-                    해제시간: formatDateTime(item.clearDate, item.clearTime),
+                    발령시간: formatDateTime(item.issueDate, item.issueTime, false),
+                    해제시간: formatDateTime(item.clearDate, item.clearTime, false),
                 }));
 
                 // 오존 API
@@ -62,24 +67,25 @@ const AirAlertTable = () => {
                         params: {
                             serviceKey: "6j4MG9vFqOJ24QdvW+Q1R5lChK83ym4k0UFBww6Kv/GKEmRsYrtwq/TnVYqpWX640SMT+QXrEdOTn2zFEzdC0g==",
                             returnType: "json",
-                            numOfRows: pageSize,
-                            pageNo: currentPage,
+                            numOfRows: 1000,
+                            pageNo: 1,
                         },
                     }
                 );
-                const ozoneItems = ozoneRes.data.response.body.items.map((item, index) => ({
+                const ozoneItems = (ozoneRes.data.response.body.items ?? []).map((item, index) => ({
                     key: `ozone-${index}`,
                     지역: item.districtName,
                     권역: item.moveName,
                     항목: "O3",
                     경보단계: mapOzoneLevel(item.issueLvl),
-                    발령시간: formatDateTime(item.dataDate, item.issueTime),
-                    해제시간: formatDateTime(item.dataDate, item.clearTime),
+                    발령시간: formatDateTime(item.dataDate || item.issueDate, item.issueTime, true),
+                    해제시간: formatDateTime(item.dataDate || item.clearDate, item.clearTime, true),
                 }));
 
                 // 병합 → 발령시간 내림차순 정렬 → 번호 부여
-                const combined = [...pmItems, ...ozoneItems];
-                combined.sort((a, b) => new Date(b.발령시간) - new Date(a.발령시간));
+                const combined = [...pmItems, ...ozoneItems]
+                    .filter(item => item.발령시간.startsWith("2025"))
+                    .sort((a, b) => new Date(b.발령시간) - new Date(a.발령시간));
                 const numbered = combined.map((item, index) => ({ ...item, 번호: index + 1 }));
 
                 setData(numbered);
@@ -116,8 +122,6 @@ const AirAlertTable = () => {
                 total: data.length,
                 onChange: (page) => setCurrentPage(page),
                 showSizeChanger: false,
-                showLessItems: false,
-                responsive: true,
             }}
         />
     );
