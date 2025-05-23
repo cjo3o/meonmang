@@ -44,6 +44,7 @@ const AirAlertTable = () => {
                         },
                     }
                 );
+                console.log(pmRes);
                 const pmItems = pmRes.data.response.body.items.map((item, index) => ({
                     key: `pm-${index}`,
                     지역: item.districtName,
@@ -59,7 +60,7 @@ const AirAlertTable = () => {
                     "http://apis.data.go.kr/B552584/OzYlwsndOccrrncInforInqireSvc/getOzAdvsryOccrrncInfo",
                     {
                         params: {
-                            serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+                            serviceKey: "6j4MG9vFqOJ24QdvW+Q1R5lChK83ym4k0UFBww6Kv/GKEmRsYrtwq/TnVYqpWX640SMT+QXrEdOTn2zFEzdC0g==",
                             returnType: "json",
                             numOfRows: pageSize,
                             pageNo: currentPage,
