@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { CustomOverlayMap, MapMarker, useMap } from 'react-kakao-maps-sdk';
+import React, {useEffect, useState} from 'react';
+import {CustomOverlayMap, MapMarker, useMap} from 'react-kakao-maps-sdk';
 import regionData from '/RegionData.json';
 import regionCenters from './regionCenters.js';
 import styles from '/src/css/Map.module.css';
+import axios from 'axios';
+
+const AVR_URL = import.meta.env.VITE_AVR_URL;
+const AVR_KEY = import.meta.env.VITE_AVR_KEY;
+
 
 function DivideRegion() {
     const map = useMap();
     const [openOverlay, setOpenOverlay] = useState(null);
+    const [sidoAvr, setSidoAvr] = useState([]);
 
     // 마커 클릭 핸들러
     const handleMarkerClick = (name) => {
@@ -16,6 +22,17 @@ function DivideRegion() {
     // 지도 클릭 시 오버레이 닫기
     useEffect(() => {
         if (!map) return;
+
+        const fetchAvrData = async () => {
+            try {
+                const {data} = await axios.get(`${AVR_URL}?returnType=json&numOfRows=25&pageNo=1&itemCode=PM10&dataGubun=HOUR&serviceKey=${AVR_KEY}`);
+                console.log(data.response.body.items);
+                setSidoAvr(data.response.body.items);
+            } catch (err) {
+                console.log("API 호출 오류", err);
+            }
+        };
+        fetchAvrData();
 
         const handleMapClick = () => {
             setOpenOverlay(null);
@@ -28,12 +45,14 @@ function DivideRegion() {
         };
     }, [map]);
 
+    console.log(sidoAvr);
+
     // 폴리곤 렌더링
     useEffect(() => {
         if (!map || !regionData) return;
 
         regionData.features.forEach((feature) => {
-            const { coordinates, type } = feature.geometry;
+            const {coordinates, type} = feature.geometry;
             const name = feature.properties.CTP_KOR_NM;
 
             const paths = [];
@@ -91,13 +110,42 @@ function DivideRegion() {
             {regionCenters.map((marker) => (
                 <div key={marker.name}>
                     <MapMarker
-                        position={{ lat: marker.center[0], lng: marker.center[1] }}
+                        position={{lat: marker.center[0], lng: marker.center[1]}}
                         onClick={() => handleMarkerClick(marker.name)}
                     />
                     {openOverlay === marker.name && (
-                        <CustomOverlayMap position={{ lat: marker.center[0], lng: marker.center[1] }}>
+                        <CustomOverlayMap position={{lat: marker.center[0], lng: marker.center[1]}}>
                             <div className={styles.customOverlay}>
-                                {marker.name} : 12
+                                {marker.name} : {
+                                (() => {
+                                    if (sidoAvr.length === 0) return "로딩중..";
+
+                                    const avrData = sidoAvr[0];
+
+                                    const regionKeyMap = {
+                                        서울: 'seoul',
+                                        부산: 'busan',
+                                        대구: 'daegu',
+                                        인천: 'incheon',
+                                        광주: 'gwangju',
+                                        대전: 'daejeon',
+                                        울산: 'ulsan',
+                                        세종: 'sejong',
+                                        경기: 'gyeonggi',
+                                        강원: 'gangwon',
+                                        충북: 'chungbuk',
+                                        충남: 'chungnam',
+                                        전북: 'jeonbuk',
+                                        전남: 'jeonnam',
+                                        경북: 'gyeongbuk',
+                                        경남: 'gyeongnam',
+                                        제주: 'jeju',
+                                    };
+                                    
+                                    const key = regionKeyMap[marker.name];
+                                    return key && avrData[key] ? `${avrData[key]}` : "데이터 없음";
+                                })()
+                            }
                             </div>
                         </CustomOverlayMap>
                     )}
