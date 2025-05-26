@@ -1,105 +1,98 @@
 import { Table, ConfigProvider } from "antd";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ATable from "../css/AirTable.module.css";
 import axios from "axios";
+import {
+  inform,
+  REGION_KEYS,
+  REGION_COLUMNS,
+  Grade,
+  itemCodeMap,
+} from "../component/AirAdd.js";
+import ExtentA from "../component/extentAll.jsx";
+
+function getAirQualityGrade(itemCode, value) {
+  const num = parseFloat(value);
+  if (isNaN(num)) return null;
+
+  switch (itemCode) {
+    case "PM10":
+      if (num <= 30) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 80) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 150) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "PM25":
+      if (num <= 15) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 35) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 75) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "O3":
+      if (num <= 0.03) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 0.09) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 0.15) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "NO2":
+      if (num <= 0.03) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 0.06) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 0.2) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "CO":
+      if (num <= 2) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 9) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 15) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "SO2":
+      if (num <= 0.02) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 0.05) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 0.15) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    default:
+      return null;
+  }
+}
 
 function AirTable() {
-  const [Datas, setDatas] = useState();
-  const getData = async () => {
-    const result = await axios.get(
-      "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=6MS6d4%2F7oderkazWnyA2%2B5XBYjmhv86nH%2F3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A%3D%3D&returnType=json&numOfRows=10000&pageNo=1&sidoName=전국&ver=1.4"
-    );
-    const { data, status } = result;
+  const [Datas, setDatas] = useState([]);
 
-    setDatas(data.response.body.items);
+  const getData = async () => {
+    try {
+      const requests = inform.map((infoCode) =>
+        axios.get("https://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst", {
+          params: {
+            serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+            returnType: "json",
+            numOfRows: 100,
+            pageNo: 1,
+            dataGubun: "HOUR",
+            itemCode: infoCode,
+          },
+        })
+      );
+  
+      const results = await Promise.all(requests);
+  
+      const allItems = results.flatMap((res) => {
+        const items = res?.data?.response?.body?.items;
+        return items?.map((item) => ({
+          ...item,
+          itemCode: item.itemCode === "PM25" ? "PM2.5" : item.itemCode,
+        })) ?? [];
+      });
+  
+      setDatas(allItems);
+    } catch (err) {
+      console.error("데이터 가져오기 실패:", err);
+    }
   };
 
   useEffect(() => {
     getData();
   }, []);
 
-  useEffect(() => {
-    if (Datas) {
-      console.log(Datas.map(item => item.stationName));
-    }
+  const dataTime = useMemo(() => {
+    const first = Datas[0];
+    return first?.dataTime || "발표 시각 없음";
   }, [Datas]);
-
-  const getGradeByCity = (stationName) => {
-    const cityData = Datas?.find((item) => item.stationName === stationName);
-    return cityData?.pm25Grade1h ?? "로딩 중";
-  };
-
-  const dataSource = [
-    {
-      key: "1",
-      item: (
-        <>
-          미세먼지
-          <br />
-          (PM-2.5)
-        </>
-      ),
-      서울: getGradeByCity("종로구"),
-      인천: getGradeByCity("인천"),
-      경기북부: getGradeByCity("경기북부"),
-      경기남부: getGradeByCity("경기남부"),
-    },
-    {
-      key: "2",
-      item: (
-        <>
-          초미세먼지
-          <br />
-          (PM-10)
-        </>
-      ),
-      value: "좋음",
-    },
-    {
-      key: "3",
-      item: (
-        <>
-          오존
-          <br />
-          (O3)
-        </>
-      ),
-      value: "매우좋음",
-    },
-    {
-      key: "4",
-      item: (
-        <>
-          이산화질소
-          <br />
-          (NO3)
-        </>
-      ),
-      value: "매우좋음",
-    },
-    {
-      key: "5",
-      item: (
-        <>
-          일산화탄소
-          <br />
-          (CO)
-        </>
-      ),
-      value: "매우좋음",
-    },
-    {
-      key: "6",
-      item: (
-        <>
-          아산화가스
-          <br />
-          (SO2)
-        </>
-      ),
-      value: "매우좋음",
-    },
-  ];
 
   const columns = [
     {
@@ -108,144 +101,76 @@ function AirTable() {
       key: "item",
       className: ATable.itemColumn,
     },
-    {
-      title: <div className={ATable.headerCenter}>서울</div>,
-      dataIndex: "서울",
-      key: "서울",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>인천</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>경기</div>,
-      children: [
-        {
-          title: <div className={ATable.headerCenter}>북부</div>,
-          dataIndex: "value",
-          key: "value",
-          className: ATable.centerAlign,
-        },
-        {
-          title: <div className={ATable.headerCenter}>남부</div>,
-          dataIndex: "value",
-          key: "value",
-          className: ATable.centerAlign,
-        },
-      ],
-    },
-    {
-      title: <div className={ATable.headerCenter}>강원</div>,
-      children: [
-        {
-          title: <div className={ATable.headerCenter}>영서</div>,
-          dataIndex: "value",
-          key: "value",
-          className: ATable.centerAlign,
-        },
-        {
-          title: <div className={ATable.headerCenter}>영동</div>,
-          dataIndex: "value",
-          key: "value",
-          className: ATable.centerAlign,
-        },
-      ],
-    },
-    {
-      title: <div className={ATable.headerCenter}>대전</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>세종</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>충북</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>충남</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>광주</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>전북</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>전남</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>전남</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>대구</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>울산</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>경북</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>경남</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
-    {
-      title: <div className={ATable.headerCenter}>제주</div>,
-      dataIndex: "value",
-      key: "value",
-      className: ATable.centerAlign,
-    },
+    ...REGION_COLUMNS.map((region) =>
+      region.children
+        ? {
+            title: <div className={ATable.headerCenter}>{region.label}</div>,
+            children: region.children.map((child) => ({
+              title: <div className={ATable.headerCenter}>{child.label}</div>,
+              dataIndex: child.key,
+              key: child.key,
+              className: ATable.centerAlign,
+            })),
+          }
+        : {
+            title: <div className={ATable.headerCenter}>{region.label}</div>,
+            dataIndex: region.key,
+            key: region.key,
+            className: ATable.centerAlign,
+          }
+    ),
   ];
 
+  const dataSource = inform.map((pollutant, idx) => {
+    const displayCode = itemCodeMap[pollutant]; // PM25 → PM2.5
+    const row = {
+      key: (idx + 1).toString(),
+      item: displayCode,
+    };
+  
+    const matching = Datas.find((d) => d.itemCode === displayCode);
+  
+    Object.entries(REGION_KEYS).forEach(([regionName, key]) => {
+      const value = matching?.[key];
+      const grade = getAirQualityGrade(displayCode, value);
+  
+      row[regionName] = grade ? (
+        <div
+          style={{
+            backgroundColor: grade.bgColor,
+            borderRadius: "4px",
+            padding: "4px",
+            textAlign: "center",
+          }}
+        >
+          {grade.label}
+        </div>
+      ) : (
+        <>
+          정보
+          <br />
+          없음
+        </>
+      );
+    });
+  
+    return row;
+  });
+  
+
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Table: {
-            headerPadding: 0, // ✅ 헤더 padding 제거
-          },
-        },
-      }}
-    >
-      <Table columns={columns} dataSource={dataSource} pagination={false} />
-    </ConfigProvider>
+    <>
+      <div className={ATable.forecastInfoWrapper}>
+        <span className={ATable.forecastInfoText}>발표 시간 : {dataTime}</span>
+      </div>
+
+      <ConfigProvider theme={{ components: { Table: { headerPadding: 0 } } }}>
+        <Table columns={columns} dataSource={dataSource} pagination={false} scroll={{ x: 1000 }} />
+        <div>
+          <ExtentA />
+        </div>
+      </ConfigProvider>
+    </>
   );
 }
 
