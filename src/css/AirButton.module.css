@@ -1,0 +1,25 @@
+/* AirButton.module.css */
+
+.Btn {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .button {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .active {
+    background-color: #1677ff;
+    color: white;
+    border-color: #1677ff;
+  }
+  
