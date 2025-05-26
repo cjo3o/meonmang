@@ -4,10 +4,20 @@ import React, {useState} from "react";
 import RealTime from "./RealTime.jsx";
 import DateInfor from "./DateInfor.jsx";
 import RealTimeMap from "./RealTimeMap.jsx";
+import RegionModal from "./RegionModal.jsx";
 
 function Map(props) {
     const [activeTab, setActiveTab] = useState("realTime");
     const [selectOption, setSelectOption] = useState("PM25");
+    const [selectedRegion, setSelectedRegion] = useState(null);
+
+    const handleOpenModal = (regionName) => {
+        setSelectedRegion(regionName);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedRegion(null);
+    };
 
     return (
         <>
@@ -26,7 +36,9 @@ function Map(props) {
                             </div>
                         </div>
                         <div className={styles.subTitle}>
-                            {activeTab === "realTime" ? <RealTime selectOption={selectOption} setSelectOption={setSelectOption}/> : <DateInfor/>}
+                            {activeTab === "realTime" ?
+                                <RealTime selectOption={selectOption} setSelectOption={setSelectOption}/> :
+                                <DateInfor/>}
                         </div>
                     </>
                 }
@@ -41,10 +53,16 @@ function Map(props) {
             >
 
                 {
-                    activeTab === "realTime" ? <RealTimeMap selectOption={selectOption}/> : "오늘/내일 대기정보"
+                    activeTab === "realTime" ?
+                        <RealTimeMap selectOption={selectOption} onOpenModal={handleOpenModal}/> : "오늘/내일 대기정보"
                 }
 
             </Card>
+            {
+                selectedRegion && (
+                    <RegionModal region={selectedRegion} onClose={handleCloseModal}/>
+                )
+            }
         </>
     );
 }

@@ -1,20 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {CustomOverlayMap, MapMarker, Map, useKakaoLoader, useMap} from 'react-kakao-maps-sdk';
 import regionData from '/RegionData.json';
 import regionCenters from './regionCenters.js';
 import styles from '/src/css/Map.module.css';
 import axios from 'axios';
-import regionModal from "./regionModal.jsx";
+import regionModal from "./RegionModal.jsx";
+import RegionModal from "./RegionModal.jsx";
 
 
 const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
 const AVR_URL = import.meta.env.VITE_AVR_URL;
 const AVR_KEY = import.meta.env.VITE_AVR_KEY;
 
-function RealTimeMap({selectOption}) {
+function RealTimeMap({selectOption, onOpenModal}) {
     const [map, setMap] = useState(null);
     const [openOverlay, setOpenOverlay] = useState(null);
     const [sidoAvr, setSidoAvr] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
+
+    const sidoAvrRef = useRef([]);
+
     useKakaoLoader({appkey: KAKAO_API_KEY});
 
     const handleMarkerClick = (name) => {
@@ -22,17 +27,17 @@ function RealTimeMap({selectOption}) {
     };
 
 
-
     // 지도 클릭 시 오버레이 닫기
     useEffect(() => {
-        console.log(selectOption);
         if (!map) return;
 
-        var fetchAvrData = async () => {
+        const fetchAvrData = async () => {
             try {
                 const {data} = await axios.get(`${AVR_URL}?returnType=json&numOfRows=25&pageNo=1&itemCode=${selectOption}&dataGubun=HOUR&serviceKey=${AVR_KEY}`);
-                console.log(data.response.body.items);
+                console.log(data);
+                sidoAvrRef.current = data.response.body.items;
                 setSidoAvr(data.response.body.items);
+                console.log(sidoAvr);
             } catch (err) {
                 console.log("API 호출 오류", err);
             }
@@ -86,8 +91,9 @@ function RealTimeMap({selectOption}) {
 
             polygon.setMap(map);
 
+
             kakao.maps.event.addListener(polygon, 'click', () => {
-                regionModal(name);
+                onOpenModal(name);
             });
 
             // 마우스 오버 효과
@@ -133,6 +139,7 @@ function RealTimeMap({selectOption}) {
                                         if (sidoAvr.length === 0) return "로딩중..";
 
                                         const avrData = sidoAvr[0];
+                                        console.log(sidoAvr[0]);
 
                                         const regionKeyMap = {
                                             서울: 'seoul',
