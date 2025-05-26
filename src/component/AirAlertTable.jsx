@@ -1,77 +1,66 @@
-import React, {useEffect, useState} from "react";
-import {Table, Spin} from "antd";
+import React, { useEffect, useState } from "react";
+import { Table, Spin, Button } from "antd";
 import axios from "axios";
+import dayjs from "dayjs";
+import * as XLSX from "xlsx";
+import ExcelIcon from "../images/excelicon.svg";
 
-// 날짜와 시간을 조합하여 "YYYY-MM-DD HH:00" 형식으로 반환
 const formatDateTime = (date, time, isOzone = false) => {
     if (!date || !time) return "-";
-    if (isOzone) {
-        const hour = String(time).padStart(2, "0");
-        return `${date} ${hour}:00`; // ex: "2025-05-14 14:00"
-    } else {
-        return `${date} ${time}`; // ex: "2025-04-24 23:00"
-    }
+    return isOzone
+        ? `${date} ${String(time).padStart(2, "0")}:00`
+        : `${date} ${time}`;
 };
 
-// 오존 경보 단계 숫자 → 문자열 매핑
 const mapOzoneLevel = (level) => {
     switch (String(level)) {
-        case "1":
-            return "주의보";
-        case "2":
-            return "경보";
-        case "3":
-            return "중대경보";
-        default:
-            return "정보없음";
+        case "1": return "주의보";
+        case "2": return "경보";
+        case "3": return "중대경보";
+        default: return "정보없음";
     }
 };
 
-const AirAlertTable = () => {
+const AirAlertTable = ({ region, itemCode, dateRange, searchTrigger, setAvailableRegions }) => {
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [filteredData, setFilteredData] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
 
     useEffect(() => {
-        const  fetchAllAlerts = async () => {
+        const fetchData = async () => {
             setLoading(true);
             try {
-                // 초미세/미세먼지 API
-                const pmRes = await axios.get(
-                    "http://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo",
-                    {
-                        params: {
-                            serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
-                            returnType: "json",
-                            numOfRows: 1000,
-                            pageNo: 1,
-                            year: 2025,
-                        },
-                    }
-                );
-                const pmItems = pmRes.data.response.body.items.map((item, index) => ({
+                const pmRes = await axios.get("https://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo", {
+                    params: {
+                        serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+                        returnType: "json",
+                        numOfRows: 1000,
+                        pageNo: 1,
+                        year: 2025,
+                    },
+                });
+
+                const pmItems = (pmRes.data.response.body.items ?? []).map((item, index) => ({
                     key: `pm-${index}`,
                     지역: item.districtName,
                     권역: item.moveName,
                     항목: item.itemCode,
                     경보단계: item.issueGbn,
-                    발령시간: formatDateTime(item.issueDate, item.issueTime, false),
-                    해제시간: formatDateTime(item.clearDate, item.clearTime, false),
+                    발령시간: formatDateTime(item.issueDate, item.issueTime),
+                    해제시간: formatDateTime(item.clearDate, item.clearTime),
                 }));
 
-                // 오존 API
-                const ozoneRes = await axios.get(
-                    "http://apis.data.go.kr/B552584/OzYlwsndOccrrncInforInqireSvc/getOzAdvsryOccrrncInfo",
-                    {
-                        params: {
-                            serviceKey: "6j4MG9vFqOJ24QdvW+Q1R5lChK83ym4k0UFBww6Kv/GKEmRsYrtwq/TnVYqpWX640SMT+QXrEdOTn2zFEzdC0g==",
-                            returnType: "json",
-                            numOfRows: 1000,
-                            pageNo: 1,
-                        },
-                    }
-                );
+                const ozoneRes = await axios.get("https://apis.data.go.kr/B552584/OzYlwsndOccrrncInforInqireSvc/getOzAdvsryOccrrncInfo", {
+                    params: {
+                        serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+                        returnType: "json",
+                        numOfRows: 1000,
+                        pageNo: 1,
+                    },
+                });
+
                 const ozoneItems = (ozoneRes.data.response.body.items ?? []).map((item, index) => ({
                     key: `ozone-${index}`,
                     지역: item.districtName,
@@ -82,22 +71,52 @@ const AirAlertTable = () => {
                     해제시간: formatDateTime(item.dataDate || item.clearDate, item.clearTime, true),
                 }));
 
-                // 병합 → 발령시간 내림차순 정렬 → 번호 부여
                 const combined = [...pmItems, ...ozoneItems]
                     .filter(item => item.발령시간.startsWith("2025"))
-                    .sort((a, b) => new Date(b.발령시간) - new Date(a.발령시간));
-                const numbered = combined.map((item, index) => ({ ...item, 번호: index + 1 }));
+                    .sort((a, b) => new Date(b.발령시간) - new Date(a.발령시간))
+                    .map((item, index) => ({ ...item, 번호: index + 1 }));
 
-                setData(numbered);
-            } catch (error) {
-                console.error("API 오류:", error);
+                // 지역 목록 추출 후 상위로 전달
+                if (setAvailableRegions) {
+                    const uniqueRegions = Array.from(new Set(combined.map(item => item.지역))).sort();
+                    setAvailableRegions(["전체", ...uniqueRegions]);
+                }
+
+                // 필터 적용
+                const result = combined.filter(item => {
+                    const matchRegion = region === "전체" || item.지역 === region;
+                    const matchItem = itemCode === "전체" || item.항목 === itemCode;
+                    const matchDate = !dateRange[0] || !dateRange[1]
+                        ? true
+                        : (
+                            dayjs(item.발령시간).isAfter(dayjs(dateRange[0]).startOf("day").subtract(1, "second")) &&
+                            dayjs(item.발령시간).isBefore(dayjs(dateRange[1]).endOf("day").add(1, "second"))
+                        );
+                    return matchRegion && matchItem && matchDate;
+                });
+
+                setData(combined);
+                setFilteredData(result);
+                setCurrentPage(1);
+            } catch (err) {
+                console.error("API 오류", err);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchAllAlerts();
-    }, []);
+        fetchData();
+    }, [searchTrigger]);
+
+    const handleExcelDownload = () => {
+        if (filteredData.length === 0) {
+            return alert("다운로드할 데이터가 없습니다.");
+        }
+        const ws = XLSX.utils.json_to_sheet(filteredData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "대기오염발령내역");
+        XLSX.writeFile(wb, "air_alert.xlsx");
+    };
 
     const columns = [
         { title: "번호", dataIndex: "번호", key: "번호", align: "center" },
@@ -110,20 +129,27 @@ const AirAlertTable = () => {
     ];
 
     return loading ? (
-        <Spin/>
+        <Spin />
     ) : (
-        <Table
-            columns={columns}
-            dataSource={data.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-            pagination={{
-                position: ["bottomCenter"],
-                current: currentPage,
-                pageSize,
-                total: data.length,
-                onChange: (page) => setCurrentPage(page),
-                showSizeChanger: false,
-            }}
-        />
+        <>
+            <div style={{ textAlign: "right", marginBottom: 8 }}>
+                <Button
+                    icon={<img src={ExcelIcon} alt="excel" style={{ width: 25, height: 25 }} />}
+                    onClick={handleExcelDownload}>엑셀 다운로드</Button>
+            </div>
+            <Table
+                columns={columns}
+                dataSource={filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
+                pagination={{
+                    position: ["bottomCenter"],
+                    current: currentPage,
+                    pageSize,
+                    total: filteredData.length,
+                    onChange: setCurrentPage,
+                    showSizeChanger: false,
+                }}
+            />
+        </>
     );
 };
 
