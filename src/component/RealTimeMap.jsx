@@ -4,6 +4,7 @@ import regionData from '/RegionData.json';
 import regionCenters from './regionCenters.js';
 import styles from '/src/css/Map.module.css';
 import axios from 'axios';
+import regionModal from "./regionModal.jsx";
 
 
 const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
@@ -86,7 +87,7 @@ function RealTimeMap({selectOption}) {
             polygon.setMap(map);
 
             kakao.maps.event.addListener(polygon, 'click', () => {
-                alert(name);
+                regionModal(name);
             });
 
             // 마우스 오버 효과
