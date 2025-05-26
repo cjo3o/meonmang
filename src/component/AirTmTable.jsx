@@ -13,7 +13,7 @@ import Extent from "../component/extent.jsx";
 
 const inform = ["PM10", "PM25", "O3"];
 
-function AirTmTable() {
+function AirTmTable({ regionKeys, regionColumns, setTimeText }) {
   const [Datas, setDatas] = useState([]);
 
   const getData = async () => {
@@ -22,11 +22,10 @@ function AirTmTable() {
 
       const requests = inform.map((infoCode) =>
         axios.get(
-          // "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
+          "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
           {
             params: {
-              serviceKey:
-                "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+              // serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
               returnType: "json",
               numOfRows: 100,
               pageNo: 1,
@@ -68,7 +67,7 @@ function AirTmTable() {
   }, [futureDatas]);
   
   const dataTime = useMemo(() => {
-    return futureDatas[0]?.dataTime || "발표 시각 없음";
+    return futureDatas[0]?.dataTime || "발표 시간 없음";
   }, [futureDatas]);
   
   const regionGradeMap = useMemo(() => {
@@ -92,7 +91,17 @@ function AirTmTable() {
   
     return mapByPollutant;
   }, [futureDatas]);
-  
+
+useEffect(() => {
+  if (setTimeText && forecastDate && dataTime) {
+    setTimeText(
+      <>
+        {forecastDate}
+        <span className={ATmtable.forecastInfoSub}>({dataTime})</span>
+      </>
+    );
+  }
+}, [forecastDate, dataTime]);
 
   const columns = [
     {
@@ -160,13 +169,6 @@ function AirTmTable() {
 
   return (
     <>
-      <div className={ATmtable.forecastInfoWrapper}>
-        <span className={ATmtable.forecastInfoText}>
-          {forecastDate} 예보
-          <span className={ATmtable.forecastInfoSub}>({dataTime} 기준)</span>
-        </span>
-      </div>
-
       <div className={ATmtable.tableWrapper}>
         <Table
           columns={columns}

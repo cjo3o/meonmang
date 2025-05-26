@@ -1,12 +1,11 @@
 import { Table, ConfigProvider } from "antd";
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import ATable from "../css/AirTable.module.css";
 import axios from "axios";
 import {
   inform,
   REGION_KEYS,
   REGION_COLUMNS,
-  Grade,
   itemCodeMap,
 } from "../component/AirAdd.js";
 import ExtentA from "../component/extentAll.jsx";
@@ -60,7 +59,7 @@ function getAirQualityGrade(itemCode, value) {
   }
 }
 
-function AirTable() {
+function AirTable({ setTimeText }) {
   const [Datas, setDatas] = useState([]);
 
   const getData = async () => {
@@ -100,8 +99,15 @@ function AirTable() {
 
   const dataTime = useMemo(() => {
     const first = Datas[0];
-    return first?.dataTime || "발표 시각 없음";
+    return first?.dataTime || "발표 시간 없음";
   }, [Datas]);
+
+  // 상위로 발표 시간 전달
+  useEffect(() => {
+    if (setTimeText && dataTime) {
+      setTimeText(dataTime);
+    }
+  }, [dataTime]);
 
   const columns = [
     {
@@ -113,20 +119,20 @@ function AirTable() {
     ...REGION_COLUMNS.map((region) =>
       region.children
         ? {
-            title: <div className={ATable.headerCenter}>{region.label}</div>,
-            children: region.children.map((child) => ({
-              title: <div className={ATable.headerCenter}>{child.label}</div>,
-              dataIndex: child.key,
-              key: child.key,
-              className: ATable.centerAlign,
-            })),
-          }
-        : {
-            title: <div className={ATable.headerCenter}>{region.label}</div>,
-            dataIndex: region.key,
-            key: region.key,
+          title: <div className={ATable.headerCenter}>{region.label}</div>,
+          children: region.children.map((child) => ({
+            title: <div className={ATable.headerCenter}>{child.label}</div>,
+            dataIndex: child.key,
+            key: child.key,
             className: ATable.centerAlign,
-          }
+          })),
+        }
+        : {
+          title: <div className={ATable.headerCenter}>{region.label}</div>,
+          dataIndex: region.key,
+          key: region.key,
+          className: ATable.centerAlign,
+        }
     ),
   ];
 
@@ -177,10 +183,6 @@ function AirTable() {
 
   return (
     <>
-      <div className={ATable.forecastInfoWrapper}>
-        <span className={ATable.forecastInfoText}>발표 시간 : {dataTime}</span>
-      </div>
-
       <ConfigProvider theme={{ components: { Table: { headerPadding: 0 } } }}>
         <Table columns={columns} dataSource={dataSource} pagination={false} scroll={{ x: 1000 }} />
         <div>
