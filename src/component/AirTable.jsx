@@ -11,11 +11,20 @@ import {
 } from "../component/AirAdd.js";
 import ExtentA from "../component/extentAll.jsx";
 
+const labelMap = {
+  PM10: { name: "미세먼지", unit: "PM-10" },
+  PM25: { name: "초미세먼지", unit: "PM-2.5" },
+  O3: { name: "오존", unit: "O3" },
+  NO2: { name: "이산화질소", unit: "NO2" },
+  CO: { name: "일산화탄소", unit: "CO" },
+  SO2: { name: "아황산가스", unit: "SO2" },
+};
+
 function getAirQualityGrade(itemCode, value) {
   const num = parseFloat(value);
   if (isNaN(num)) return null;
 
-  switch (itemCode) {
+  switch (itemCode.replace(".", "")) {
     case "PM10":
       if (num <= 30) return { label: "좋음", bgColor: "#a2d8ff" };
       if (num <= 80) return { label: "보통", bgColor: "#d2f29b" };
@@ -59,7 +68,7 @@ function AirTable() {
       const requests = inform.map((infoCode) =>
         axios.get("https://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst", {
           params: {
-            serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+            // serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
             returnType: "json",
             numOfRows: 100,
             pageNo: 1,
@@ -68,9 +77,9 @@ function AirTable() {
           },
         })
       );
-  
+
       const results = await Promise.all(requests);
-  
+
       const allItems = results.flatMap((res) => {
         const items = res?.data?.response?.body?.items;
         return items?.map((item) => ({
@@ -78,7 +87,7 @@ function AirTable() {
           itemCode: item.itemCode === "PM25" ? "PM2.5" : item.itemCode,
         })) ?? [];
       });
-  
+
       setDatas(allItems);
     } catch (err) {
       console.error("데이터 가져오기 실패:", err);
@@ -122,18 +131,27 @@ function AirTable() {
   ];
 
   const dataSource = inform.map((pollutant, idx) => {
-    const displayCode = itemCodeMap[pollutant]; // PM25 → PM2.5
+    const displayCode = itemCodeMap[pollutant];
+    const label = labelMap[pollutant];
+
     const row = {
       key: (idx + 1).toString(),
-      item: displayCode,
+      item: label ? (
+        <>
+          {label.name}
+          <br />({label.unit})
+        </>
+      ) : (
+        displayCode
+      ),
     };
-  
+
     const matching = Datas.find((d) => d.itemCode === displayCode);
-  
+
     Object.entries(REGION_KEYS).forEach(([regionName, key]) => {
       const value = matching?.[key];
-      const grade = getAirQualityGrade(displayCode, value);
-  
+      const grade = value !== undefined ? getAirQualityGrade(displayCode, value) : null;
+
       row[regionName] = grade ? (
         <div
           style={{
@@ -153,10 +171,9 @@ function AirTable() {
         </>
       );
     });
-  
+
     return row;
   });
-  
 
   return (
     <>
