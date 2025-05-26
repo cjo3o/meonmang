@@ -6,7 +6,8 @@ import AirTmTable from "../component/AirTmTable.jsx";
 
 import ADataStyle from "../css/AirData.module.css";
 
-import { Citys, POLLUTANTS, REGION_KEYS, REGION_COLUMNS, Grade } from "../component/AirAdd.js";
+import { REGION_KEYS, REGION_COLUMNS } from "../component/AirAdd.js";
+
 
 function AirData() {
   const [selectedDay, setSelectedDay] = useState("오늘");  // 기본값 '오늘'
@@ -27,7 +28,6 @@ function AirData() {
           <div className={ADataStyle.cen_center}>
             {selectedDay === "내일" ? (
               <AirTmTable
-                pollutants={POLLUTANTS}
                 regionKeys={REGION_KEYS}
                 regionColumns={REGION_COLUMNS}
               />
@@ -36,6 +36,7 @@ function AirData() {
             )}
           </div>
         </Card>
+
       </div>
     </div>
   );

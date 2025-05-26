@@ -2,21 +2,83 @@ import { Table, ConfigProvider } from "antd";
 import React, { useState, useEffect, useMemo } from "react";
 import ATable from "../css/AirTable.module.css";
 import axios from "axios";
-import { Citys, POLLUTANTS, REGION_KEYS, REGION_COLUMNS, Grade } from "../component/AirAdd.js";
+import {
+  inform,
+  REGION_KEYS,
+  REGION_COLUMNS,
+  Grade,
+  itemCodeMap,
+} from "../component/AirAdd.js";
+import ExtentA from "../component/extentAll.jsx";
+
+function getAirQualityGrade(itemCode, value) {
+  const num = parseFloat(value);
+  if (isNaN(num)) return null;
+
+  switch (itemCode) {
+    case "PM10":
+      if (num <= 30) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 80) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 150) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "PM25":
+      if (num <= 15) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 35) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 75) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "O3":
+      if (num <= 0.03) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 0.09) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 0.15) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "NO2":
+      if (num <= 0.03) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 0.06) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 0.2) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "CO":
+      if (num <= 2) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 9) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 15) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    case "SO2":
+      if (num <= 0.02) return { label: "좋음", bgColor: "#a2d8ff" };
+      if (num <= 0.05) return { label: "보통", bgColor: "#d2f29b" };
+      if (num <= 0.15) return { label: "나쁨", bgColor: "#f9c97a" };
+      return { label: "매우나쁨", bgColor: "#f07c7c" };
+    default:
+      return null;
+  }
+}
 
 function AirTable() {
   const [Datas, setDatas] = useState([]);
 
   const getData = async () => {
     try {
-      const requests = Citys.map((city) =>
-        axios.get(
-          // `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7%2FkDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ%3D%3D&returnType=json&numOfRows=100&pageNo=1&sidoName=${city}&ver=1.4`
-        )
+      const requests = inform.map((infoCode) =>
+        axios.get("https://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst", {
+          params: {
+            serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+            returnType: "json",
+            numOfRows: 100,
+            pageNo: 1,
+            dataGubun: "HOUR",
+            itemCode: infoCode,
+          },
+        })
       );
-
+  
       const results = await Promise.all(requests);
-      const allItems = results.flatMap((res) => res.data.response.body.items);
+  
+      const allItems = results.flatMap((res) => {
+        const items = res?.data?.response?.body?.items;
+        return items?.map((item) => ({
+          ...item,
+          itemCode: item.itemCode === "PM25" ? "PM2.5" : item.itemCode,
+        })) ?? [];
+      });
+  
       setDatas(allItems);
     } catch (err) {
       console.error("데이터 가져오기 실패:", err);
@@ -26,6 +88,11 @@ function AirTable() {
   useEffect(() => {
     getData();
   }, []);
+
+  const dataTime = useMemo(() => {
+    const first = Datas[0];
+    return first?.dataTime || "발표 시각 없음";
+  }, [Datas]);
 
   const columns = [
     {
@@ -54,58 +121,57 @@ function AirTable() {
     ),
   ];
 
-  const stationMap = useMemo(() => {
-    const map = new Map();
-    Datas.forEach((item) => {
-      map.set(item.stationName, item);
-    });
-    return map;
-  }, [Datas]);
-
-  const dataSource = POLLUTANTS.map((pollutant, idx) => {
+  const dataSource = inform.map((pollutant, idx) => {
+    const displayCode = itemCodeMap[pollutant]; // PM25 → PM2.5
     const row = {
       key: (idx + 1).toString(),
-      item: (
-        <>
-          {pollutant.label}
-          <br />({pollutant.sub})
-        </>
-      ),
+      item: displayCode,
     };
-
-    Object.entries(REGION_KEYS).forEach(([regionName, stationName]) => {
-      const data = stationMap.get(stationName);
-      const gradeValue = data?.[pollutant.field];
-      const gradeInfo = Grade[gradeValue];
-
-      row[regionName] =
-        gradeValue === null ? (
-          "미측정"
-        ) : gradeInfo ? (
-          <div
-            style={{
-              backgroundColor: gradeInfo.bgColor,
-              borderRadius: "4px",
-              padding: "4px",
-              textAlign: "center",
-            }}
-          >
-            {gradeInfo.label}
-          </div>
-        ) : (
-          "정보 없음"
-        );
+  
+    const matching = Datas.find((d) => d.itemCode === displayCode);
+  
+    Object.entries(REGION_KEYS).forEach(([regionName, key]) => {
+      const value = matching?.[key];
+      const grade = getAirQualityGrade(displayCode, value);
+  
+      row[regionName] = grade ? (
+        <div
+          style={{
+            backgroundColor: grade.bgColor,
+            borderRadius: "4px",
+            padding: "4px",
+            textAlign: "center",
+          }}
+        >
+          {grade.label}
+        </div>
+      ) : (
+        <>
+          정보
+          <br />
+          없음
+        </>
+      );
     });
-
+  
     return row;
   });
+  
 
   return (
-    <ConfigProvider theme={{ components: { Table: { headerPadding: 0 } } }}>
-      <Table columns={columns} dataSource={dataSource} pagination={false} />
-    </ConfigProvider>
+    <>
+      <div className={ATable.forecastInfoWrapper}>
+        <span className={ATable.forecastInfoText}>발표 시간 : {dataTime}</span>
+      </div>
+
+      <ConfigProvider theme={{ components: { Table: { headerPadding: 0 } } }}>
+        <Table columns={columns} dataSource={dataSource} pagination={false} scroll={{ x: 1000 }} />
+        <div>
+          <ExtentA />
+        </div>
+      </ConfigProvider>
+    </>
   );
 }
-
 
 export default AirTable;
