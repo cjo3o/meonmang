@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Button, Card, Select} from "antd";
 import axios from "axios";
 import styles from "/src/css/RegionModal.module.css";
+import good from "/src/images/Good.svg";
+import normal from "/src/images/normal.svg";
 
 const SIDO_AVR_URL = import.meta.env.VITE_SIDO_AVR_URL;
 const AVR_KEY = import.meta.env.VITE_AVR_KEY;
@@ -10,6 +12,7 @@ function RegionModal({region, onClose}) {
     const [sido, setSido] = useState(null);
     const [dataTime, setDataTime] = useState(null);
     const [district, setDistrict] = useState(null);
+    const [img, setImg] = useState(good);
 
     const regionKeyMap = {
         서울특별시: "서울",
@@ -56,6 +59,18 @@ function RegionModal({region, onClose}) {
     });
     console.log(findItem);
 
+    const changeImg = () => {
+        if (findItem !== undefined) {
+            if (0 <= findItem.pm25Value && findItem.pm25Value <= 15) {
+                setImg(good);
+                console.log(img);
+            } else if (findItem.pm25Value <= 35) {
+                setImg(normal);
+                console.log(img);
+            }
+        }
+    }
+
     return (
         <>
             <Card className={styles.modalContent}
@@ -69,7 +84,7 @@ function RegionModal({region, onClose}) {
                           </div>
                           <div className={styles.modalsubTitle}>
                               <Select
-                                  defaultValue="지역을 선택해주세요"
+                                  defaultValue="지역선택"
                                   className={styles.roundSelect}
                                   style={{width: "40%", textAlign: "center"}}
                                   options={
@@ -79,7 +94,10 @@ function RegionModal({region, onClose}) {
                                               value: item.cityName
                                           })) : []
                                   }
-                                  onChange={value => setDistrict(value)}
+                                  onChange={value => {
+                                      setDistrict(value);
+                                      changeImg();
+                                  }}
                               />
                               <div className={styles.modalDatatime}>
                                   {
@@ -113,27 +131,90 @@ function RegionModal({region, onClose}) {
                     {
                         findItem === undefined ? "데이터 없음" : (
                             <>
-
-                                <ul>
-                                    <li>
-                                        초미세먼지 (PM25) : {findItem.pm25Value === "" ? "데이터 없음" : findItem.pm25Value}
-                                    </li>
-                                    <li>
-                                        미세먼지 (PM10) : {findItem.pm10Value === "" ? "데이터 없음" : findItem.pm10Value}
-                                    </li>
-                                    <li>
-                                        오존 (O₃) : {findItem.o3Value === "" ? "데이터 없음" : findItem.o3Value}
-                                    </li>
-                                    <li>
-                                        일산화탄소 (CO) : {findItem.coValue === "" ? "데이터 없음" : findItem.coValue}
-                                    </li>
-                                    <li>
-                                        이산화질소 (NO₂) : {findItem.no2Value === "" ? "데이터 없음" : findItem.no2Value}
-                                    </li>
-                                    <li>
-                                        아황산가스 (SO₂) : {findItem.so2Value === "" ? "데이터 없음" : findItem.so2Value}
-                                    </li>
-                                </ul>
+                                <div className={styles.modalBodybox}>
+                                    <div className={styles.boxTitle}>
+                                        <p>초미세먼지</p>
+                                        <p>(PM-2.5)</p>
+                                    </div>
+                                    <div className={styles.boxBody}>
+                                        <img src={img} alt="매우좋음"/>
+                                        {findItem.pm25Value === "" ? "데이터 없음" : findItem.pm25Value}
+                                        <p>㎍/㎥</p>
+                                    </div>
+                                    <div className={styles.boxFooter}>
+                                        매우좋음
+                                    </div>
+                                </div>
+                                <div className={styles.modalBodybox}>
+                                    <div className={styles.boxTitle}>
+                                        <p>미세먼지</p>
+                                        <p>(PM-10)</p>
+                                    </div>
+                                    <div className={styles.boxBody}>
+                                        <img src={img} alt="매우좋음"/>
+                                        {findItem.pm10Value === "" ? "데이터 없음" : findItem.pm10Value}
+                                        <p>㎍/㎥</p>
+                                    </div>
+                                    <div className={styles.boxFooter}>
+                                        매우좋음
+                                    </div>
+                                </div>
+                                <div className={styles.modalBodybox}>
+                                    <div className={styles.boxTitle}>
+                                        <p>오존</p>
+                                        <p>(O₃)</p>
+                                    </div>
+                                    <div className={styles.boxBody}>
+                                        <img src={img} alt="매우좋음"/>
+                                        {findItem.o3Value === "" ? "데이터 없음" : findItem.o3Value}
+                                        <p>ppm</p>
+                                    </div>
+                                    <div className={styles.boxFooter}>
+                                        매우좋음
+                                    </div>
+                                </div>
+                                <div className={styles.modalBodybox}>
+                                    <div className={styles.boxTitle}>
+                                        <p>이산화질소</p>
+                                        <p>(NO₂)</p>
+                                    </div>
+                                    <div className={styles.boxBody}>
+                                        <img src={img} alt="매우좋음"/>
+                                        {findItem.no2Value === "" ? "데이터 없음" : findItem.no2Value}
+                                        <p>ppm</p>
+                                    </div>
+                                    <div className={styles.boxFooter}>
+                                        매우좋음
+                                    </div>
+                                </div>
+                                <div className={styles.modalBodybox}>
+                                    <div className={styles.boxTitle}>
+                                        <p>일산화탄소</p>
+                                        <p>(CO)</p>
+                                    </div>
+                                    <div className={styles.boxBody}>
+                                        <img src={img} alt="매우좋음"/>
+                                        {findItem.coValue === "" ? "데이터 없음" : findItem.coValue}
+                                        <p>ppm</p>
+                                    </div>
+                                    <div className={styles.boxFooter}>
+                                        매우좋음
+                                    </div>
+                                </div>
+                                <div className={styles.modalBodybox}>
+                                    <div className={styles.boxTitle}>
+                                        <p>아황산가스</p>
+                                        <p>(SO₂)</p>
+                                    </div>
+                                    <div className={styles.boxBody}>
+                                        <img src={img} alt="매우좋음"/>
+                                        {findItem.so2Value === "" ? "데이터 없음" : findItem.so2Value}
+                                        <p>ppm</p>
+                                    </div>
+                                    <div className={styles.boxFooter}>
+                                        매우좋음
+                                    </div>
+                                </div>
                             </>
                         )
 

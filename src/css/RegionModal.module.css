@@ -1,7 +1,8 @@
 .modalContent {
-    width: 25%;
+    width: auto;
     z-index: 1;
     position: fixed;
+    top: 25%;
 }
 
 .modalTitle {
@@ -20,10 +21,12 @@
 .modalsubTitle {
     margin-top: 0.1rem;
     display: flex;
+    gap: 4rem;
     justify-content: space-between;
     padding: 0.5rem 0.7rem;
     background-color: #67D8F3;
     border-radius: 0.2rem;
+    width: auto;
 }
 .roundSelect :global(.ant-select-selector) {
     border-radius: 50px !important;
@@ -35,20 +38,49 @@
     padding: 0 11px;
     border-radius: 50px;
     align-content: center;
-    width: 40%;
+    width: fit-content;
     text-align: center;
     font-weight: normal;
 }
 
 .modalBody {
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: center;
 }
 
-.modalBody > ul {
-    list-style: none;
-}
-
-.modalBody > ul li {
-    padding: 0.5rem 0.7rem;
+.modalBodybox {
+    width: 17%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1.5rem;
+    background-color: #67D8F3;
+    border-right: dashed 1px #ccc;
     font-size: 1.1rem;
+}
+
+.boxTitle {
+    white-space: nowrap;
+    text-align: center;
+    line-height: 1.4rem;
+}
+
+.boxTitle > p:last-child {
+    color: #666666;
+}
+
+.boxBody {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 1.5rem auto;
+}
+
+.boxBody > img {
+    width: 5rem;
+}
+
+.boxBody > p {
+    line-height: 0.7rem;
 }
