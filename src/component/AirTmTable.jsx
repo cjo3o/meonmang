@@ -13,7 +13,7 @@ import Extent from "../component/extent.jsx";
 
 const inform = ["PM10", "PM25", "O3"];
 
-function AirTmTable({ regionKeys, regionColumns, setTimeText }) {
+function AirTmTable({ setTimeText }) {
   const [Datas, setDatas] = useState([]);
 
   const getData = async () => {
@@ -22,10 +22,10 @@ function AirTmTable({ regionKeys, regionColumns, setTimeText }) {
 
       const requests = inform.map((infoCode) =>
         axios.get(
-          "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
+          // "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
           {
             params: {
-              // serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+              serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
               returnType: "json",
               numOfRows: 100,
               pageNo: 1,
@@ -61,22 +61,22 @@ function AirTmTable({ regionKeys, regionColumns, setTimeText }) {
   const futureDatas = useMemo(() => {
     return Datas.filter((d) => dayjs(d.informData).isAfter(today));
   }, [Datas]);
-  
+
   const forecastDate = useMemo(() => {
     return futureDatas[0]?.informData || "예보 날짜 없음";
   }, [futureDatas]);
-  
+
   const dataTime = useMemo(() => {
     return futureDatas[0]?.dataTime || "발표 시간 없음";
   }, [futureDatas]);
-  
+
   const regionGradeMap = useMemo(() => {
     const mapByPollutant = {};
-  
+
     inform.forEach((code) => {
       const item = futureDatas.find((i) => i.informCode === code);
       const gradeMap = new Map();
-  
+
       if (item?.informGrade) {
         item.informGrade.split(",").forEach((entry) => {
           const [region, grade] = entry.split(" : ").map((s) => s.trim());
@@ -85,23 +85,23 @@ function AirTmTable({ regionKeys, regionColumns, setTimeText }) {
           }
         });
       }
-  
+
       mapByPollutant[code] = gradeMap;
     });
-  
+
     return mapByPollutant;
   }, [futureDatas]);
 
-useEffect(() => {
-  if (setTimeText && forecastDate && dataTime) {
-    setTimeText(
-      <>
-        {forecastDate}
-        <span className={ATmtable.forecastInfoSub}>({dataTime})</span>
-      </>
-    );
-  }
-}, [forecastDate, dataTime]);
+  useEffect(() => {
+    if (setTimeText && forecastDate && dataTime) {
+      setTimeText(
+        <>
+          {forecastDate}
+          <span className={ATmtable.forecastInfoSub}>({dataTime})</span>
+        </>
+      );
+    }
+  }, [forecastDate, dataTime]);
 
   const columns = [
     {

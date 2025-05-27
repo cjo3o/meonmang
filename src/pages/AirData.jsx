@@ -20,7 +20,7 @@ function AirData() {
           title={
             <div className={ADataStyle.cen_up}>
               <div className={ADataStyle.header}>
-                <h1>실시간 대기정보</h1>
+                <h1>대기정보</h1>
               </div>
               <div className={ADataStyle.headerRow}>
                 <AirButton
