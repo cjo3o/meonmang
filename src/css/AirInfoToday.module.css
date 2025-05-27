@@ -1,0 +1,56 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.location {
+  width: 30px;
+  height: 30px;
+}
+
+.TextTop {
+  font-size: 16px;
+}
+
+.TextTop2 {
+    font-size: 13px;
+    color: gray;
+  }
+
+.body{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.body1 {
+    width: 20%;
+    text-align: center;
+    border-right: 1px solid rgb(219, 219, 219);
+    padding-right: 10px;
+}
+
+.body2 {
+    width: 20%;
+    text-align: center;
+    border-right: 1px solid rgb(219, 219, 219);
+    padding: 0 10px;
+}
+
+.body3 {
+    width: 20%;
+    text-align: center;
+    padding-left: 10px;
+}
+
+.status {
+    margin: 10px 0;
+    width: 50px;
+    height: 50px;
+}
+
+.values {
+    color: rgb(88, 166, 255);
+    font-size: 1.5rem;
+}
