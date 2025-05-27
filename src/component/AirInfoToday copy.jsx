@@ -18,14 +18,15 @@ function AirInfoToday() {
   const [stationInfo, setStationInfo] = useState(null);
   const [realtimeData, setRealtimeData] = useState(null);
 
-const airItems = [
-  { label: "초미세먼지", sub: "PM-2.5", className: AirToday.body1, valueKey: "pm25Value", unit: "㎍/m³" },
-  { label: "미세먼지", sub: "PM-10", className: AirToday.body2, valueKey: "pm10Value", unit: "㎍/m³" },
-  { label: "오존", sub: "O3", className: AirToday.body2, valueKey: "o3Value", unit: "ppm" },
-  { label: "이산화지로", sub: "NO2", className: AirToday.body2, valueKey: "no2Value", unit: "ppm" },
-  { label: "일삼화탄소", sub: "CO", className: AirToday.body2, valueKey: "coValue", unit: "ppm" },
-  { label: "아산화가스", sub: "SO2", className: AirToday.body3, valueKey: "so2Value", unit: "ppm" },
-];
+  const airItems = [
+    { label: "초미세먼지", sub: "PM-2.5", className: AirToday.body1, valueKey: "pm25Value", code: "pm25", unit: "㎍/m³" },
+    { label: "미세먼지", sub: "PM-10", className: AirToday.body2, valueKey: "pm10Value", code: "pm10", unit: "㎍/m³" },
+    { label: "오존", sub: "O3", className: AirToday.body2, valueKey: "o3Value", code: "o3", unit: "ppm" },
+    { label: "이산화지로", sub: "NO2", className: AirToday.body2, valueKey: "no2Value", code: "no2", unit: "ppm" },
+    { label: "일삼화탄소", sub: "CO", className: AirToday.body2, valueKey: "coValue", code: "co", unit: "ppm" },
+    { label: "아산화가스", sub: "SO2", className: AirToday.body3, valueKey: "so2Value", code: "so2", unit: "ppm" },
+  ];
+
 
   const sidoList = [
     "서울", "부산", "대구", "인천", "광주", "대전", "울산",
@@ -139,6 +140,10 @@ const airItems = [
   }, []);
 
   useEffect(() => {
+  console.log("📍 선택된 측정소:", stationInfo);
+}, [stationInfo]);
+
+  useEffect(() => {
     if (!stationInfo || !stationInfo.stationName) return;
 
     const fetchRealtimeData = async () => {
@@ -157,6 +162,7 @@ const airItems = [
             },
           }
         );
+        console.log("📡 실시간 데이터:", res.data);
         const data = res.data.response.body.items?.[0];
         setRealtimeData(data);
       } catch (err) {
@@ -166,6 +172,62 @@ const airItems = [
 
     fetchRealtimeData();
   }, [stationInfo]);
+
+  const getGrade = (code, value) => {
+    if (value === undefined || value === "-" || value === null) return "-";
+    const v = parseFloat(value);
+
+    switch (code) {
+      case "pm10":
+        if (v <= 30) return "좋음";
+        if (v <= 80) return "보통";
+        if (v <= 150) return "나쁨";
+        return "매우나쁨";
+      case "pm25":
+        if (v <= 15) return "좋음";
+        if (v <= 35) return "보통";
+        if (v <= 75) return "나쁨";
+        return "매우나쁨";
+      case "o3":
+        if (v <= 0.0300) return "좋음";
+        if (v <= 0.0900) return "보통";
+        if (v <= 0.1500) return "나쁨";
+        return "매우나쁨";
+      case "no2":
+        if (v <= 0.030) return "좋음";
+        if (v <= 0.060) return "보통";
+        if (v <= 0.200) return "나쁨";
+        return "매우나쁨";
+      case "co":
+        if (v <= 2.00) return "좋음";
+        if (v <= 9.00) return "보통";
+        if (v <= 15.00) return "나쁨";
+        return "매우나쁨";
+      case "so2":
+        if (v <= 0.020) return "좋음";
+        if (v <= 0.050) return "보통";
+        if (v <= 0.150) return "나쁨";
+        return "매우나쁨";
+      default:
+        return "-";
+    }
+  };
+
+  const getStatusIcon = (grade) => {
+    switch (grade) {
+      case "좋음":
+        return status1;
+      case "보통":
+        return status2;
+      case "나쁨":
+        return status3;
+      case "매우나쁨":
+        return status4;
+      default:
+        return status1; // 기본값
+    }
+  };
+
 
   return (
     <Card
@@ -192,18 +254,22 @@ const airItems = [
           </span>
         </div>
         <div className={AirToday.body}>
-          {airItems.map((item, idx) => (
-            <div key={idx} className={item.className}>
-              <p>{item.label}</p>
-              <p>({item.sub})</p>
-              <img src={status1} alt="status" className={AirToday.status} />
-              <p className={AirToday.values}>
-                {realtimeData ? realtimeData[item.valueKey] : "-"}
-              </p>
-              <p>{item.unit}</p>
-              <p>매우좋음</p>
-            </div>
-          ))}
+          {airItems.map((item, idx) => {
+            const value = realtimeData ? realtimeData[item.valueKey] : "-";
+            const grade = getGrade(item.code, value);
+            const icon = getStatusIcon(grade);
+
+            return (
+              <div key={idx} className={item.className}>
+                <p>{item.label}</p>
+                <p>({item.sub})</p>
+                <img src={icon} alt="status" className={AirToday.status} />
+                <p className={AirToday.values}>{value}</p>
+                <p>{item.unit}</p>
+                <p>{grade}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </Card>
