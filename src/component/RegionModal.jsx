@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {use, useEffect, useState} from 'react';
 import {Button, Card, Select} from "antd";
 import axios from "axios";
 import styles from "/src/css/RegionModal.module.css";
@@ -51,24 +51,51 @@ function RegionModal({region, onClose}) {
         fetchRegionData();
     }, [key]);
 
-    console.log(sido);
-    console.log(district);
+    useEffect(() => {
+        if (sido && sido.length > 0) {
+            setDistrict(sido[0].cityName);
+        }
+    }, [sido]);
+
+    useEffect(() => {
+        if (!sido || !district) return;
+
+        const selected = sido.find(item => item.cityName === district);
+        if (!selected) return;
+
+        const pm25 = Number(selected.pm25Value);
+        if (!isNaN(pm25)) {
+            if (pm25 <= 15) {
+                setImg(good);
+            } else if (pm25 <= 35) {
+                setImg(normal);
+            } else {
+                // 필요 시 보통/나쁨/매우나쁨 등 다른 이미지도 설정 가능
+            }
+        }
+    }, [district]);
 
     const findItem = sido?.find(item => {
         return item.cityName === district
     });
     console.log(findItem);
 
-    const changeImg = () => {
-        if (findItem !== undefined) {
-            if (0 <= findItem.pm25Value && findItem.pm25Value <= 15) {
-                setImg(good);
-                console.log(img);
-            } else if (findItem.pm25Value <= 35) {
-                setImg(normal);
-                console.log(img);
-            }
-        }
+    // const changeImg = () => {
+    //     if (findItem !== undefined) {
+    //         if (Number(findItem.pm25Value) <= 15) {
+    //             setImg(good);
+    //             console.log("좋음");
+    //             console.log(findItem.pm25Value);
+    //         } else if (Number(findItem.pm25Value) <= 35) {
+    //             setImg(normal);
+    //             console.log("보통");
+    //             console.log(findItem.pm25Value);
+    //         }
+    //     }
+    // }
+
+    if (!sido || !district) {
+        return <div>로딩 중...</div>;
     }
 
     return (
@@ -84,7 +111,7 @@ function RegionModal({region, onClose}) {
                           </div>
                           <div className={styles.modalsubTitle}>
                               <Select
-                                  defaultValue="지역선택"
+                                  defaultValue={`${district}`}
                                   className={styles.roundSelect}
                                   style={{width: "40%", textAlign: "center"}}
                                   options={
@@ -96,12 +123,12 @@ function RegionModal({region, onClose}) {
                                   }
                                   onChange={value => {
                                       setDistrict(value);
-                                      changeImg();
+                                      // changeImg();
                                   }}
                               />
                               <div className={styles.modalDatatime}>
                                   {
-                                      sido !== null && (
+                                      (
                                           <div>
                                               {
                                                   dataTime.split(" ")[0] + " " + dataTime.split(" ")[1].split(":")[0] + "시"
