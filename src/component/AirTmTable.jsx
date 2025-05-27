@@ -1,4 +1,4 @@
-import { Table, ConfigProvider, Card } from "antd";
+import { Table } from "antd";
 import React, { useState, useEffect, useMemo } from "react";
 import dayjs from "dayjs";
 import ATmtable from "../css/AirTmTable.module.css";
@@ -13,7 +13,7 @@ import Extent from "../component/extent.jsx";
 
 const inform = ["PM10", "PM25", "O3"];
 
-function AirTmTable() {
+function AirTmTable({ setTimeText }) {
   const [Datas, setDatas] = useState([]);
 
   const getData = async () => {
@@ -22,11 +22,10 @@ function AirTmTable() {
 
       const requests = inform.map((infoCode) =>
         axios.get(
-          // "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
+          "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
           {
             params: {
-              serviceKey:
-                "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+              // serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
               returnType: "json",
               numOfRows: 100,
               pageNo: 1,
@@ -62,22 +61,22 @@ function AirTmTable() {
   const futureDatas = useMemo(() => {
     return Datas.filter((d) => dayjs(d.informData).isAfter(today));
   }, [Datas]);
-  
+
   const forecastDate = useMemo(() => {
     return futureDatas[0]?.informData || "예보 날짜 없음";
   }, [futureDatas]);
-  
+
   const dataTime = useMemo(() => {
-    return futureDatas[0]?.dataTime || "발표 시각 없음";
+    return futureDatas[0]?.dataTime || "발표 시간 없음";
   }, [futureDatas]);
-  
+
   const regionGradeMap = useMemo(() => {
     const mapByPollutant = {};
-  
+
     inform.forEach((code) => {
       const item = futureDatas.find((i) => i.informCode === code);
       const gradeMap = new Map();
-  
+
       if (item?.informGrade) {
         item.informGrade.split(",").forEach((entry) => {
           const [region, grade] = entry.split(" : ").map((s) => s.trim());
@@ -86,13 +85,23 @@ function AirTmTable() {
           }
         });
       }
-  
+
       mapByPollutant[code] = gradeMap;
     });
-  
+
     return mapByPollutant;
   }, [futureDatas]);
-  
+
+  useEffect(() => {
+    if (setTimeText && forecastDate && dataTime) {
+      setTimeText(
+        <>
+          {forecastDate}
+          <span className={ATmtable.forecastInfoSub}>({dataTime})</span>
+        </>
+      );
+    }
+  }, [forecastDate, dataTime]);
 
   const columns = [
     {
@@ -160,13 +169,6 @@ function AirTmTable() {
 
   return (
     <>
-      <div className={ATmtable.forecastInfoWrapper}>
-        <span className={ATmtable.forecastInfoText}>
-          {forecastDate} 예보
-          <span className={ATmtable.forecastInfoSub}>({dataTime} 기준)</span>
-        </span>
-      </div>
-
       <div className={ATmtable.tableWrapper}>
         <Table
           columns={columns}
@@ -174,10 +176,10 @@ function AirTmTable() {
           pagination={false}
           scroll={{ x: 1000 }} // ← 최소한의 넓이만 지정
         />
+        </div>
         <div>
           <Extent />
         </div>
-      </div>
     </>
   );
 }

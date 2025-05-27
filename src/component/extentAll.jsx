@@ -6,6 +6,14 @@ function ExtentAll() {
     <div className={ExstyleA.legendTable}>
       <h1>예보등급</h1>
       <table className={ExstyleA.extable}>
+      <colgroup>
+          <col style={{ width: "8%" }} />
+          <col style={{ width: "8%" }} />
+          <col style={{ width: "16.25%" }} />
+          <col style={{ width: "16.25%" }} />
+          <col style={{ width: "16.25%" }} />
+          <col style={{ width: "16.25%" }} />
+        </colgroup>
         <thead>
           <tr>
             <th rowSpan={2} colSpan={2}>
@@ -47,30 +55,30 @@ function ExtentAll() {
               (ppm, 1시간)
             </td>
             <td>O₃</td>
-            <td>0~0.03</td>
-            <td>0.0301~0.09</td>
-            <td>0.0901~0.15</td>
+            <td>0~0.0300</td>
+            <td>0.0301~0.0900</td>
+            <td>0.0901~0.1500</td>
             <td>0.1500 초과</td>
           </tr>
           <tr>
             <td>NO₂</td>
-            <td>0~0.03</td>
-            <td>0.031~0.06</td>
-            <td>0.061~0.2</td>
+            <td>0~0.030</td>
+            <td>0.031~0.060</td>
+            <td>0.061~0.200</td>
             <td>0.200 초과</td>
           </tr>
           <tr>
             <td>CO</td>
-            <td>0~2</td>
-            <td>2.01~9</td>
+            <td>0~2.00</td>
+            <td>2.01~9.00</td>
             <td>9.01~15</td>
             <td>15 초과</td>
           </tr>
           <tr>
             <td>SO₂</td>
-            <td>0~0.02</td>
-            <td>0.021~0.05</td>
-            <td>0.051~0.15</td>
+            <td>0~0.020</td>
+            <td>0.021~0.050</td>
+            <td>0.051~0.150</td>
             <td>0.150 초과</td>
           </tr>
         </tbody>
