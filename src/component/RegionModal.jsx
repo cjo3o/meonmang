@@ -8,6 +8,8 @@ const AVR_KEY = import.meta.env.VITE_AVR_KEY;
 
 function RegionModal({region, onClose}) {
     const [sido, setSido] = useState(null);
+    const [dataTime, setDataTime] = useState(null);
+    const [district, setDistrict] = useState(null);
 
     const regionKeyMap = {
         서울특별시: "서울",
@@ -38,13 +40,22 @@ function RegionModal({region, onClose}) {
                 } = await axios.get(`${SIDO_AVR_URL}?serviceKey=${AVR_KEY}&returnType=json&numOfRows=100&pageNo=1&sidoName=${key}&searchCondition=HOUR`)
                 console.log(data);
                 setSido(data.response.body.items);
+                setDataTime(data.response.body.items[0].dataTime);
             } catch (error) {
                 console.error(error);
             }
         }
         fetchRegionData();
     }, [key]);
+
     console.log(sido);
+    console.log(district);
+
+    const findItem = sido?.find(item => {
+        return item.cityName === district
+    });
+    console.log(findItem);
+
     return (
         <>
             <Card className={styles.modalContent}
@@ -60,6 +71,7 @@ function RegionModal({region, onClose}) {
                               <Select
                                   defaultValue="지역을 선택해주세요"
                                   className={styles.roundSelect}
+                                  style={{width: "40%", textAlign: "center"}}
                                   options={
                                       sido
                                           ? sido.map((item) => ({
@@ -67,7 +79,19 @@ function RegionModal({region, onClose}) {
                                               value: item.cityName
                                           })) : []
                                   }
+                                  onChange={value => setDistrict(value)}
                               />
+                              <div className={styles.modalDatatime}>
+                                  {
+                                      sido !== null && (
+                                          <div>
+                                              {
+                                                  dataTime.split(" ")[0] + " " + dataTime.split(" ")[1].split(":")[0] + "시"
+                                              }
+                                          </div>
+                                      )
+                                  }
+                              </div>
                           </div>
                       </>
                   }
@@ -78,9 +102,43 @@ function RegionModal({region, onClose}) {
                           padding: 0,
                           border: "none",
                           minHeight: 0
+                      },
+                      body: {
+                          padding: 0,
+                          border: "none",
+                          minHeight: 0
                       }
                   }}>
-                dd
+                <div className={styles.modalBody}>
+                    {
+                        findItem === undefined ? "데이터 없음" : (
+                            <>
+
+                                <ul>
+                                    <li>
+                                        초미세먼지 (PM25) : {findItem.pm25Value === "" ? "데이터 없음" : findItem.pm25Value}
+                                    </li>
+                                    <li>
+                                        미세먼지 (PM10) : {findItem.pm10Value === "" ? "데이터 없음" : findItem.pm10Value}
+                                    </li>
+                                    <li>
+                                        오존 (O₃) : {findItem.o3Value === "" ? "데이터 없음" : findItem.o3Value}
+                                    </li>
+                                    <li>
+                                        일산화탄소 (CO) : {findItem.coValue === "" ? "데이터 없음" : findItem.coValue}
+                                    </li>
+                                    <li>
+                                        이산화질소 (NO₂) : {findItem.no2Value === "" ? "데이터 없음" : findItem.no2Value}
+                                    </li>
+                                    <li>
+                                        아황산가스 (SO₂) : {findItem.so2Value === "" ? "데이터 없음" : findItem.so2Value}
+                                    </li>
+                                </ul>
+                            </>
+                        )
+
+                    }
+                </div>
             </Card>
         </>
     )

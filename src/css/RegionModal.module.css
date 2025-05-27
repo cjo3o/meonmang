@@ -1,25 +1,54 @@
 .modalContent {
+    width: 25%;
     z-index: 1;
     position: fixed;
-    outline: solid 2px #ccc;
 }
 
 .modalTitle {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.5rem;
     padding: 0.5rem 0.7rem;
     min-height: 56px;
+    background-color: #006AB6;
+    color: white;
+    font-weight: normal;
+    border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .modalsubTitle {
+    margin-top: 0.1rem;
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 0.7rem;
     background-color: #67D8F3;
+    border-radius: 0.2rem;
 }
 .roundSelect :global(.ant-select-selector) {
     border-radius: 50px !important;
     border: none !important;
-    width:  100px !important;
+}
+
+.modalDatatime {
+    background-color: #fff;
+    padding: 0 11px;
+    border-radius: 50px;
+    align-content: center;
+    width: 40%;
+    text-align: center;
+    font-weight: normal;
+}
+
+.modalBody {
+    padding: 0.5rem 0.7rem;
+}
+
+.modalBody > ul {
+    list-style: none;
+}
+
+.modalBody > ul li {
+    padding: 0.5rem 0.7rem;
+    font-size: 1.1rem;
 }
