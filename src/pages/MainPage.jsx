@@ -22,6 +22,11 @@ function MainPage(props) {
                 </div>
             </div>
             <Sidebar></Sidebar>
+            <div>
+                {
+
+                }
+            </div>
         </>
     );
 }
