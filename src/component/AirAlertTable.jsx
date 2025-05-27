@@ -86,12 +86,18 @@ const AirAlertTable = ({ region, itemCode, dateRange, searchTrigger, setAvailabl
                 const result = combined.filter(item => {
                     const matchRegion = region === "전체" || item.지역 === region;
                     const matchItem = itemCode === "전체" || item.항목 === itemCode;
-                    const matchDate = !dateRange[0] || !dateRange[1]
-                        ? true
-                        : (
-                            dayjs(item.발령시간).isAfter(dayjs(dateRange[0]).startOf("day").subtract(1, "second")) &&
-                            dayjs(item.발령시간).isBefore(dayjs(dateRange[1]).endOf("day").add(1, "second"))
-                        );
+
+                    const 발령 = dayjs(item.발령시간, "YYYY-MM-DD HH:mm"); // formatDateTime()으로 이미 포맷 통일됨
+                    const 시작 = dateRange[0] ? dayjs(dateRange[0]).startOf("day") : null;
+                    const 끝 = dateRange[1] ? dayjs(dateRange[1]).endOf("day") : null;
+
+                    const matchDate =
+                        !시작 || !끝
+                            ? true
+                            : 발령.isValid() &&
+                            발령.isSameOrAfter(시작) &&
+                            발령.isSameOrBefore(끝);
+
                     return matchRegion && matchItem && matchDate;
                 });
 
@@ -106,7 +112,7 @@ const AirAlertTable = ({ region, itemCode, dateRange, searchTrigger, setAvailabl
         };
 
         fetchData();
-    }, [searchTrigger]);
+    }, [searchTrigger, dateRange]);
 
     const handleExcelDownload = () => {
         if (filteredData.length === 0) {

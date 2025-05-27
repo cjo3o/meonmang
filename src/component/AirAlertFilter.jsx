@@ -8,10 +8,10 @@ const AirAlertFilter = ({
                             setRegion,
                             itemCode,
                             setItemCode,
-                            dateRange,
-                            setDateRange,
+                            pendingDateRange,
+                            setPendingDateRange,
                             regionOptions,
-                            onSearch,
+                            onSearch
                         }) => (
     <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col>
@@ -32,7 +32,7 @@ const AirAlertFilter = ({
             </Radio.Group>
         </Col>
         <Col>
-            <RangePicker value={dateRange} onChange={setDateRange} />
+            <RangePicker value={pendingDateRange} onChange={setPendingDateRange} />
         </Col>
         <Col>
             <Space>
