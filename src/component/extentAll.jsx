@@ -6,6 +6,14 @@ function ExtentAll() {
     <div className={ExstyleA.legendTable}>
       <h1>예보등급</h1>
       <table className={ExstyleA.extable}>
+      <colgroup>
+          <col style={{ width: "8%" }} />
+          <col style={{ width: "8%" }} />
+          <col style={{ width: "16.25%" }} />
+          <col style={{ width: "16.25%" }} />
+          <col style={{ width: "16.25%" }} />
+          <col style={{ width: "16.25%" }} />
+        </colgroup>
         <thead>
           <tr>
             <th rowSpan={2} colSpan={2}>

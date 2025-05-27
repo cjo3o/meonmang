@@ -1,4 +1,4 @@
-import { Table, ConfigProvider, Card } from "antd";
+import { Table } from "antd";
 import React, { useState, useEffect, useMemo } from "react";
 import dayjs from "dayjs";
 import ATmtable from "../css/AirTmTable.module.css";
@@ -22,10 +22,10 @@ function AirTmTable({ setTimeText }) {
 
       const requests = inform.map((infoCode) =>
         axios.get(
-          // "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
+          "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
           {
             params: {
-              serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+              // serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
               returnType: "json",
               numOfRows: 100,
               pageNo: 1,
@@ -176,10 +176,10 @@ function AirTmTable({ setTimeText }) {
           pagination={false}
           scroll={{ x: 1000 }} // ← 최소한의 넓이만 지정
         />
+        </div>
         <div>
           <Extent />
         </div>
-      </div>
     </>
   );
 }
