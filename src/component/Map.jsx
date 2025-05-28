@@ -5,6 +5,7 @@ import RealTime from "./RealTime.jsx";
 import DateInfor from "./DateInfor.jsx";
 import RealTimeMap from "./RealTimeMap.jsx";
 import RegionModal from "./RegionModal.jsx";
+import DateInforMap from "./DateInforMap.jsx";
 
 function Map(props) {
     const [activeTab, setActiveTab] = useState("realTime");
@@ -54,7 +55,7 @@ function Map(props) {
 
                 {
                     activeTab === "realTime" ?
-                        <RealTimeMap selectOption={selectOption} onOpenModal={handleOpenModal}/> : "오늘/내일 대기정보"
+                        <RealTimeMap selectOption={selectOption} onOpenModal={handleOpenModal}/> : <DateInforMap/>
                 }
 
             </Card>
