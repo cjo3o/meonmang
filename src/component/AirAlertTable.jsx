@@ -4,6 +4,11 @@ import axios from "axios";
 import dayjs from "dayjs";
 import * as XLSX from "xlsx";
 import ExcelIcon from "../images/excelicon.svg";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 const formatDateTime = (date, time, isOzone = false) => {
     if (!date || !time) return "-";
@@ -71,39 +76,58 @@ const AirAlertTable = ({ region, itemCode, dateRange, searchTrigger, setAvailabl
                     해제시간: formatDateTime(item.dataDate || item.clearDate, item.clearTime, true),
                 }));
 
-                const combined = [...pmItems, ...ozoneItems]
-                    .filter(item => item.발령시간.startsWith("2025"))
-                    .sort((a, b) => new Date(b.발령시간) - new Date(a.발령시간))
-                    .map((item, index) => ({ ...item, 번호: index + 1 }));
-
-                // 지역 목록 추출 후 상위로 전달
-                if (setAvailableRegions) {
-                    const uniqueRegions = Array.from(new Set(combined.map(item => item.지역))).sort();
-                    setAvailableRegions(["전체", ...uniqueRegions]);
-                }
-
-                // 필터 적용
-                const result = combined.filter(item => {
-                    const matchRegion = region === "전체" || item.지역 === region;
-                    const matchItem = itemCode === "전체" || item.항목 === itemCode;
-
-                    const 발령 = dayjs(item.발령시간, "YYYY-MM-DD HH:mm"); // formatDateTime()으로 이미 포맷 통일됨
+                const result = ozoneItems.filter((item)=>{
+                    const 발령 = dayjs(item.발령시간, "YYYY-MM-DD HH:mm");
                     const 시작 = dateRange[0] ? dayjs(dateRange[0]).startOf("day") : null;
                     const 끝 = dateRange[1] ? dayjs(dateRange[1]).endOf("day") : null;
+                    return 발령.isSameOrAfter(시작) && 발령.isSameOrBefore(끝);
+                })
+                // console.log(result);
+                let combined = [...result,...pmItems];
+                combined = combined.sort((a, b) => new Date(b.발령시간) - new Date(a.발령시간))
 
-                    const matchDate =
-                        !시작 || !끝
-                            ? true
-                            : 발령.isValid() &&
-                            발령.isSameOrAfter(시작) &&
-                            발령.isSameOrBefore(끝);
-
-                    return matchRegion && matchItem && matchDate;
-                });
-
-                setData(combined);
-                setFilteredData(result);
+                setFilteredData(combined);
                 setCurrentPage(1);
+
+                // const combined = [...pmItems, ...ozoneItems]
+                //     .filter(item => item.발령시간.startsWith("2025"))
+                //     .sort((a, b) => new Date(b.발령시간) - new Date(a.발령시간))
+                //     .map((item, index) => ({ ...item, 번호: index + 1 }));
+
+                // 지역 목록 추출 후 상위로 전달
+                // if (setAvailableRegions) {
+                //     const uniqueRegions = Array.from(new Set(combined.map(item => item.지역))).sort();
+                //     setAvailableRegions(["전체", ...uniqueRegions]);
+                // }
+                //
+                // // 필터 적용
+                // const result = combined.filter(item => {
+                //     const matchRegion = region === "전체" || item.지역 === region;
+                //     const matchItem = itemCode === "전체" || item.항목 === itemCode;
+                //     const 발령 = dayjs(item.발령시간, "YYYY-MM-DD HH:mm"); // formatDateTime()으로 이미 포맷 통일됨
+                //
+                //     dateRange = dateRange ?? [dayjs().startOf("day").format("YYYY-MM-DD"), dayjs().endOf("day").format("YYYY-MM-DD")];
+                //
+                //     const 시작 = dateRange[0] ? dayjs(dateRange[0]).startOf("day") : null;
+                //     const 끝 = dateRange[1] ? dayjs(dateRange[1]).endOf("day") : null;
+                //
+                //     console.log('시작',시작.format('YYYY-MM-DD HH:mm'));
+                //     console.log('끝',끝.format('YYYY-MM-DD HH:mm'));
+                //     console.log('발령',발령.format('YYYY-MM-DD HH:mm'));
+                //
+                //     const matchDate =
+                //         !시작 || !끝
+                //             ? true
+                //             : 발령.isValid() &&
+                //             발령.isSameOrAfter(시작) &&
+                //             발령.isSameOrBefore(끝);
+                //
+                //     return matchRegion && matchItem && matchDate;
+                // });
+
+                // setData(combined);
+                // setFilteredData(result);
+                // setCurrentPage(1);
             } catch (err) {
                 console.error("API 오류", err);
             } finally {
