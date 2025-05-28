@@ -10,10 +10,10 @@ const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
 const DATE_URL = import.meta.env.VITE_DATE_URL;
 const AVR_KEY = import.meta.env.VITE_AVR_KEY;
 
-function RealTimeMap({selectOption, onOpenModal}) {
+function DateInforMap({dateOption, selectDate}) {
     const [map, setMap] = useState(null);
     const [openOverlay, setOpenOverlay] = useState(null);
-    const [todayInfor, setTodayInfor] = useState([]);
+    const [dayInfor, setDayInfor] = useState([]);
 
     useKakaoLoader({appkey: KAKAO_API_KEY});
 
@@ -28,9 +28,17 @@ function RealTimeMap({selectOption, onOpenModal}) {
 
         const fetchAvrData = async () => {
             try {
-                const {data} = await axios.get(`${DATE_URL}?serviceKey=${AVR_KEY}&returnType=json&numOfRows=100&pageNo=1&searchDate=2025-05-28&informCode=PM10`);
-                // console.log(data.response.body.items[1]);
-                setTodayInfor(data.response.body.items[0].informGrade.split(","));
+                const {data} = await axios.get(`${DATE_URL}?serviceKey=${AVR_KEY}&returnType=json&numOfRows=100&pageNo=1&searchDate=2025-05-28&informCode=${dateOption}`);
+
+                if (selectDate === "today") {
+                    console.log(data.response.body.items[0]);
+                    setDayInfor(data.response.body.items[0].informGrade.split(","));
+                    console.log(data.response.body.items[0].informData);
+                } else if (selectDate === "tomorrow") {
+                    console.log(data.response.body.items[1]);
+                    setDayInfor(data.response.body.items[1].informGrade.split(","));
+                    console.log(data.response.body.items[1].informData);
+                }
             } catch (err) {
                 console.log("API 호출 오류", err);
             }
@@ -46,9 +54,9 @@ function RealTimeMap({selectOption, onOpenModal}) {
         return () => {
             kakao.maps.event.removeListener(map, 'click', handleMapClick);
         };
-    }, [map, selectOption]);
+    }, [map, dateOption, selectDate]);
 
-    const result = todayInfor.map(item=>{
+    const result = dayInfor.map(item=>{
         return item.split(':')
     })
     console.log(result);
@@ -154,4 +162,4 @@ function RealTimeMap({selectOption, onOpenModal}) {
     );
 }
 
-export default RealTimeMap;
+export default DateInforMap;

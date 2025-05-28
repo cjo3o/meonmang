@@ -10,7 +10,10 @@ import DateInforMap from "./DateInforMap.jsx";
 function Map(props) {
     const [activeTab, setActiveTab] = useState("realTime");
     const [selectOption, setSelectOption] = useState("PM25");
+    const [dateOption, setDateOption] = useState("PM25");
     const [selectedRegion, setSelectedRegion] = useState(null);
+    const [selectDate, setSelectDate] = useState("today");
+    const [dataTime, setDataTime] = useState(null);
 
     const handleOpenModal = (regionName) => {
         setSelectedRegion(regionName);
@@ -38,8 +41,8 @@ function Map(props) {
                         </div>
                         <div className={styles.subTitle}>
                             {activeTab === "realTime" ?
-                                <RealTime selectOption={selectOption} setSelectOption={setSelectOption}/> :
-                                <DateInfor/>}
+                                <RealTime  setSelectOption={setSelectOption} dataTime={dataTime} setDataTime={setDataTime}/> :
+                                <DateInfor dateOption={dateOption} setDateOption={setDateOption} selectDate={selectDate} setSelectDate={setSelectDate}/>}
                         </div>
                     </>
                 }
@@ -55,7 +58,7 @@ function Map(props) {
 
                 {
                     activeTab === "realTime" ?
-                        <RealTimeMap selectOption={selectOption} onOpenModal={handleOpenModal}/> : <DateInforMap/>
+                        <RealTimeMap selectOption={selectOption} setDataTime={setDataTime} onOpenModal={handleOpenModal}/> : <DateInforMap dateOption={dateOption} selectDate={selectDate}/>
                 }
 
             </Card>

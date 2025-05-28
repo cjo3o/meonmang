@@ -12,11 +12,11 @@ const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
 const AVR_URL = import.meta.env.VITE_AVR_URL;
 const AVR_KEY = import.meta.env.VITE_AVR_KEY;
 
-function RealTimeMap({selectOption, onOpenModal}) {
+function RealTimeMap({selectOption, onOpenModal, setDataTime}) {
     const [map, setMap] = useState(null);
     const [openOverlay, setOpenOverlay] = useState(null);
     const [sidoAvr, setSidoAvr] = useState([]);
-    const [openModal, setOpenModal] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const sidoAvrRef = useRef([]);
 
@@ -29,17 +29,20 @@ function RealTimeMap({selectOption, onOpenModal}) {
 
     // 지도 클릭 시 오버레이 닫기
     useEffect(() => {
-        if (!map) return;
+        if (!map) return ;
 
         const fetchAvrData = async () => {
+            setLoading(true);
             try {
                 const {data} = await axios.get(`${AVR_URL}?returnType=json&numOfRows=25&pageNo=1&itemCode=${selectOption}&dataGubun=HOUR&serviceKey=${AVR_KEY}`);
                 console.log(data);
+                setDataTime(data.response.body.items[0].dataTime);
                 sidoAvrRef.current = data.response.body.items;
                 setSidoAvr(data.response.body.items);
-                console.log(sidoAvr);
             } catch (err) {
                 console.log("API 호출 오류", err);
+            } finally {
+                setLoading(false);
             }
         };
         fetchAvrData();
@@ -54,7 +57,6 @@ function RealTimeMap({selectOption, onOpenModal}) {
             kakao.maps.event.removeListener(map, 'click', handleMapClick);
         };
     }, [map, selectOption]);
-
 
     // 폴리곤 렌더링
     useEffect(() => {
@@ -114,6 +116,16 @@ function RealTimeMap({selectOption, onOpenModal}) {
             });
         });
     }, [map]);
+
+    if (loading || !map) {
+        return (
+            <div className={styles.loadingContainer}>
+                <p className={styles.loadingText}>데이터 로딩중...</p>
+            </div>
+        );
+    }
+
+
 
     return (
         <>

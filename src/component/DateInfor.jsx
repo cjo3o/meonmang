@@ -2,18 +2,18 @@ import React from 'react';
 import styles from "../css/Map.module.css";
 import {Select} from "antd";
 
-function DateInfor(props) {
-    const [selectDate, setSelectDate] = React.useState("today");
+function DateInfor({setDateOption, selectDate, setSelectDate}) {
     return (
         <>
             <Select
                 className={styles.roundSelect}
                 style={{width: "30%", textAlign: "center"}}
                 defaultValue="초미세먼지 (PM-2.5)"
+                onChange={(value) => setDateOption(value)}
                 options={[
-                    {value: "초미세먼지 (PM-2.5)", label: "초미세먼지 (PM-2.5)"},
-                    {value: "미세먼지 (PM-10)", label: "미세먼지 (PM-10)"},
-                    {value: "오존 (O₃)", label: "오존 (O₃)"},
+                    {value: "PM25", label: "초미세먼지 (PM-2.5)"},
+                    {value: "PM10", label: "미세먼지 (PM-10)"},
+                    {value: "O3", label: "오존 (O₃)"},
                 ]}>
             </Select>
             <div className={styles.selectDate}>
