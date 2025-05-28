@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Card} from "antd";
 import AlertStyle from "../../css/AirAlert.module.css";
 import AirAlertFilter from "../../component/AirAlertFilter.jsx";
-// import Alertexcel from "../../component/Alertexcel.jsx";
+import Alertexcel from "../../component/Alertexcel.jsx";
 import AirAlertTable from "../../component/AirAlertTable.jsx";
 import Alertitems from "../../component/Alertitems.jsx";
 import dayjs from "dayjs";
@@ -13,10 +13,12 @@ const AirAlert = () => {
   const [pendingDateRange, setPendingDateRange] = useState([
     dayjs().startOf('year'), dayjs().endOf('day')
   ]);
-  const [dateRange, setDateRange] = useState([null, null]);
 
-  const [searchTrigger, setSearchTrigger] = useState(0); // 테이블 갱신용 트리거
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [searchTrigger, setSearchTrigger] = useState(0);
   const [regionOptions, setRegionOptions] = useState(["전체"]);
+
+  const [filteredData, setFilteredData] = useState([]);
 
   const handleSearch = () => {
     setDateRange(pendingDateRange);         // 날짜 적용
@@ -35,6 +37,7 @@ const AirAlert = () => {
           <div className={AlertStyle.header}>
             <h1>대기오염 발령 내역</h1>
           </div>
+          <div className={AlertStyle.flexBetween}>
           <AirAlertFilter
             region={region}
             setRegion={setRegion}
@@ -45,12 +48,16 @@ const AirAlert = () => {
             regionOptions={regionOptions}
             onSearch={handleSearch}
           />
+            <Alertexcel data={filteredData} />
+          </div>
           <AirAlertTable
             region={region}
             itemCode={itemCode}
             dateRange={pendingDateRange}
             searchTrigger={searchTrigger}
             setAvailableRegions={setRegionOptions}
+            setFilteredData={setFilteredData}
+            onDataUpdate={setFilteredData}
           />
 
           <div className={AlertStyle.bottom}>
