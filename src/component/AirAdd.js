@@ -1,5 +1,4 @@
 
-
 export const Grade = {
   1: { label: "좋음", bgColor: "#a2d8ff" },
   2: { label: "보통", bgColor: "#d2f29b" },
@@ -27,22 +26,22 @@ export const itemCodeMap = {
 
 export const REGION_KEYS = {
   서울: "seoul",
-  // 인천: "incheon",
-  // 경기: "gyeonggi",
-  // 강원: "gangwon",
-  // 대전: "daejeon",
-  // 세종: "sejong",
-  // 충북: "chungbuk",
-  // 충남: "chungnam",
-  // 광주: "gwangju",
-  // 전북: "jeonbuk",
-  // 전남: "jeonnam",
-  // 부산: "busan",
-  // 대구: "daegu",
-  // 울산: "ulsan",
-  // 경북: "gyeongbuk",
-  // 경남: "gyeongnam",
-  // 제주: "jeju",
+  인천: "incheon",
+  경기: "gyeonggi",
+  강원: "gangwon",
+  대전: "daejeon",
+  세종: "sejong",
+  충북: "chungbuk",
+  충남: "chungnam",
+  광주: "gwangju",
+  전북: "jeonbuk",
+  전남: "jeonnam",
+  부산: "busan",
+  대구: "daegu",
+  울산: "ulsan",
+  경북: "gyeongbuk",
+  경남: "gyeongnam",
+  제주: "jeju",
 };
 
 export const REGION_COLUMNS = [

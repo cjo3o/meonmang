@@ -1,4 +1,3 @@
-// 예시 구조 (AirAdd.js에 정의되어 있어야 함)
 export const POLLUTANTS2 = [
   { key: "pm10", label: "미세먼지", sub: "PM-10", code: "PM10" },
   { key: "pm25", label: "초미세먼지", sub: "PM-2.5", code: "PM25" },
@@ -24,6 +23,7 @@ export const Citys2 = [
   "광주",
   "전북",
   "전남",
+  "부산",
   "대구",
   "울산",
   "경북",
@@ -45,6 +45,7 @@ export const REGION_KEYS2 = {
   광주: "광주",
   전북: "전북",
   전남: "전남",
+  부산: "부산",
   대구: "대구",
   울산: "울산",
   경북: "경북",
@@ -76,6 +77,7 @@ export const REGION_COLUMNS2 = [
   { label: "광주", key: "광주" },
   { label: "전북", key: "전북" },
   { label: "전남", key: "전남" },
+  { label: "부산", key: "부산" },
   { label: "대구", key: "대구" },
   { label: "울산", key: "울산" },
   { label: "경북", key: "경북" },

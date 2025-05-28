@@ -1,54 +1,58 @@
 .legendTable {
-    margin-top: 20px;
-  }
-  
-  .legendTable table {
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-    text-align: center;
-  }
-  
-  .legendTable th:first-child,
-  .legendTable td:first-child {
-    width: 20%;
-  }
-  
-  .legendTable th,
-  .legendTable td {
-    border: 1px solid #ddd;
-    padding: 5px;
-  }
-  
-  .legendTable h1 {
-    text-align: center;
-  }
-  
-  .bgLight {
-    background-color: #f0faf3;
-    font-weight: bold;
-  }
-  
-  .gradeGood {
-    background-color: #a2d8ff;
-    color: white;
-  }
-  
-  .gradeNormal {
-    background-color: #d2f29b;
-    color: black;
-  }
-  
-  .gradeBad {
-    background-color: #f9c97a;
-    color: black;
-  }
-  
-  .gradeVeryBad {
-    background-color: #f07c7c;
-    color: white;
-  }
-  
-  .extable {
-    margin-top: 5px;
-  }
+  overflow-x: auto;  /* ✅ 가로 스크롤 가능 */
+  display: block; 
+  margin-top: 20px;
+}
+
+.legendTable table {
+  width: 100%;
+  /* table-layout: fixed; */
+  border-collapse: collapse;
+  text-align: center;
+}
+
+/* .legendTable th:first-child,
+.legendTable td:first-child {
+  min-width: 100px;
+  width: 5%;
+} */
+
+.legendTable th,
+.legendTable td {
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+
+.legendTable h1 {
+  text-align: center;
+}
+
+.bgLight {
+  background-color: #f0faf3;
+  font-weight: bold;
+}
+
+.gradeGood {
+  background-color: #a2d8ff;
+  color: white;
+}
+
+.gradeNormal {
+  background-color: #d2f29b;
+  color: black;
+}
+
+.gradeBad {
+  background-color: #f9c97a;
+  color: black;
+}
+
+.gradeVeryBad {
+  background-color: #f07c7c;
+  color: white;
+}
+
+.extable {
+  min-width: 1000px;
+  margin-top: 5px;
+}

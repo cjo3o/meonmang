@@ -13,12 +13,6 @@
     width: 100%;
   }
   
-  .forecastInfoWrapper {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 12px;
-  }
-  
   .forecastInfoText {
     font-size: 17px;
     font-weight: 500;

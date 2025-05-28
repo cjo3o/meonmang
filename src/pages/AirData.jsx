@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card } from "antd";
 import AirButton from "../component/AirButton.jsx";
 import AirTable from "../component/AirTable.jsx";
@@ -8,20 +8,32 @@ import ADataStyle from "../css/AirData.module.css";
 
 import { REGION_KEYS, REGION_COLUMNS } from "../component/AirAdd.js";
 
-
 function AirData() {
-  const [selectedDay, setSelectedDay] = useState("오늘");  // 기본값 '오늘'
+  const [selectedDay, setSelectedDay] = useState("오늘"); // 기본값 '오늘'
+  const [timeText, setTimeText] = useState(""); // 발표시간 상태
 
   return (
     <div className={ADataStyle.content}>
-      <div className={ADataStyle.header}>
-        <h1>대기 정보</h1>
-      </div>
+
       <div className={ADataStyle.center}>
         <Card
           title={
             <div className={ADataStyle.cen_up}>
-              <AirButton selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+              <div className={ADataStyle.header}>
+                <h1>대기정보</h1>
+              </div>
+              <div className={ADataStyle.headerRow}>
+                <AirButton
+                  selectedDay={selectedDay}
+                  setSelectedDay={setSelectedDay}
+                />
+                {selectedDay === "오늘" && (
+                  <div className={ADataStyle.timeText}>발표 시간: {timeText}</div>
+                )}
+                {selectedDay === "내일" && (
+                  <div className={ADataStyle.timeText}>예보일 : {timeText}</div>
+                )}
+              </div>
             </div>
           }
         >
@@ -30,13 +42,13 @@ function AirData() {
               <AirTmTable
                 regionKeys={REGION_KEYS}
                 regionColumns={REGION_COLUMNS}
+                setTimeText={setTimeText}
               />
             ) : (
-              <AirTable selectedDay={selectedDay} />
+              <AirTable selectedDay={selectedDay} setTimeText={setTimeText} />
             )}
           </div>
         </Card>
-
       </div>
     </div>
   );
