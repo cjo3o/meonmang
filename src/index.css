@@ -21,3 +21,19 @@
 .ant-table-measure-row {
   display: none !important;
 }
+
+/* AirInfoForecast 컴포넌트에만 적용 */
+.air-info-forecast .ant-card-body {
+  height: 310px;
+  padding: 35px 15px;
+}
+
+.air-info-today .ant-card-body {
+  height: 310px;
+  padding: 15px 15px;
+}
+
+
+.air-info-forecast-wrapper {
+  margin-top: 5px; /* 또는 원하는 위치 조절 */
+}

@@ -14,8 +14,9 @@ proj4.defs(
   "+proj=tmerc +lat_0=38 +lon_0=127.5 +k=0.9996 +x_0=200000 +y_0=500000 +ellps=GRS80 +units=m +no_defs"
 );
 
-function AirInfoToday() {
-  const [stationInfo, setStationInfo] = useState(null);
+function AirInfoToday({ setStationInfo }) {
+  const [station, setStation] = useState(null);
+  const [stationInfo, setLocalStationInfo] = useState(null);
   const [realtimeData, setRealtimeData] = useState(null);
 
   const airItems = [
@@ -112,7 +113,7 @@ function AirInfoToday() {
           "https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getMsrstnList",
           {
             params: {
-              // serviceKey: "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
+              // serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
               returnType: "json",
               addr: sido,
               numOfRows: 100,
@@ -171,25 +172,19 @@ function AirInfoToday() {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
-        const { latitude, longitude } = pos.coords;
-        const myCoords = { lat: latitude, lng: longitude };
-        try {
-          const stations = await fetchAllStations();
-          const nearest = findNearestStation(myCoords, stations);
-          setStationInfo(nearest || null);
-        } catch (e) {
-          console.error("측정소 검색 실패", e);
-          setStationInfo({ stationName: "에러" });
-        }
+        const myCoords = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        };
+        const stations = await fetchAllStations();
+        const nearest = findNearestStation(myCoords, stations);
+        setLocalStationInfo(nearest || null); // 내부 렌더링용
+        setStationInfo(nearest || null); // 부모로 전달
+        setStation(nearest || null); // ✅ 이거 빠져있어서 station은 항상 null
       },
       (err) => {
-        console.error("위치 정보 실패:", err);
-        setStationInfo({ stationName: "위치 실패" });
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
+        console.error("위치 실패", err);
+        setStationInfo(null); // ✅ 실패 시도 처리
       }
     );
   }, []);
@@ -205,7 +200,7 @@ function AirInfoToday() {
           "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty",
           {
             params: {
-              // serviceKey: "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
+              // serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
               returnType: "json",
               numOfRows: 1,
               pageNo: 1,
@@ -280,8 +275,24 @@ function AirInfoToday() {
     }
   };
 
+  const getGradeColor = (grade) => {
+    switch (grade) {
+      case "좋음":
+        return "#0086FF";
+      case "보통":
+        return "#00DE86";
+      case "나쁨":
+        return "#FFC957";
+      case "매우나쁨":
+        return "#DE4F4F";
+      default:
+        return "#0086FF";
+    }
+  };
+
   return (
     <Card
+      className={`${AirToday.Card} air-info-today`}
       title="오늘의 대기질"
       variant="borderless"
       styles={{
@@ -307,45 +318,35 @@ function AirInfoToday() {
             </div>
             <div>
               <span className={AirToday.TextTop2}>
-                {stationInfo
-                  ? `(${buildDisplayStation(stationInfo)} 측정소 기준)`
+                {station
+                  ? `(${buildDisplayStation(station)} 측정소 기준)`
                   : "(측정소 없음)"}
               </span>
             </div>
           </div>
           <div>
-            <span>{realtimeData?.dataTime || "측정시간 없음"}</span>
+            <span>{realtimeData?.dataTime || "측정시간 없음"}기준</span>
           </div>
         </div>
         <div className={AirToday.body}>
-          {[0, 1].map((groupIdx) => (
-            <div key={groupIdx} className={AirToday.subGroup}>
-              {airItems
-                .slice(groupIdx * 3, groupIdx * 3 + 3)
-                .map((item, idx) => {
-                  const value = realtimeData
-                    ? realtimeData[item.valueKey]
-                    : "-";
-                  const grade = getGrade(item.code, value);
-                  const icon = getStatusIcon(grade);
+          <div className={AirToday.subGroup}>
+            {airItems.map((item, idx) => {
+              const value = realtimeData ? realtimeData[item.valueKey] : "-";
+              const grade = getGrade(item.code, value);
+              const icon = getStatusIcon(grade);
 
-                  return (
-                    <div key={idx + groupIdx * 3} className={item.className}>
-                      <p>{item.label}</p>
-                      <p>({item.sub})</p>
-                      <img
-                        src={icon}
-                        alt="status"
-                        className={AirToday.status}
-                      />
-                      <p className={AirToday.values}>{value}</p>
-                      <p>{item.unit}</p>
-                      <p>{grade}</p>
-                    </div>
-                  );
-                })}
-            </div>
-          ))}
+              return (
+                <div key={idx} className={item.className}>
+                  <p>{item.label}</p>
+                  <p>({item.sub})</p>
+                  <img src={icon} alt="status" className={AirToday.status} />
+                  <p className={AirToday.values}>{value}</p>
+                  <p>{item.unit}</p>
+                  <p style={{ color: getGradeColor(grade) }}>{grade}</p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </Card>

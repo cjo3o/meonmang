@@ -1,3 +1,6 @@
+.Card {
+  height: 365px;
+}
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -19,7 +22,6 @@
 
 .TextTop {
   display: flex;
-  
   align-items: center;
 }
 
@@ -36,8 +38,8 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap; /* ✅ 줄바꿈 허용 */
-  justify-content: center;
-  margin-top: 10px;
+  margin-top: 20px;
+  overflow-x: auto;
 }
 
 .subGroup {
@@ -87,8 +89,8 @@
 }
 
 
-@media (max-width: 1805px) {
+/* @media (max-width: 1805px) {
   .body4, .body3 {
     border-right: none;
   }
-}
+} */

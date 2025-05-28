@@ -17,8 +17,10 @@
     gap: 2rem;
 }
 
-.content2 {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-}
+/* 모바일 화면일 때 Map 숨기기 */
+@media (max-width: 768px) {
+    .map {
+      display: none;
+    }
+  }
+  
