@@ -1,56 +1,94 @@
 .header {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
+}
+
+.header2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .location {
   width: 30px;
   height: 30px;
+  margin-right: 5px;
 }
 
 .TextTop {
+  display: flex;
+  
+  align-items: center;
+}
+
+.TextTop1 {
   font-size: 16px;
 }
 
 .TextTop2 {
-    font-size: 13px;
-    color: gray;
-  }
+  font-size: 13px;
+  color: gray;
+}
 
-.body{
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
+.body {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* ✅ 줄바꿈 허용 */
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.subGroup {
+  display: flex;
 }
 
 .body1 {
-    width: 20%;
-    text-align: center;
-    border-right: 1px solid rgb(219, 219, 219);
-    padding-right: 10px;
+  width: 20%;
+  min-width: 86px;
+  text-align: center;
+  border-right: 1px solid rgb(219, 219, 219);
+  padding-right: 10px;
 }
 
 .body2 {
-    width: 20%;
-    text-align: center;
-    border-right: 1px solid rgb(219, 219, 219);
-    padding: 0 10px;
+  width: 20%;
+  min-width: 86px;
+  text-align: center;
+  border-right: 1px solid rgb(219, 219, 219);
+  padding: 0 10px;
 }
 
 .body3 {
-    width: 20%;
-    text-align: center;
-    padding-left: 10px;
+  width: 20%;
+  min-width: 86px;
+  text-align: center;
+  border-right: 1px solid rgb(219, 219, 219);
+  padding: 0 10px;
+}
+
+.body4 {
+  width: 20%;
+  min-width: 86px;
+  text-align: center;
+  padding-left: 10px;
 }
 
 .status {
-    margin: 10px 0;
-    width: 50px;
-    height: 50px;
+  margin: 10px 0;
+  width: 50px;
+  height: 50px;
 }
 
 .values {
-    color: rgb(88, 166, 255);
-    font-size: 1.5rem;
+  color: rgb(88, 166, 255);
+  font-size: 1.5rem;
+}
+
+
+@media (max-width: 1805px) {
+  .body4, .body3 {
+    border-right: none;
+  }
 }
