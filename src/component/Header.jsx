@@ -1,9 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from '/src/css/Header.module.css';
 import logo from '/src/images/Logo.svg';
 import { Link } from 'react-router-dom';
 
 function Header(props) {
+    const [showSubmenu, setShowSubmenu] = useState(false);
+
     return (
         <>
             <div className={styles.Header}>
@@ -15,7 +17,19 @@ function Header(props) {
                         <ul>
                             <li><Link to="">먼망진창 소개</Link></li>
                             <li><Link to="/airdata">대기 정보</Link></li>
-                            <li><Link to="">대기오염 알림</Link></li>
+                            <li
+                              onMouseEnter={() => setShowSubmenu(true)}
+                              onMouseLeave={() => setShowSubmenu(false)}
+                              className={styles.hasSubmenu}
+                            >
+                                <Link to="/airalert">대기오염 알림</Link>
+                                {showSubmenu && (
+                                  <ul className={styles.submenu}>
+                                      <li><Link to="/airalert">경보</Link></li>
+                                      <li><Link to="/airclack">알림</Link></li>
+                                  </ul>
+                                )}
+                            </li>
                             <li><Link to="">고객지원</Link></li>
                         </ul>
                     </div>

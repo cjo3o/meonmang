@@ -1,0 +1,37 @@
+/* AirButton.module.css */
+
+.Btn {
+    display: flex;
+    gap: 10px;
+    transition: all 0.3s ease;
+  }
+  
+  .button {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .active {
+    background-color: #1677ff;
+    color: white;
+    border-color: #1677ff;
+  }
+  
+  @media (max-width: 600px) {
+    .Btn{
+      gap: 5px;
+    }
+    .button {
+      margin-top: 10px;
+      padding: 3px 6px;
+      font-size: 0.875rem; /* 글자 크기 축소 */
+    }
+  }

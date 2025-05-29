@@ -1,0 +1,45 @@
+.itemColumn {
+    width: 7%;
+    min-width: 85px;
+    text-align: center;
+  }
+  
+  .centerAlign {
+    text-align: center;
+  }
+  
+  .headerCenter {
+    text-align: center;
+    width: 100%;
+  }
+  
+  .forecastInfoText {
+    font-size: 17px;
+    font-weight: 500;
+  }
+  
+  .forecastInfoSub {
+    font-size: 14px;
+    color: #888;
+    margin-left: 4px;
+  }
+
+  .tableWrapper {
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .gradeBox {
+    display: inline-block;
+    white-space: nowrap;
+    /* padding: 4px 8px; */
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    min-width: 40px;
+  }
+  
+  
+  

@@ -1,22 +1,27 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Select} from "antd";
 import styles from "../css/Map.module.css";
 
-function RealTime(props) {
+function RealTime({selectOption, setSelectOption}) {
+    useEffect(() => {
+
+    }, []);
     return (
         <>
             <Select
                 className={styles.roundSelect}
                 style={{width: "30%", textAlign: "center"}}
                 defaultValue="초미세먼지 (PM-2.5)"
+                onChange={(value) => setSelectOption(value)}
                 options={[
-                    {value: "초미세먼지 (PM-2.5)", label: "초미세먼지 (PM-2.5)"},
-                    {value: "미세먼지 (PM-10)", label: "미세먼지 (PM-10)"},
-                    {value: "오존 (O₃)", label: "오존 (O₃)"},
-                    {value: "이산화질소 (NO₂)", label: "이산화질소 (NO₂)"},
-                    {value: "일산화탄소 (CO)", label: "일산화탄소 (CO)"},
-                    {value: "아황산가스 (SO₂)", label: "아황산가스 (SO₂)"},
-                ]}>
+                    { value: "PM25", label: "초미세먼지 (PM-2.5)" },
+                    { value: "PM10", label: "미세먼지 (PM-10)" },
+                    { value: "O3", label: "오존 (O₃)" },
+                    { value: "NO2", label: "이산화질소 (NO₂)" },
+                    { value: "CO", label: "일산화탄소 (CO)" },
+                    { value: "SO2", label: "아황산가스 (SO₂)" },
+                ]}
+            >
             </Select>
             <div className={styles.selectCity}>
                 <p>시/도</p>
