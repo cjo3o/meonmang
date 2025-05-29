@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Select, Radio, DatePicker, Button, Space } from "antd";
+import { Row, Col, Select, Radio, DatePicker } from "antd";
 
 const { RangePicker } = DatePicker;
 
@@ -11,7 +11,7 @@ const AirAlertFilter = ({
                             pendingDateRange,
                             setPendingDateRange,
                             regionOptions,
-                            onSearch
+                            // onSearch
                         }) => (
     <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col>
@@ -34,11 +34,11 @@ const AirAlertFilter = ({
         <Col>
             <RangePicker value={pendingDateRange} onChange={setPendingDateRange} />
         </Col>
-        <Col>
-            <Space>
-                <Button type="primary" onClick={onSearch}>검색</Button>
-            </Space>
-        </Col>
+        {/*<Col>*/}
+        {/*    <Space>*/}
+        {/*        <Button type="primary" onClick={onSearch}>검색</Button>*/}
+        {/*    </Space>*/}
+        {/*</Col>*/}
     </Row>
 );
 
