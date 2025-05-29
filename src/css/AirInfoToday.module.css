@@ -1,6 +1,8 @@
 .Card {
-  height: 365px;
+  min-width: 330px;
+  height: auto;
 }
+
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -35,11 +37,11 @@
 }
 
 .body {
-  display: flex;
+  /* display: flex;
   flex-direction: row;
-  flex-wrap: wrap; /* ✅ 줄바꿈 허용 */
+  flex-wrap: wrap; ✅ 줄바꿈 허용 */
   margin-top: 20px;
-  overflow-x: auto;
+  /* width: 10vw; */
 }
 
 .subGroup {
@@ -48,39 +50,44 @@
 
 .body1 {
   width: 20%;
-  min-width: 86px;
+  /* min-width: px; */
+  font-size: clamp(10px, 0.75vw, 18px);
   text-align: center;
   border-right: 1px solid rgb(219, 219, 219);
-  padding-right: 10px;
+  /* padding-right: 10px; */
 }
 
 .body2 {
   width: 20%;
-  min-width: 86px;
+  /* min-width: px; */
+  font-size: clamp(10px, 0.75vw, 18px);
   text-align: center;
   border-right: 1px solid rgb(219, 219, 219);
-  padding: 0 10px;
+  /* padding: 0 10px; */
 }
 
 .body3 {
   width: 20%;
-  min-width: 86px;
+  /* min-width: px; */
+  font-size: clamp(10px, 0.75vw, 18px);
   text-align: center;
   border-right: 1px solid rgb(219, 219, 219);
-  padding: 0 10px;
+  /* padding: 0 10px; */
 }
 
 .body4 {
   width: 20%;
-  min-width: 86px;
+  /* min-width: px; */
+  font-size: clamp(10px, 0.75vw, 18px);
   text-align: center;
-  padding-left: 10px;
+  /* padding-left: 10px; */
 }
 
 .status {
   margin: 10px 0;
-  width: 50px;
-  height: 50px;
+  /* width: 50px;
+  height: 50px; */
+  width: 2.5vw;
 }
 
 .values {
@@ -88,9 +95,13 @@
   font-size: 1.5rem;
 }
 
-
-/* @media (max-width: 1805px) {
-  .body4, .body3 {
-    border-right: none;
+@media (max-width: 768px) {
+  .Card {
+    min-width: 0;
+    width: 100%; /* ✅ 부모 크기에 맞게 늘림 */
+    box-sizing: border-box; /* ✅ padding 포함해 사이즈 계산 */
   }
-} */
+  .body1, .body2, .body3, .body4 {
+    font-size: clamp(6px, 0.75vw, 18px);
+  }
+}

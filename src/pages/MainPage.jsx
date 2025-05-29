@@ -10,7 +10,7 @@ function MainPage(props) {
             <div className={styles.Content}>
                 <div className={styles.contentBox}>
                     <div className={styles.content1}>
-                        <Map></Map>
+                        <Map className={styles.map}/>
                         <AirInfo></AirInfo>
                     </div>
                 </div>

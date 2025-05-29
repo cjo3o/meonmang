@@ -6,9 +6,8 @@
     transition: all 0.2s ease;
 }
 
-/* @media (max-width: 1805px) {
-    .airInfoToday {
-        width: 25%;
-        min-width: 290px;
+@media (max-width: 768px) {
+    .airInfor {
+        width: 100%;
     }
-  } */
+  }
