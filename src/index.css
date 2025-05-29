@@ -24,8 +24,11 @@
 
 /* AirInfoForecast 컴포넌트에만 적용 */
 .air-info-forecast .ant-card-body {
-  height: 310px;
   padding: 35px 15px;
+}
+
+.air-info-forecast .ant-card-head {
+  padding: 0px;
 }
 
 .air-info-today .ant-card-body {

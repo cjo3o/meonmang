@@ -1,5 +1,6 @@
 .Card {
-    height: 365px;
+  min-width: 330px;
+  height: auto;
 }
 .cardHeader {
   position: relative;
@@ -64,22 +65,33 @@
 }
 
 .cen1 {
-  /* margin-top: 20px; */
   height: 90px;
 }
 
 .cen2 {
-  /* margin-top: 50px; */
   height: 90px;
 }
 
 .status1 {
-  /* margin-top: 30px; */
-  width: 50px;
-  height: 50px;
+  width: 2.5vw;
 }
 
 .status2 {
-  width: 50px;
-  height: 50px;
+  width: 2.5vw;
+}
+
+@media (max-width: 768px) {
+  .Card {
+    min-width: 0;
+    width: 100%; /* ✅ 부모 크기에 맞게 늘림 */
+    box-sizing: border-box; /* ✅ padding 포함해 사이즈 계산 */
+  }
+
+  .body1, .body2, .body3, .body4 {
+    font-size: clamp(10px, 4vw, 21px);
+  }
+
+  .status1, .status2 {
+    width: clamp(50px, 15vw, 80px);
+  }
 }

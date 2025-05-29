@@ -45,9 +45,9 @@ function AirInfoToday({ setStationInfo }) {
       unit: "ppm",
     },
     {
-      label: "이산화지로",
+      label: "이산화질소",
       sub: "NO2",
-      className: AirToday.body2,
+      className: AirToday.body4,
       valueKey: "no2Value",
       code: "no2",
       unit: "ppm",
@@ -55,7 +55,7 @@ function AirInfoToday({ setStationInfo }) {
     {
       label: "일삼화탄소",
       sub: "CO",
-      className: AirToday.body2,
+      className: AirToday.body5,
       valueKey: "coValue",
       code: "co",
       unit: "ppm",
@@ -63,7 +63,7 @@ function AirInfoToday({ setStationInfo }) {
     {
       label: "아산화가스",
       sub: "SO2",
-      className: AirToday.body4,
+      className: AirToday.body6,
       valueKey: "so2Value",
       code: "so2",
       unit: "ppm",
@@ -113,7 +113,7 @@ function AirInfoToday({ setStationInfo }) {
           "https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getMsrstnList",
           {
             params: {
-              // serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+              // serviceKey: "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
               returnType: "json",
               addr: sido,
               numOfRows: 100,
@@ -200,7 +200,7 @@ function AirInfoToday({ setStationInfo }) {
           "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty",
           {
             params: {
-              // serviceKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
+              // serviceKey: "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
               returnType: "json",
               numOfRows: 1,
               pageNo: 1,
@@ -324,8 +324,8 @@ function AirInfoToday({ setStationInfo }) {
               </span>
             </div>
           </div>
-          <div>
-            <span>{realtimeData?.dataTime || "측정시간 없음"}기준</span>
+          <div className={AirToday.TextTop3Wrapper}>
+            <span className={AirToday.TextTop3}>{realtimeData?.dataTime || "측정시간 없음"}기준</span>
           </div>
         </div>
         <div className={AirToday.body}>
