@@ -22,10 +22,12 @@ const AirClack = () => {
 
         try {
             const registration = await navigator.serviceWorker.ready;
+            console.log("2333");
             const subscription = await registration.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A=="
             });
+            console.log("2444");
 
             const payload = {
                 sub: subscription,
@@ -35,6 +37,7 @@ const AirClack = () => {
                 clientId: getClientId(),
                 createdAt: new Date().toISOString()
             };
+            console.log(payload);
 
             const res = await axios.post(`${API_URL}/subscribe`, payload);
 
