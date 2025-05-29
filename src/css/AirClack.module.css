@@ -1,0 +1,22 @@
+.content {
+    background: linear-gradient(to bottom, #a7f7ff, #f3f3f3);
+}
+
+.center {
+    width: 40vh;
+    margin: 0 auto;
+    padding: 3% 0;
+}
+
+.header {
+    padding-bottom: 40px;
+    text-align: center;
+}
+
+.button {
+    margin-top: 20px;
+}
+
+.form {
+    margin-bottom: 30px;
+}

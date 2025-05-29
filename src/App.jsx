@@ -5,6 +5,7 @@ import MainPage from "./pages/MainPage.jsx";
 import AirData from "./pages/AirData.jsx";
 import AirAlert from "./pages/Clack/AirAlert.jsx";
 import AirClack from "./pages/Clack/AirClack.jsx";
+import Intro from "./pages/intro.jsx";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<MainPage />} />
+            <Route path="/intro" element={<Intro />} />
           <Route path="/airdata" element={<AirData />} />
           <Route path="/airalert" element={<AirAlert />} />
           <Route path="/airclack" element={<AirClack />} />
