@@ -1,12 +1,12 @@
 import React, {useState} from "react";
-import {Button, Card, Form, Select, message} from "antd";
+import {Button, Card, Form, Select, message, Radio} from "antd";
 import axios from "axios";
 import ClackStyle from "../../css/AirClack.module.css";
-import { REGION_KEYS, itemCodeMap } from "../../component/AirAdd.js";
+import {REGION_KEYS, itemCodeMap} from "../../component/AirAdd.js";
 
-const { Option } = Select;
+const {Option} = Select;
 const API_URL = import.meta.env.VITE_BACK_API_URL;
-const intervals = Array.from({ length: 12 }, (_, i) => i + 1);
+const hours = Array.from({length: 12}, (_, i) => i + 1);
 
 const AirClack = () => {
     const [loading, setLoading] = useState(false);
@@ -22,20 +22,19 @@ const AirClack = () => {
 
         try {
             const registration = await navigator.serviceWorker.ready;
-            console.log("2333");
             const subscription = await registration.pushManager.subscribe({
                 userVisibleOnly: true,
-                applicationServerKey: "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A=="
+                applicationServerKey: "BLbnwaj6jGwQgm7uH4Vu_5c_IW2lT0VXruGAwx4BTiiJ1rgvTv7bCjo1DL0q8ukDxv9TFLWa5eV__c7BvaTcqM0"
             });
-            console.log("2444");
 
             const payload = {
                 sub: subscription,
+                clientId: getClientId(),
                 region: values.region,
                 item: values.item,
-                interval: values.interval,
-                clientId: getClientId(),
-                createdAt: new Date().toISOString()
+                ampm: values.ampm,
+                hour: values.hour,
+                createdAt: new Date().toISOString(),
             };
             console.log(payload);
 
@@ -65,48 +64,78 @@ const AirClack = () => {
     };
 
     return (
-            <div className={ClackStyle.content}>
-                <div className={ClackStyle.center}>
-                    <Card>
-                        <div className={ClackStyle.header}>
-                            <h1>대기 알림 신청</h1>
-                        </div>
-                        <Form className={ClackStyle.form} layout="vertical" onFinish={onFinish}>
-                            <Form.Item name="region" label="지역" rules={[{ required: true }]}>
-                                <Select placeholder="지역을 선택하세요">
-                                    {Object.entries(REGION_KEYS).map(([label, value]) => (
-                                        <Option key={value} value={value}>
-                                            {label}
+        <div className={ClackStyle.content}>
+            <div className={ClackStyle.center}>
+                <Card>
+                    <div className={ClackStyle.header}>
+                        <h1>대기 알림 신청</h1>
+                    </div>
+                    <Form
+                        className={ClackStyle.form}
+                        layout="vertical"
+                        onFinish={onFinish}>
+                        <Form.Item
+                            name="region"
+                            label="지역"
+                            rules={[{required: true}]}>
+                            <Select placeholder="지역을 선택하세요">
+                                {Object.entries(REGION_KEYS).map(([label, value]) => (
+                                    <Option key={value} value={value}>
+                                        {label}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+
+                        <Form.Item
+                            name="item"
+                            label="항목"
+                            rules={[{required: true}]}>
+                            <Select placeholder="항목을 선택하세요">
+                                {Object.entries(itemCodeMap).map(([code, label]) => (
+                                    <Option key={code} value={code}>{label}</Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+
+
+                        <div className={ClackStyle.formtime}>
+                        <Form.Item
+                            name="ampm"
+                            label="오전/오후"
+                            rules={[{required: true}]}
+                        >
+                            <Radio.Group placeholder="오전/오후 선택">
+                                <Radio value="AM">오전</Radio>
+                                <Radio value="PM">오후</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+
+                            <Form.Item
+                                name="hour"
+                                label="시"
+                                rules={[{required: true}]}
+                            >
+                                <Select placeholder="시 선택">
+                                    {hours.map((h) => (
+                                        <Option key={h} value={h}>
+                                            {h}시
                                         </Option>
                                     ))}
                                 </Select>
                             </Form.Item>
 
-                            <Form.Item className={ClackStyle.form} name="item" label="항목" rules={[{ required: true }]}>
-                                <Select placeholder="항목을 선택하세요">
-                                    {Object.entries(itemCodeMap).map(([code, label]) => (
-                                        <Option key={code} value={code}>{label}</Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
+                        </div>
 
-                                <Form.Item className={ClackStyle.form} name="interval" label="시간 간격 (단위: 시간)" rules={[{ required: true }]}>
-                                    <Select placeholder="간격을 선택하세요">
-                                        {intervals.map((n) => (
-                                            <Option key={n} value={n}>{`${n}시간`}</Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-
-                                <Form.Item className={ClackStyle.form} style={{ textAlign: "center" }}>
-                                    <Button className={ClackStyle.button} type="primary" htmlType="submit" loading={loading}>
-                                        알림 신청
-                                    </Button>
-                                </Form.Item>
-                        </Form>
-                    </Card>
-                </div>
+                        <Form.Item style={{textAlign: "center"}}>
+                            <Button className={ClackStyle.button} type="primary" htmlType="submit" loading={loading}>
+                                알림 신청
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </Card>
             </div>
+        </div>
     );
 };
 

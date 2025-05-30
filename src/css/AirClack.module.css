@@ -3,7 +3,7 @@
 }
 
 .center {
-    width: 40vh;
+    width: 50vh;
     margin: 0 auto;
     padding: 3% 0;
 }
@@ -19,4 +19,9 @@
 
 .form {
     margin-bottom: 30px;
+}
+
+.formtime {
+    display: flex;
+    gap: 10px;
 }

@@ -1,5 +1,9 @@
+import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { NetworkFirst } from 'workbox-strategies';
+
+precacheAndRoute(self.__WB_MANIFEST);
+cleanupOutdatedCaches();
 
 // SPA 내 라우팅 요청은 네트워크 우선
 registerRoute(
@@ -29,7 +33,7 @@ self.addEventListener('push', (event) => {
     );
 });
 
-// 📦 알림 클릭 시 특정 페이지로 이동
+// 알림 클릭 시 특정 페이지로 이동
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
 
