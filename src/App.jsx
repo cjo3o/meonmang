@@ -12,7 +12,7 @@ function App() {
                 <Router>
                     <Header/>
                     <Routes>
-                        <Route path="/" element={<MainPage/>}/>
+                        <Route path="" element={<MainPage/>}/>
                         <Route path="/airdata" element={<AirData/>}/>
                     </Routes>
                     <Footer/>

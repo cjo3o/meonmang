@@ -40,6 +40,10 @@
 }
 
 .nav > ul > li {
+  text-align: center;
+}
+
+.nav > ul > li > a {
   font-weight: bold;
   font-size: 1rem;
   padding: 1rem 1.5rem;
@@ -55,7 +59,7 @@
   color: inherit;
 }
 
-.nav > ul > li:hover {
+.nav > ul > li >:hover {
   background-color: #6effc3;
   border-radius: 15px;
   transition: background-color 0.3s;
@@ -109,12 +113,16 @@
   }
 
   .nav > ul > li {
+    margin: 0.4rem 0;
+  }
+
+  .nav > ul > li > a {
     padding: 0.7rem 1rem;
-    margin: 0;
+   
     text-align: center;
   }
 
-  .nav > ul > li:hover {
+  .nav > ul > li > a:hover {
     background-color: #6effc3;
   }
 
