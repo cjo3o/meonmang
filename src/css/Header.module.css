@@ -32,7 +32,6 @@
   justify-content: flex-end;
   gap: 3rem;
   list-style: none;
-  background-color: #fff;
 }
 
 .open {
@@ -41,25 +40,22 @@
 
 .nav > ul > li {
   text-align: center;
+  display: flex;
 }
 
 .nav > ul > li > a {
+  text-decoration: none;
+  color: #000;
   font-weight: bold;
   font-size: 1rem;
   padding: 1rem 1.5rem;
-  margin: 1rem 0;
   border-radius: 15px;
   transition: background-color 0.3s;
   cursor: pointer;
   white-space: nowrap;
 }
 
-.nav > ul > li > a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.nav > ul > li >:hover {
+.nav > ul > li > a:hover {
   background-color: #6effc3;
   border-radius: 15px;
   transition: background-color 0.3s;
@@ -95,6 +91,37 @@
   background-color: #6effc3;
   border-radius: 15px;
   transition: background-color 0.3s;
+}
+
+.hasSubmenu {
+  position: relative;
+}
+
+.submenu {
+  list-style: none;
+  position: absolute;
+  top: 56px;
+  z-index: 10;
+  background-color: #fff;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.submenu > li > a {
+  width: 100%;
+  display: inline-block;
+  padding: 0.3rem;
+  text-decoration: none;
+  color: #000;
+  transition: all 0.3s;
+}
+
+.submenu > li > a:hover {
+  color: #7e7e7e;
+  transition: all 0.3s;
 }
 
 @media (max-width: 874px) {
