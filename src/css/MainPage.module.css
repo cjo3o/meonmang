@@ -17,6 +17,12 @@
     gap: 2rem;
 }
 
+@media (max-width: 1430px) {
+    .Content {
+        padding: 1.5rem 0;
+    }    
+}
+
 
 @media (max-width: 768px) {
     .contentBox {

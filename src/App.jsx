@@ -9,23 +9,23 @@ import AirClack from "./pages/Clack/AirClack.jsx";
 import Intro from "./pages/intro.jsx";
 
 function App() {
-  return (
-    <>
-        <div className={styles.wrap}>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-            <Route path="/intro" element={<Intro />} />
-          <Route path="/airdata" element={<AirData />} />
-          <Route path="/airalert" element={<AirAlert />} />
-          <Route path="/airclack" element={<AirClack />} />
-        </Routes>
-        <Footer />
-      </Router>
-        </div>
-    </>
-  );
+    return (
+        <>
+            <div className={styles.wrap}>
+                <Router>
+                    <Header/>
+                    <Routes>
+                        <Route path="/" element={<MainPage/>}/>
+                        <Route path="/intro" element={<Intro/>}/>
+                        <Route path="/airdata" element={<AirData/>}/>
+                        <Route path="/airalert" element={<AirAlert/>}/>
+                        <Route path="/airclack" element={<AirClack/>}/>
+                    </Routes>
+                    <Footer/>
+                </Router>
+            </div>
+        </>
+    );
 }
 
 export default App;
