@@ -1,15 +1,14 @@
 .Footer {
-    display: flex;
-    justify-content: center;
     background-color: #39B581;
 }
 
 .footerContainer {
-    width: 70%;
+    max-width: 1200px;
     display: flex;
     justify-content: space-between;
     gap: 4rem;
-    margin: 1.5rem;
+    margin: 0 auto;
+    padding: 1.5rem;
 }
 
 .footerContent {

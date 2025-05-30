@@ -19,9 +19,9 @@ function Header(props) {
                             <li><Link to="">고객지원</Link></li>
                         </ul>
                     </div>
-                    <div className={styles.kakao}>
-                        <h3>카카오 로그인</h3>
-                    </div>
+                    {/*<div className={styles.kakao}>*/}
+                    {/*    <h3>카카오 로그인</h3>*/}
+                    {/*</div>*/}
                 </div>
             </div>
         </>

@@ -8,7 +8,8 @@
   display: flex;
   color: #000;
   justify-content: space-between;
-  width: 70%;
+  max-width: 1200px;
+  padding: 0 1.5rem;
 }
 
 .Logo {
@@ -19,13 +20,16 @@
 
 .nav {
   align-content: center;
-  width: 50%;
+  width: 70%;
+  overflow: hidden;
 }
 
 .nav > ul {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 3rem;
   list-style: none;
+  /*overflow: hidden;*/
 }
 
 .nav > ul > li {
@@ -36,6 +40,7 @@
   border-radius: 15px;
   transition: background-color 0.3s;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .nav > ul > li > a {
