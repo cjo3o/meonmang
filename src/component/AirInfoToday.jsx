@@ -293,7 +293,7 @@ function AirInfoToday({ setStationInfo }) {
   return (
     <Card
       className={`${AirToday.Card} air-info-today`}
-      title="오늘의 대기질"
+      title={<span className={AirToday.cardTitle}>오늘의 대기질</span>}
       variant="borderless"
       styles={{
         header: {

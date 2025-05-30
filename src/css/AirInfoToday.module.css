@@ -3,6 +3,13 @@
   height: auto;
 }
 
+.cardTitle {
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -127,6 +134,10 @@
 
   .header2 {
     justify-content: center;
+  }
+
+  .cardTitle {
+    font-size: clamp(20px, 3.3vw, 40px);
   }
 
   .header {

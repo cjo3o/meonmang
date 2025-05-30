@@ -28,10 +28,10 @@ function AirData() {
                   setSelectedDay={setSelectedDay}
                 />
                 {selectedDay === "오늘" && (
-                  <div className={ADataStyle.timeText}>발표 시간: {timeText}</div>
+                  <div className={ADataStyle.timeText1}>발표 시간: {timeText}</div>
                 )}
                 {selectedDay === "내일" && (
-                  <div className={ADataStyle.timeText}>예보일 : {timeText}</div>
+                  <div className={ADataStyle.timeText2}>예보일 : {timeText}</div>
                 )}
               </div>
             </div>

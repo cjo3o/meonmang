@@ -79,7 +79,11 @@ function AirInfoForecast({ stationInfo }) {
     const region = parts[0];
     const city = parts[1];
 
-    let regionName = region;
+    let regionName = region.replace(
+      /(광역시|특별시|특별자치시|특별자치도|도)$/g,
+      ""
+    );
+
     if (region === "경기도") regionName = getGyeonggiRegion(city);
     else if (region === "강원도") regionName = getGangwonRegion(city);
     else {
@@ -100,7 +104,7 @@ function AirInfoForecast({ stationInfo }) {
         경남: "경남",
         제주: "제주",
       };
-      regionName = map[region] || region;
+      regionName = map[regionName] || regionName;
     }
 
     const today = dayjs().format("YYYY-MM-DD");
@@ -116,8 +120,8 @@ function AirInfoForecast({ stationInfo }) {
             "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
             {
               params: {
-                serviceKey:
-                  "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
+                // serviceKey:
+                //   "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
                 returnType: "json",
                 numOfRows: 100,
                 pageNo: 1,
@@ -127,7 +131,6 @@ function AirInfoForecast({ stationInfo }) {
             }
           );
           const items = res.data.response.body.items || [];
-          console.log(res.data);
           for (const item of items) {
             const date = item.informData;
             const informGrade = item.informGrade || "";
@@ -163,10 +166,15 @@ function AirInfoForecast({ stationInfo }) {
         className={`${Airfore.Card} air-info-forecast`}
         title={
           <div className={Airfore.cardHeader}>
-            <span className={Airfore.cardTitle}>대기정보 예보</span>
-            <Link to="/airdata" className={Airfore.detailLink}>
-              자세히 보기
-            </Link>
+            <div className={Airfore.left}></div>
+            <div className={Airfore.center}>
+              <span className={Airfore.cardTitle}>대기정보 예보</span>
+            </div>
+            <div className={Airfore.right}>
+              <Link to="/airdata" className={Airfore.detailLink}>
+                자세히보기
+              </Link>
+            </div>
           </div>
         }
         variant="borderless"
@@ -180,7 +188,10 @@ function AirInfoForecast({ stationInfo }) {
         <div className={Airfore.content}>
           <div className={Airfore.body}>
             <div className={Airfore.body1}>
-              <div className={Airfore.header}></div>
+              <div className={Airfore.header}>
+                <br />
+                <br />
+              </div>
               <div className={Airfore.cen1}>오늘</div>
               <div className={Airfore.cen2}>내일</div>
             </div>
