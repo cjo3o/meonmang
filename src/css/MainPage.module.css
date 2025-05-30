@@ -17,8 +17,13 @@
     gap: 2rem;
 }
 
-.content2 {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-}
+
+@media (max-width: 768px) {
+    .contentBox {
+        display: flex;
+        flex-direction: column;
+        width: 85%;
+        margin: 3rem auto;
+    }
+  }
+  

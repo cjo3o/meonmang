@@ -1,9 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import styles from '/src/css/Header.module.css';
 import logo from '/src/images/Logo.svg';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import {DownSquareOutlined} from "@ant-design/icons";
+import sidebar from "./Sidebar.jsx";
 
 function Header(props) {
+    const [openSidebar, setOpenSidebar] = React.useState(false);
+
     const [showSubmenu, setShowSubmenu] = useState(false);
 
     return (
@@ -14,7 +18,7 @@ function Header(props) {
                         <img src={logo} alt="logo" width={"180px"}/>
                     </div>
                     <div className={styles.nav}>
-                        <ul>
+                        <ul className={openSidebar ? styles.open : ''}>
                             <li><Link to="">먼망진창 소개</Link></li>
                             <li><Link to="/airdata">대기 정보</Link></li>
                             <li
@@ -33,8 +37,11 @@ function Header(props) {
                             <li><Link to="">고객지원</Link></li>
                         </ul>
                     </div>
-                    <div className={styles.kakao}>
-                        <h3>카카오 로그인</h3>
+                    {/*<div className={styles.kakao}>*/}
+                    {/*    <h3>카카오 로그인</h3>*/}
+                    {/*</div>*/}
+                    <div className={styles.mobileMenu} onClick={() => setOpenSidebar(!openSidebar)}>
+                        <DownSquareOutlined/>
                     </div>
                 </div>
             </div>

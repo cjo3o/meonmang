@@ -25,3 +25,9 @@
 .sidebar > p {
     line-height: 1.1rem;
 }
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+  }

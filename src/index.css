@@ -21,3 +21,20 @@
 .ant-table-measure-row {
   display: none !important;
 }
+
+.air-info-forecast .ant-card-body {
+  padding: 15px 15px;
+}
+
+.air-info-forecast .ant-card-head {
+  padding: 0px;
+}
+
+.air-info-today .ant-card-body {
+  padding: 15px 15px;
+}
+
+
+.air-info-forecast-wrapper {
+  margin-top: 5px;
+}

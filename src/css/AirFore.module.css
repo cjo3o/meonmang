@@ -1,0 +1,179 @@
+.Card {
+  min-width: 350px;
+  height: auto;
+}
+.cardHeader {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0.5rem 1rem;
+  flex-wrap: wrap;
+}
+
+.left,
+.center,
+.right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.center {
+  justify-content: center; /* 가운데 정렬 */
+}
+
+.left {
+  flex: 1;
+}
+
+.right {
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  flex-wrap: wrap;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: normal;
+  color: #ffffff;
+}
+
+.detailLink {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+
+.body {
+  display: flex;
+  justify-content: space-between; /* 또는 flex-start */
+  align-items: stretch;
+  text-align: center;
+}
+
+.body1 {
+  flex: 1.3;
+  border-right: 1px solid rgb(219, 219, 219);
+}
+
+.body2 {
+  flex: 2;
+  width: 25%;
+  border-right: 1px solid rgb(219, 219, 219);
+}
+
+.body3 {
+  flex: 2;
+  width: 25%;
+}
+
+.header,
+.cen1,
+.cen2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header,
+.bodyfirst1,
+.bodyfirst2,
+.cen1 {
+  border-bottom: 1px solid rgb(219, 219, 219);
+}
+
+.body1,
+.body2,
+.body3 {
+  display: flex;
+  flex-direction: column;
+}
+
+.body1 .cen1,
+.body1 .cen2,
+.body2 .header,
+.body2 .cen1,
+.body2 .cen2,
+.body3 .header,
+.body3 .cen1,
+.body3 .cen2 {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.cen1 {
+  margin: 10px 0;
+}
+
+.status1 {
+  width: 2.5vw;
+}
+
+.status2 {
+  width: 2.5vw;
+}
+
+@media (max-width: 768px) {
+  .Card {
+    min-width: 0;
+    width: 100%; /* ✅ 부모 크기에 맞게 늘림 */
+    box-sizing: border-box; /* ✅ padding 포함해 사이즈 계산 */
+  }
+
+  .body1,
+  .body2,
+  .body3,
+  .body4 {
+    font-size: clamp(10px, 4vw, 21px);
+  }
+
+  .status1,
+  .status2 {
+    width: clamp(50px, 15vw, 80px);
+  }
+  .header {
+    height: auto;
+    font-size: clamp(10px, 3.5vw, 21px);
+  }
+
+  .body1 {
+    flex: 2;
+    width: 25%;
+    border-right: 1px solid rgb(219, 219, 219);
+  }
+
+  .body1,
+  .body2,
+  .body3 {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .body1 .cen1,
+  .body1 .cen2,
+  .body2 .header,
+  .body2 .cen1,
+  .body2 .cen2,
+  .body3 .header,
+  .body3 .cen1,
+  .body3 .cen2 {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .cardTitle {
+    font-size: clamp(20px, 3.3vw, 40px);
+  }
+
+  .detailLink {
+    margin-left: 20px;
+    font-size: clamp(13px, 2vw, 40px);
+  }
+}

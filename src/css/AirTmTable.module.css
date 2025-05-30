@@ -18,6 +18,10 @@
     font-weight: 500;
   }
   
+  .forecastInfo {
+    margin-left: 4px;    
+  }
+  
   .forecastInfoSub {
     font-size: 14px;
     color: #888;

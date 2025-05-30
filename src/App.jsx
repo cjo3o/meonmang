@@ -1,8 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Header from "./component/Header.jsx";
 import Footer from "./component/Footer.jsx";
 import MainPage from "./pages/MainPage.jsx";
 import AirData from "./pages/AirData.jsx";
+import styles from "./App.module.css";
 import AirAlert from "./pages/Clack/AirAlert.jsx";
 import AirClack from "./pages/Clack/AirClack.jsx";
 import Intro from "./pages/intro.jsx";
@@ -10,6 +11,7 @@ import Intro from "./pages/intro.jsx";
 function App() {
   return (
     <>
+        <div className={styles.wrap}>
       <Router>
         <Header />
         <Routes>
@@ -21,6 +23,7 @@ function App() {
         </Routes>
         <Footer />
       </Router>
+        </div>
     </>
   );
 }

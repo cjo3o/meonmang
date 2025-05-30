@@ -96,8 +96,12 @@ function AirTmTable({ setTimeText }) {
     if (setTimeText && forecastDate && dataTime) {
       setTimeText(
         <>
-          {forecastDate}
+        <div>
+        <span className={ATmtable.forecastInfo}>{forecastDate}</span>
+          </div>
+          <div>
           <span className={ATmtable.forecastInfoSub}>({dataTime})</span>
+          </div>
         </>
       );
     }

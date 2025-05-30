@@ -1,44 +1,20 @@
-import React from 'react';
-import {Card} from "antd";
+import React, { useState } from "react";
 import styles from "/src/css/AirInfo.module.css";
+import AirInfoForecast from "./AirInfoForecast";
+import AirInfoToday from "./AirInfoToday";
 
 function AirInfo(props) {
-    return (
-        <>
-            <div className={styles.airInfor}>
-                <Card
-                    title="오늘의 대기질"
-                    variant="borderless"
-                    styles={{
-                        header: {
-                            backgroundColor: '#67D8F3',
-                            color: '#fff',
-                            textAlign: 'center',
-                            fontSize: '1.5rem',
-                            fontWeight: 'normal',
-                        }
-                    }}
-                >
-                    dd
-                </Card>
-                <Card
-                    title="대기정보 예보"
-                    variant="borderless"
-                    styles={{
-                        header: {
-                            backgroundColor: '#67D8F3',
-                            color: '#fff',
-                            textAlign: 'center',
-                            fontSize: '1.5rem',
-                            fontWeight: 'normal',
-                        }
-                    }}
-                >
-                    dd
-                </Card>
-            </div>
-        </>
-    );
+  const [stationInfo, setStationInfo] = useState(null);
+  return (
+    <>
+      <div className={styles.airInfor}>
+        <div className={styles.airInfoToday}>
+          <AirInfoToday setStationInfo={setStationInfo} />
+        </div>
+        <AirInfoForecast stationInfo={stationInfo} />
+      </div>
+    </>
+  );
 }
 
 export default AirInfo;

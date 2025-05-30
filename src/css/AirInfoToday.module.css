@@ -1,0 +1,149 @@
+.Card {
+  min-width: 350px;
+  height: auto;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.location {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+}
+
+.TextTop {
+  display: flex;
+  align-items: center;
+}
+
+.TextTop1 {
+  font-size: 16px;
+}
+
+.TextTop2 {
+  font-size: 13px;
+  color: gray;
+}
+
+.body {
+  margin-top: 0.5vw;
+}
+
+.subGroup {
+  display: flex;
+}
+
+.body1 {
+  width: 20%;
+  font-size: clamp(10px, 0.75vw, 18px);
+  text-align: center;
+  border-right: 1px solid rgb(219, 219, 219);
+}
+
+.body2 {
+  width: 20%;
+  font-size: clamp(10px, 0.75vw, 18px);
+  text-align: center;
+  border-right: 1px solid rgb(219, 219, 219);
+}
+
+.body3 {
+  width: 20%;
+  font-size: clamp(10px, 0.75vw, 18px);
+  text-align: center;
+  border-right: 1px solid rgb(219, 219, 219);
+}
+
+.body4 {
+  width: 20%;
+  font-size: clamp(10px, 0.75vw, 18px);
+  text-align: center;
+  border-right: 1px solid rgb(219, 219, 219);
+}
+
+.body5 {
+  width: 20%;
+  font-size: clamp(10px, 0.75vw, 18px);
+  text-align: center;
+  border-right: 1px solid rgb(219, 219, 219);
+}
+
+.body6 {
+  width: 20%;
+  font-size: clamp(10px, 0.75vw, 18px);
+  text-align: center;
+}
+
+.status {
+  margin-top: 1.4vw;
+  width: clamp(20px, 2.5vw, 50px);
+}
+
+.values {
+  color: rgb(88, 166, 255);
+  font-size: clamp(15px, 1.5vw, 23px);
+}
+
+@media (max-width: 768px) {
+  .Card {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .subGroup {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto; 
+  }
+  .body1, .body2, .body3, .body4, .body5, .body6 {
+    font-size: clamp(10px, 4vw, 21px);
+    width: 100%;
+  }
+  .body3 {
+    border:none
+  }
+
+  .body1, .body2, .body3 {
+    border-bottom: 1px solid rgb(219, 219, 219);
+  }
+
+  .status {
+    width: clamp(50px, 15vw, 80px);
+  }
+  .values {
+    font-size: clamp(10px, 4vw, 21px);
+  }
+
+  .header2 {
+    justify-content: center;
+  }
+
+  .cardTitle {
+    font-size: clamp(20px, 3.3vw, 40px);
+  }
+
+  .header {
+    display: grid;
+    text-align: right;
+    justify-content: unset;
+  }
+  
+}
