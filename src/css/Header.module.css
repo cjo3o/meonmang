@@ -1,6 +1,8 @@
 .Header {
   background-color: #fff;
   color: #000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
 .headerContainer {
@@ -8,8 +10,10 @@
   display: flex;
   color: #000;
   justify-content: space-between;
+  align-items: center;
   max-width: 1200px;
   padding: 0 1.5rem;
+  height: 88px;
 }
 
 .Logo {
@@ -21,7 +25,6 @@
 .nav {
   align-content: center;
   width: 70%;
-  overflow: hidden;
 }
 
 .nav > ul {
@@ -29,7 +32,11 @@
   justify-content: flex-end;
   gap: 3rem;
   list-style: none;
-  /*overflow: hidden;*/
+  background-color: #fff;
+}
+
+.open {
+  display: flex !important;
 }
 
 .nav > ul > li {
@@ -68,4 +75,50 @@
 .kakao > h3:hover {
   color: #fae100;
   transition: all 0.3s;
+}
+
+.mobileMenu {
+  height: fit-content;
+  display: none;
+  font-size: 2rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 15px;
+  transition: background-color 0.3s;
+}
+
+.mobileMenu:hover {
+  background-color: #6effc3;
+  border-radius: 15px;
+  transition: background-color 0.3s;
+}
+
+@media (max-width: 874px) {
+
+  .nav > ul {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 88px;
+    right: 0;
+    z-index: 10;
+    gap: 1.5rem;
+    padding: 1rem;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav > ul > li {
+    padding: 0.7rem 1rem;
+    margin: 0;
+    text-align: center;
+  }
+
+  .nav > ul > li:hover {
+    background-color: #6effc3;
+  }
+
+  .mobileMenu {
+    display: flex;
+  }
 }
