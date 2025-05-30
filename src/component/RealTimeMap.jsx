@@ -1,24 +1,41 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {CustomOverlayMap, MapMarker, Map, useKakaoLoader, useMap} from 'react-kakao-maps-sdk';
+import {CustomOverlayMap, MapMarker, Map, useKakaoLoader} from 'react-kakao-maps-sdk';
 import regionData from '/RegionData.json';
 import regionCenters from './regionCenters.js';
 import styles from '/src/css/Map.module.css';
+import markerIcon from '/src/images/markerIcon.png';
 import axios from 'axios';
-import regionModal from "./RegionModal.jsx";
-import RegionModal from "./RegionModal.jsx";
-
 
 const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
 const AVR_URL = import.meta.env.VITE_AVR_URL;
 const AVR_KEY = import.meta.env.VITE_AVR_KEY;
 
-function RealTimeMap({selectOption, onOpenModal}) {
+function RealTimeMap({selectOption, onOpenModal, setDataTime}) {
     const [map, setMap] = useState(null);
     const [openOverlay, setOpenOverlay] = useState(null);
     const [sidoAvr, setSidoAvr] = useState([]);
-    const [openModal, setOpenModal] = useState(false);
+    const [hoveredMarker, setHoveredMarker] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const sidoAvrRef = useRef([]);
+    const regionKeyMap = {
+        서울: 'seoul',
+        부산: 'busan',
+        대구: 'daegu',
+        인천: 'incheon',
+        광주: 'gwangju',
+        대전: 'daejeon',
+        울산: 'ulsan',
+        세종: 'sejong',
+        경기: 'gyeonggi',
+        강원: 'gangwon',
+        충북: 'chungbuk',
+        충남: 'chungnam',
+        전북: 'jeonbuk',
+        전남: 'jeonnam',
+        경북: 'gyeongbuk',
+        경남: 'gyeongnam',
+        제주: 'jeju',
+    };
 
     useKakaoLoader({appkey: KAKAO_API_KEY});
 
@@ -26,23 +43,27 @@ function RealTimeMap({selectOption, onOpenModal}) {
         setOpenOverlay((prev) => (prev === name ? null : name));
     };
 
+    // 데이터 fetch는 map 없이도 실행 가능
+    useEffect(() => {
+        const fetchAvrData = async () => {
+            setLoading(true);
+            try {
+                const {data} = await axios.get(`${AVR_URL}?returnType=json&numOfRows=25&pageNo=1&itemCode=${selectOption}&dataGubun=HOUR&serviceKey=${AVR_KEY}`);
+                setDataTime(data.response.body.items[0].dataTime);
+                setSidoAvr(data.response.body.items[0]);
+            } catch (err) {
+                console.log("API 호출 오류", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAvrData();
+    }, [selectOption]);
 
     // 지도 클릭 시 오버레이 닫기
     useEffect(() => {
         if (!map) return;
-
-        const fetchAvrData = async () => {
-            try {
-                const {data} = await axios.get(`${AVR_URL}?returnType=json&numOfRows=25&pageNo=1&itemCode=${selectOption}&dataGubun=HOUR&serviceKey=${AVR_KEY}`);
-                console.log(data);
-                sidoAvrRef.current = data.response.body.items;
-                setSidoAvr(data.response.body.items);
-                console.log(sidoAvr);
-            } catch (err) {
-                console.log("API 호출 오류", err);
-            }
-        };
-        fetchAvrData();
 
         const handleMapClick = () => {
             setOpenOverlay(null);
@@ -53,17 +74,15 @@ function RealTimeMap({selectOption, onOpenModal}) {
         return () => {
             kakao.maps.event.removeListener(map, 'click', handleMapClick);
         };
-    }, [map, selectOption]);
+    }, [map]);
 
-
-    // 폴리곤 렌더링
+    // 폴리곤 그리기
     useEffect(() => {
         if (!map || !regionData) return;
 
         regionData.features.forEach((feature) => {
             const {coordinates, type} = feature.geometry;
             const name = feature.properties.CTP_KOR_NM;
-
             const paths = [];
 
             if (type === 'Polygon') {
@@ -85,18 +104,16 @@ function RealTimeMap({selectOption, onOpenModal}) {
                 strokeWeight: 2,
                 strokeColor: '#004c80',
                 strokeOpacity: 0.8,
-                fillColor: '#00a0e9',
+                fillColor: '#ff9b9b',
                 fillOpacity: 0.5,
             });
 
             polygon.setMap(map);
 
-
             kakao.maps.event.addListener(polygon, 'click', () => {
                 onOpenModal(name);
             });
 
-            // 마우스 오버 효과
             kakao.maps.event.addListener(polygon, 'mouseover', () => {
                 polygon.setOptions({
                     fillOpacity: 0.8,
@@ -115,63 +132,87 @@ function RealTimeMap({selectOption, onOpenModal}) {
         });
     }, [map]);
 
+    const changeColor = (value) => {
+        if (selectOption === "PM25") {
+            if (value <= 15) return styles.good;
+            if (value <= 35) return styles.normal;
+            if (value <= 75) return styles.bad;
+            return styles.worst;
+        } else if (selectOption === "PM10") {
+            if (value <= 30) return styles.good;
+            if (value <= 80) return styles.normal;
+            if (value <= 150) return styles.bad;
+            return styles.worst;
+        } else if (selectOption === "O3") {
+            if (value <= 0.03) return styles.good;
+            if (value <= 0.09) return styles.normal;
+            if (value <= 0.15) return styles.bad;
+            return styles.worst;
+        } else if (selectOption === "NO2") {
+            if (value <= 0.03) return styles.good;
+            if (value <= 0.06) return styles.normal;
+            if (value <= 0.2) return styles.bad;
+            return styles.worst;
+        } else if (selectOption === "CO") {
+            if (value <= 2) return styles.good;
+            if (value <= 9) return styles.normal;
+            if (value <= 15) return styles.bad;
+            return styles.worst;
+        } else {
+            if (value <= 0.02) return styles.good;
+            if (value <= 0.05) return styles.normal;
+            if (value <= 0.15) return styles.bad;
+            return styles.worst;
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className={styles.loadingContainer}>
+                <div className={styles.loadingText}>데이터 로딩중...</div>
+            </div>
+        )
+    }
+
     return (
-        <>
-            <Map className={styles.mapContainer}
-                 onCreate={setMap}
-                 center={{lat: 35.9, lng: 127.5}}
-                 level={13}
-                 zoomable={false}
-                 draggable={false}
-                 disableDoubleClick={true}
-            >
-                {regionCenters.map((marker) => (
-                    <div key={marker.name}>
-                        <MapMarker
-                            position={{lat: marker.center[0], lng: marker.center[1]}}
-                            onClick={() => handleMarkerClick(marker.name)}
-                        />
-                        {openOverlay === marker.name && (
-                            <CustomOverlayMap position={{lat: marker.center[0], lng: marker.center[1]}}>
-                                <div className={styles.customOverlay}>
-                                    {marker.name} : {
-                                    (() => {
-                                        if (sidoAvr.length === 0) return "로딩중..";
-
-                                        const avrData = sidoAvr[0];
-                                        console.log(sidoAvr[0]);
-
-                                        const regionKeyMap = {
-                                            서울: 'seoul',
-                                            부산: 'busan',
-                                            대구: 'daegu',
-                                            인천: 'incheon',
-                                            광주: 'gwangju',
-                                            대전: 'daejeon',
-                                            울산: 'ulsan',
-                                            세종: 'sejong',
-                                            경기: 'gyeonggi',
-                                            강원: 'gangwon',
-                                            충북: 'chungbuk',
-                                            충남: 'chungnam',
-                                            전북: 'jeonbuk',
-                                            전남: 'jeonnam',
-                                            경북: 'gyeongbuk',
-                                            경남: 'gyeongnam',
-                                            제주: 'jeju',
-                                        };
-
-                                        const key = regionKeyMap[marker.name];
-                                        return key && avrData[key] ? `${avrData[key]}` : "데이터 없음";
-                                    })()
-                                }
-                                </div>
-                            </CustomOverlayMap>
-                        )}
-                    </div>
-                ))}
-            </Map>
-        </>
+        <Map
+            className={styles.mapContainer}
+            onCreate={(mapInstance) => {
+                setMap(mapInstance);
+            }}
+            center={{lat: 35.9, lng: 127.5}}
+            level={13}
+            zoomable={true}
+            draggable={false}
+            disableDoubleClick={true}
+        >
+            {regionCenters.map((marker) => (
+                <div key={marker.name} className={styles.mapMarker}>
+                    <MapMarker
+                        image={{
+                            src: markerIcon,
+                            size: {
+                                width: openOverlay === marker.name || hoveredMarker === marker.name ? 35 : 25,
+                                height: openOverlay === marker.name || hoveredMarker === marker.name ? 35 : 25,
+                            },
+                        }}
+                        position={{lat: marker.center[0], lng: marker.center[1]}}
+                        onClick={() => handleMarkerClick(marker.name)}
+                        onMouseOver={() => setHoveredMarker(marker.name)}
+                        onMouseOut={() => setHoveredMarker(null)}
+                    />
+                    {openOverlay === marker.name && (
+                        <CustomOverlayMap position={{lat: marker.center[0], lng: marker.center[1]}}>
+                            <div
+                                className={`${styles.customOverlay} ${changeColor(sidoAvr[regionKeyMap[marker.name]])}`}>
+                                <div>{marker.name}</div>
+                                <div>{sidoAvr[regionKeyMap[marker.name]] ?? '데이터 없음'}</div>
+                            </div>
+                        </CustomOverlayMap>
+                    )}
+                </div>
+            ))}
+        </Map>
     );
 }
 
