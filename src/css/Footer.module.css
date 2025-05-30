@@ -11,6 +11,10 @@
     padding: 1.5rem;
 }
 
+.logo {
+    align-content: center;
+}
+
 .footerContent {
     width: 100%;
 }
@@ -39,4 +43,28 @@
 .moveTop:hover {
     transform: translateY(-3px);
     transition: all 0.3s;
+}
+
+@media (max-width: 768px) {
+    .footerContainer {
+        display: inline-block;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .logo {
+        width: fit-content;
+    }
+
+    .footerContent {
+        width: auto;
+        float: left;
+    }
+
+    .moveTop {
+        width: fit-content;
+        height: 100%;
+        float: right;
+    }
+
 }
