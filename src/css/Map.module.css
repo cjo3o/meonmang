@@ -24,6 +24,7 @@
 
 .mapCard {
     width: 50%;
+    min-height: 370px;
 }
 
 .mapTitle {
@@ -120,7 +121,8 @@
 
 .mapContainer {
     width: 100%;
-    height: 600px;
+    aspect-ratio: 4 / 4;
+    min-height: 400px;
     background-color: #fff;
 }
 

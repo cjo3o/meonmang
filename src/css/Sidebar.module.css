@@ -28,13 +28,6 @@
 
 @media (max-width: 768px) {
     .sidebar {
-        right: 0.2rem;
-        font-size: clamp(12px, 2.1vw, 40px);
-        padding: 0.4rem;
-        border-radius: 15px;
-        background-color: #FFF8E1;
-    }
-    .sidebar > img {
-        width: 30px;
+        display: none;
     }
   }
