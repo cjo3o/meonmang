@@ -21,6 +21,7 @@ function DateInforMap({dateOption, selectDate}) {
     const [dayInfor, setDayInfor] = useState([]);
     const [regionMarkers, setRegionMarkers] = useState(regionCenters2);
     const [hoveredMarker, setHoveredMarker] = useState(null);
+    const [loading, setLoading] = useState(true);
 
 
     useKakaoLoader({appkey: KAKAO_API_KEY});
@@ -46,6 +47,7 @@ function DateInforMap({dateOption, selectDate}) {
 
     useEffect(() => {
         const fetchAvrData = async () => {
+            setLoading(true);
             try {
                 const {data} = await axios.get(`${DATE_URL}?serviceKey=${AVR_KEY}&returnType=json&numOfRows=100&pageNo=1&searchDate=2025-05-28&informCode=${dateOption}`);
                 const items = data.response.body.items;
@@ -55,6 +57,8 @@ function DateInforMap({dateOption, selectDate}) {
                 setDayInfor(parsed);
             } catch (err) {
                 console.error("API 호출 오류", err);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -128,6 +132,14 @@ function DateInforMap({dateOption, selectDate}) {
                 return styles.unknown;
         }
     };
+
+    if (loading) {
+        return (
+            <div className={styles.loadingContainer}>
+                <div className={styles.loadingText}>데이터 로딩중...</div>
+            </div>
+        );
+    }
 
     return (
         <Map

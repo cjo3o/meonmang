@@ -7,19 +7,22 @@ import styles from "./App.module.css";
 import AirAlert from "./pages/Clack/AirAlert.jsx";
 import AirClack from "./pages/Clack/AirClack.jsx";
 import Intro from "./pages/intro.jsx";
+import {useState} from "react";
 
 function App() {
+    const [openSidebar, setOpenSidebar] = useState(false);
+
     return (
         <>
             <div className={styles.wrap}>
                 <Router>
-                    <Header/>
+                    <Header openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
                     <Routes>
-                        <Route path="/" element={<MainPage/>}/>
-                        <Route path="/intro" element={<Intro/>}/>
-                        <Route path="/airdata" element={<AirData/>}/>
-                        <Route path="/airalert" element={<AirAlert/>}/>
-                        <Route path="/airclack" element={<AirClack/>}/>
+                        <Route path="/" element={<MainPage setOpenSidebar={setOpenSidebar}/>}/>
+                        <Route path="/intro" element={<Intro setOpenSidebar={setOpenSidebar}/>}/>
+                        <Route path="/airdata" element={<AirData setOpenSidebar={setOpenSidebar}/>}/>
+                        <Route path="/airalert" element={<AirAlert setOpenSidebar={setOpenSidebar}/>}/>
+                        <Route path="/airclack" element={<AirClack setOpenSidebar={setOpenSidebar}/>}/>
                     </Routes>
                     <Footer/>
                 </Router>

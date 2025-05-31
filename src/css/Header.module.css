@@ -32,6 +32,7 @@
   justify-content: flex-end;
   gap: 3rem;
   list-style: none;
+  background-color: #fff;
 }
 
 .open {
@@ -140,20 +141,18 @@
   }
 
   .nav > ul > li {
-    margin: 0.4rem 0;
+    margin: 0.4rem auto;
   }
 
   .nav > ul > li > a {
     padding: 0.7rem 1rem;
-   
-    text-align: center;
-  }
-
-  .nav > ul > li > a:hover {
-    background-color: #6effc3;
   }
 
   .mobileMenu {
     display: flex;
+  }
+
+  .submenu {
+    top: 100%;
   }
 }
