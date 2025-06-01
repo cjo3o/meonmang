@@ -50,6 +50,7 @@ const AirAlert = () => {
           />
             <Alertexcel data={filteredData} />
           </div>
+          <div className={AlertStyle.airAlertTable}>
           <AirAlertTable
             region={region}
             itemCode={itemCode}
@@ -59,6 +60,7 @@ const AirAlert = () => {
             setFilteredData={setFilteredData}
             onDataUpdate={setFilteredData}
           />
+          </div>
 
           <div className={AlertStyle.bottom}>
             <h1>대기오염 발령 기준</h1>

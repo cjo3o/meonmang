@@ -22,4 +22,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.airAlertTable {
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .flexBetween {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }

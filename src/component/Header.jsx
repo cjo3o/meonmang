@@ -19,7 +19,7 @@ function Header(props) {
                     </div>
                     <div className={styles.nav}>
                         <ul className={openSidebar ? styles.open : ''}>
-                            <li><Link to="">먼망진창 소개</Link></li>
+                            <li><Link to="/intro">먼망진창 소개</Link></li>
                             <li><Link to="/airdata">대기 정보</Link></li>
                             <li
                               onMouseEnter={() => setShowSubmenu(true)}

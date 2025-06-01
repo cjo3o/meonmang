@@ -1,0 +1,116 @@
+.content {
+    background: linear-gradient(to bottom, #a7f7ff, #f3f3f3);
+}
+
+.header {
+    text-align: center;
+}
+
+.center {
+    width: 75%;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+.header h1 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+}
+
+.intro {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeSlideDown 1s ease forwards;
+    padding: 2rem;
+}
+
+.intro h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 1rem 0 0.5rem;
+}
+
+.intro h3 {
+    text-align: center;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin: 0.5rem 0;
+}
+
+.middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 1rem;
+    width: fit-content;
+}
+
+.menu > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu h2,
+.menu h3,
+.menu p {
+    margin-bottom: 0.7rem;
+    opacity: 0;
+    transform: translateX(-30px);
+    animation: slideInLeft 0.8s ease forwards;
+}
+
+.menu h2 { animation-delay: 0.3s; }
+.menu h3:nth-of-type(1) { animation-delay: 0.6s; }
+.menu p:nth-of-type(1) { animation-delay: 0.9s; }
+.menu h3:nth-of-type(2) { animation-delay: 1.2s; }
+.menu p:nth-of-type(2) { animation-delay: 1.5s; }
+.menu h3:nth-of-type(3) { animation-delay: 1.8s; }
+.menu p:nth-of-type(3) { animation-delay: 2.1s; }
+
+.menuIcon {
+    object-fit: contain;
+}
+
+@keyframes fadeSlideDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .menu {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+}

@@ -15,6 +15,7 @@ const AirAlertFilter = ({
                         }) => (
     <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col>
+            <h4>지역</h4>
             <Select
                 placeholder="지역"
                 value={region}
@@ -24,6 +25,7 @@ const AirAlertFilter = ({
             />
         </Col>
         <Col>
+            <h4>항목</h4>
             <Radio.Group value={itemCode} onChange={e => setItemCode(e.target.value)}>
                 <Radio value="전체">전체</Radio>
                 <Radio value="PM10">PM10</Radio>
@@ -32,6 +34,7 @@ const AirAlertFilter = ({
             </Radio.Group>
         </Col>
         <Col>
+            <h4>날짜</h4>
             <RangePicker value={pendingDateRange} onChange={setPendingDateRange} />
         </Col>
         {/*<Col>*/}
