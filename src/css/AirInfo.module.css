@@ -1,6 +1,7 @@
 .airInfor {
     width: 45%;
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
     gap: 2.5rem;
     transition: all 0.2s ease;

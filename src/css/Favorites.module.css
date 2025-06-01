@@ -1,0 +1,87 @@
+.loading {
+    text-align: center;
+    align-content: center;
+    font-size: 3rem;
+    font-weight: bold;
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.content {
+    background: linear-gradient(to bottom,#A7F7FF, #F3F3F3);
+    overflow: hidden;
+}
+
+.contentBox {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    width: 50%;
+    height: 100%;
+    min-height: px;
+    margin: 4rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.contentTitle {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-bottom: solid 1px #dcdcdc;
+    padding-bottom: 1.5rem;
+}
+
+.plusBox {
+    text-align: center;
+    align-content: center;
+    height: 250px;
+    border: 1px solid #dcdcdc;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.plusBtn {
+    display: inline-block;
+    font-size: 3rem;
+    color: #dcdcdc;
+    width: 7rem;
+    height: 7rem;
+    align-content: center;
+    border-radius: 50%;
+    border: solid 1px #dcdcdc;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.plusBox:hover > .plusBtn {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    scale: 1.05;
+    transition: all 0.3s;
+}
+
+.plusBox:hover {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.modal {
+    align-content: center;
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.modalCard {
+    max-width: 750px;
+    margin: auto;
+}

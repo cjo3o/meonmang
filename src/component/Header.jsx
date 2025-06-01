@@ -33,7 +33,7 @@ function Header({openSidebar, setOpenSidebar}) {
                                   </ul>
                                 )}
                             </li>
-                            <li><Link to="">고객지원</Link></li>
+                            <li><Link to="/favorites">즐겨찾기</Link></li>
                         </ul>
                     </div>
                     {/*<div className={styles.kakao}>*/}

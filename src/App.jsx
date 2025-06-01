@@ -8,6 +8,7 @@ import AirAlert from "./pages/Clack/AirAlert.jsx";
 import AirClack from "./pages/Clack/AirClack.jsx";
 import Intro from "./pages/intro.jsx";
 import {useState} from "react";
+import Favorites from "./pages/Favorites.jsx";
 
 function App() {
     const [openSidebar, setOpenSidebar] = useState(false);
@@ -23,6 +24,7 @@ function App() {
                         <Route path="/airdata" element={<AirData setOpenSidebar={setOpenSidebar}/>}/>
                         <Route path="/airalert" element={<AirAlert setOpenSidebar={setOpenSidebar}/>}/>
                         <Route path="/airclack" element={<AirClack setOpenSidebar={setOpenSidebar}/>}/>
+                        <Route path="/favorites" element={<Favorites setOpenSidebar={setOpenSidebar}/>}/>
                     </Routes>
                     <Footer/>
                 </Router>

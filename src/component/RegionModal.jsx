@@ -83,15 +83,15 @@ function RegionModal({region, onClose}) {
     const favoritesRegister = () => {
         const list = JSON.parse(localStorage.getItem("favorites") || "[]");
 
-        if (list.includes(findItem.cityName)) {
-            const newList = list.filter((item) => item !== findItem.cityName);
+        if (list.some(item => item.key === key && item.cityName === findItem.cityName)) {
+            const newList = list.filter((item) => !(item.key === key && item.cityName === findItem.cityName));
             localStorage.setItem("favorites", JSON.stringify(newList));
             alert("즐겨찾기에 해제되었습니다.");
             console.log(list);
             checkFavorite();
 
         } else {
-            const newList = [...list, findItem.cityName];
+            const newList = [...list, {key, cityName: findItem.cityName}];
             localStorage.setItem("favorites", JSON.stringify(newList));
             alert("즐겨찾기에 등록되었습니다.");
             checkFavorite();
@@ -100,8 +100,8 @@ function RegionModal({region, onClose}) {
 
     const checkFavorite = () => {
         const list = JSON.parse(localStorage.getItem("favorites") || "[]");
-        const favorite = list.find(item => {
-            return item === findItem?.cityName
+        const favorite = list.find((item) => {
+            return item.key === key && item.cityName === findItem?.cityName
         });
         console.log(list);
         console.log(favorite);
