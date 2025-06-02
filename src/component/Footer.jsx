@@ -17,7 +17,7 @@ function Footer(props) {
                     <div className={styles.footerContent}>
                         <p>(41937) 대구광역시 중구 중앙대로 394 제일빌딩 5층</p>
                         <p>대표번호 053) 572 - 1005</p>
-                        <p>개인정보처리방침</p>
+
                     </div>
                     <div className={styles.moveTop} onClick={moveTop}>
                         <img src={Top} alt="top"/>

@@ -24,12 +24,12 @@
     width: fit-content;
 }
 
-.footerContent > p:last-child {
-    background-color: #008554;
-    padding: 0.1rem 0.4rem;
-    cursor: pointer;
-    margin-top: 1rem;
-}
+/*.footerContent > p:last-child {*/
+/*    background-color: #008554;*/
+/*    padding: 0.1rem 0.4rem;*/
+/*    cursor: pointer;*/
+/*    margin-top: 1rem;*/
+/*}*/
 
 .moveTop {
     height: fit-content;
