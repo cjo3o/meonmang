@@ -612,7 +612,6 @@ function RegionModal({region, onClose}) {
                                     </div>
                                 </>
                             )
-
                         }
                     </div>
                 </Card>
