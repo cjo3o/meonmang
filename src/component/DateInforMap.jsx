@@ -236,43 +236,6 @@ function DateInforMap({dateOption, selectDate}) {
     }
 
     return (
-        <Map
-            className={styles.mapContainer}
-            onCreate={setMap}
-            center={{lat: 35.9, lng: 127.5}}
-            level={13}
-            zoomable={false}
-            draggable={false}
-            disableDoubleClick={true}
-        >
-            {regionMarkers.map((marker) => (
-                <div key={marker.name}>
-                    <MapMarker
-                        image={{
-                            src: markerIcon,
-                            size: {
-                                width: openOverlay === marker.name || hoveredMarker === marker.name ? 35 : 25,
-                                height: openOverlay === marker.name || hoveredMarker === marker.name ? 35 : 25,
-                            },
-                        }}
-                        position={{lat: marker.center[0], lng: marker.center[1]}}
-                        onClick={() => handleMarkerClick(marker.name)}
-                        onMouseOver={() => setHoveredMarker(marker.name)}
-                        onMouseOut={() => setHoveredMarker(null)}
-                    />
-                    {openOverlay === marker.name && (
-                        <CustomOverlayMap position={{lat: marker.center[0], lng: marker.center[1]}}>
-                            <div className={`${styles.customOverlay} ${getStateColorClass(marker.state)}`}>
-                                <div>{marker.name}</div>
-                                <div>{marker.state || '정보 없음'}</div>
-                            </div>
-                        </CustomOverlayMap>
-                    )}
-                </div>
-            ))}
-        </Map>
-    );
-  return (
     <Map
       className={styles.mapContainer}
       center={{ lat: 35.9, lng: 127.5 }}
