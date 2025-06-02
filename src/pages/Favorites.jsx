@@ -1,26 +1,34 @@
 import React, {useEffect, useState} from 'react';
 import styles from '/src/css/Favorites.module.css';
-import {Card, Select} from "antd";
+import {Button, Card, Select, TreeSelect} from "antd";
 import axios from "axios";
-import {PlusOutlined} from "@ant-design/icons";
+import {CloseOutlined, MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
+import treeData from "/korea_region_tree.json";
 
 const SIDO_AVR_URL = import.meta.env.VITE_SIDO_AVR_URL;
 
-// const AVR_KEY = import.meta.env.VITE_AVR_KEY;
+const AVR_KEY = import.meta.env.VITE_AVR_KEY;
 
 function Favorites({setOpenSidebar}) {
     const [favorites, setFavorites] = useState(null);
     const [selectData, setSelectData] = useState({});
     const [loading, setLoading] = useState(true);
     const [openModal, setOpenModal] = useState(false);
+    const [value, setValue] = useState();
+    const [delValue, setDelValue] = useState();
 
     useEffect(() => {
         setOpenSidebar(false);
+        fetchFavorites();
+
+    }, []);
+
+    const fetchFavorites = async () => {
         const res = JSON.parse(localStorage.getItem("favorites") || "[]");
         console.log(res);
         setFavorites(res);
 
-        res.forEach(async (item) => {
+        for (const item of res) {
             setLoading(true);
             try {
                 const {data} = await axios.get(`${SIDO_AVR_URL}?serviceKey=${AVR_KEY}&returnType=json&numOfRows=100&pageNo=1&sidoName=${item.key}&searchCondition=HOUR`);
@@ -34,19 +42,56 @@ function Favorites({setOpenSidebar}) {
             } finally {
                 setLoading(false);
             }
-        })
-    }, []);
-
-    const plusFav = () => {
-        setOpenModal(true);
+        }
     }
 
-    if (loading) {
-        return <div className={styles.loading}>데이터 불러오는중...</div>;
+    const closeModal = () => {
+        setOpenModal(false);
+        setValue(null);
+    }
+
+    const plusFav = () => {
+        if (!value) {
+            return alert("지역을 선택해주세요");
+        }
+        const list = JSON.parse(localStorage.getItem("favorites") || "[]");
+        console.log(list);
+        const matched = list.find((item) => {
+            return item.key === value?.split("-")[0] && item.cityName === value?.split("-")[1]
+        });
+        console.log(matched);
+
+        if (matched) {
+            alert("이미 등록된 지역입니다.");
+        } else {
+            const newlist = [...list, {key: value?.split("-")[0], cityName: value?.split("-")[1]}]
+            localStorage.setItem("favorites", JSON.stringify(newlist));
+            alert("즐겨찾기에 등록되었습니다.");
+            setOpenModal(false);
+            setValue(null);
+            fetchFavorites();
+        }
+    }
+
+    const minusFav = ({mdKey, mdCityName}) => {
+        const list = JSON.parse(localStorage.getItem("favorites") || "[]");
+        console.log(mdKey, mdCityName);
+        const newList = list.filter((item) => {
+            return item.key !== mdKey || item.cityName !== mdCityName;
+        });
+        localStorage.setItem("favorites", JSON.stringify(newList));
+        alert("즐겨찾기에서 해제되었습니다.")
+        fetchFavorites();
+    }
+
+    const onchange = (newValue) => {
+        console.log(newValue);
+        setValue(newValue);
     }
 
     console.log(favorites);
     console.log(selectData);
+    console.log(value?.split("-"));
 
     return (
         <>
@@ -55,51 +100,108 @@ function Favorites({setOpenSidebar}) {
                     <div className={styles.contentTitle}>
                         즐겨찾기 목록
                     </div>
-                    {
-                        favorites?.map((item) => {
-                            const data = selectData[`${item.key}-${item.cityName}`];
+                    <div className={styles.contentBody}>
+                        {
+                            favorites?.map((item) => {
+                                const data = selectData[`${item.key}-${item.cityName}`];
 
-                            return (
-                                <div key={item.cityName}>
-                                    <Card
-                                        title={item.key + "-" + item.cityName}
-                                        style={{"box-shadow": "0 2px 4px 0 rgba(0, 0, 0, 0.1)"}}
-                                    >
-                                        {
-                                            data ? (
-                                                <>
-                                                    <p>초미세먼지 {data.pm25Value}</p>
-                                                    <p>미세먼지 {data.pm10Value}</p>
-                                                    <p>오존 {data.pmo3Value}</p>
-                                                    <p>이산화질소 {data.no2Value}</p>
-                                                    <p>일산화탄소 {data.coValue}</p>
-                                                    <p>아황산가스 {data.so2Value}</p>
-                                                </>
-                                            ) : (
-                                                <p>데이터 로딩중...</p>
-                                            )
-                                        }
-                                    </Card>
-                                </div>
-                            )
-                        })
-                    }
-                    <div className={styles.plusBox} onClick={plusFav}>
-                        <div className={styles.plusBtn}>
-                            <PlusOutlined/>
+                                return (
+                                    <div key={`${item.key}-${item.cityName}`}>
+                                        <Card
+                                            title={
+                                                <div className={styles.cardTitle}>
+                                                    {item.key + "-" + item.cityName}
+                                                    <div className={styles.minus} onClick={() => minusFav({
+                                                        mdKey: item.key,
+                                                        mdCityName: item.cityName
+                                                    })}>
+                                                        <MinusCircleOutlined/>
+                                                    </div>
+                                                </div>
+                                            }
+                                            style={{"boxShadow": "0 0 4px rgba(0, 0, 0, 0.1)"}}
+                                        >
+                                            {
+                                                data ? (
+                                                    <>
+                                                        <p>초미세먼지 {data.pm25Value}</p>
+                                                        <p>미세먼지 {data.pm10Value}</p>
+                                                        <p>오존 {data.o3Value}</p>
+                                                        <p>이산화질소 {data.no2Value}</p>
+                                                        <p>일산화탄소 {data.coValue}</p>
+                                                        <p>아황산가스 {data.so2Value}</p>
+                                                    </>
+                                                ) : (
+                                                    <p>데이터 로딩중...</p>
+                                                )
+                                            }
+                                        </Card>
+                                    </div>
+                                )
+                            })
+                        }
+                        <div className={styles.plusBox} onClick={() => {
+                            const list = JSON.parse(localStorage.getItem("favorites") || "[]");
+                            console.log(list);
+                            if (list.length >= 5) {
+                                alert("즐겨찾기는 최대 5개까지 등록가능합니다.");
+                            } else {
+                                setOpenModal(true);
+                            }
+                        }}>
+                            <div className={styles.plusBtn}>
+                                <PlusOutlined/>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
+            {
+                loading && (
+                    <div className={styles.loading}>데이터 불러오는중...</div>
+                )
+            }
             {
                 openModal && (
                     <div className={styles.modal}>
                         <Card
                             className={styles.modalCard}
-                            title="즐겨찾기 추가">
-                            <Select
-                                options={[]}
+                            title={
+                                <div className={styles.modalTitle}>
+                                    <p>즐겨찾기 추가</p>
+                                    <Button onClick={closeModal}>
+                                        <CloseOutlined/>
+                                    </Button>
+                                </div>
+                            }
+                            variant="borderless"
+                            styles={{
+                                header: {
+                                    padding: 0,
+                                    border: "none",
+                                    minHeight: 0
+                                },
+                                body: {
+                                    padding: "1rem",
+                                    border: "none",
+                                    minHeight: 0
+                                }
+                            }}
+                        >
+                            <TreeSelect
+                                className={styles.selectBox}
+                                value={value}
+                                treeData={treeData}
+                                placeholder="지역을 선택해주세요"
+                                styles={{
+                                    popup: {root: {maxHeight: 400, overflow: 'auto'}},
+                                }}
+                                onChange={onchange}
                             />
+                            <div className={styles.submit}>
+                                <Button onClick={plusFav}>등록</Button>
+                            </div>
                         </Card>
                     </div>
                 )
