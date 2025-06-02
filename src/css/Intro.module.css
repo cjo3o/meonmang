@@ -69,12 +69,18 @@
 }
 
 .menu h2 { animation-delay: 0.3s; }
+
 .menu h3:nth-of-type(1) { animation-delay: 0.6s; }
 .menu p:nth-of-type(1) { animation-delay: 0.9s; }
+
 .menu h3:nth-of-type(2) { animation-delay: 1.2s; }
 .menu p:nth-of-type(2) { animation-delay: 1.5s; }
+
 .menu h3:nth-of-type(3) { animation-delay: 1.8s; }
 .menu p:nth-of-type(3) { animation-delay: 2.1s; }
+
+.menu h3:nth-of-type(4) { animation-delay: 2.4s; }
+.menu p:nth-of-type(4) { animation-delay: 2.7s; }
 
 .menuIcon {
     object-fit: contain;
