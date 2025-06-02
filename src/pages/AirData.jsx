@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Card } from "antd";
 import AirButton from "../component/AirButton.jsx";
 import AirTable from "../component/AirTable.jsx";
@@ -8,9 +8,13 @@ import ADataStyle from "../css/AirData.module.css";
 
 import { REGION_KEYS, REGION_COLUMNS } from "../component/AirAdd.js";
 
-function AirData() {
+function AirData({setOpenSidebar}) {
   const [selectedDay, setSelectedDay] = useState("오늘"); // 기본값 '오늘'
   const [timeText, setTimeText] = useState(""); // 발표시간 상태
+
+  useEffect(() => {
+    setOpenSidebar(false);
+  }, []);
 
   return (
     <div className={ADataStyle.content}>

@@ -1,0 +1,130 @@
+.loading {
+    text-align: center;
+    align-content: center;
+    font-size: 3rem;
+    font-weight: bold;
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.content {
+    background: linear-gradient(to bottom,#A7F7FF, #F3F3F3);
+    overflow: hidden;
+}
+
+.contentBox {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    width: 50%;
+    height: 100%;
+    max-height: 915px;
+    min-height: 915px;
+    margin: 4rem auto;
+    overflow-y: auto;
+}
+
+.contentTitle {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-bottom: solid 1px #dcdcdc;
+    padding-bottom: 1.5rem;
+}
+
+.contentBody {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.cardTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.minus {
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    padding: 0.2rem;
+}
+
+.plusBox {
+    text-align: center;
+    align-content: center;
+    max-height: 250px;
+    border: 1px solid #dcdcdc;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.plusBtn {
+    display: inline-block;
+    color: #dcdcdc;
+    width: 3rem;
+    height: 3rem;
+    margin: 2rem 0;
+    align-content: center;
+    border-radius: 50%;
+    border: solid 1px #dcdcdc;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.plusBox:hover > .plusBtn {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    scale: 1.05;
+    transition: all 0.3s;
+}
+
+.plusBox:hover {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.modal {
+    align-content: center;
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 1.5rem;
+}
+
+.modalCard {
+    max-width: 250px;
+    margin: auto;
+}
+
+.modalTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    min-height: 56px;
+    background-color: #006AB6;
+    color: white;
+    font-weight: normal;
+    font-size: 1.2rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.selectBox {
+    width: 100%;
+}
+
+.submit {
+    margin-top: 1rem;
+    text-align: right;
+}

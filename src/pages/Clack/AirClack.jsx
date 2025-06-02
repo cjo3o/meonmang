@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Card, Form, Select, message, Radio} from "antd";
 import axios from "axios";
 import ClackStyle from "../../css/AirClack.module.css";
@@ -8,8 +8,12 @@ const {Option} = Select;
 const API_URL = import.meta.env.VITE_BACK_API_URL;
 const hours = Array.from({length: 12}, (_, i) => i + 1);
 
-const AirClack = () => {
+const AirClack = ({setOpenSidebar}) => {
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setOpenSidebar(false);
+    }, []);
 
     const onFinish = async (values) => {
         setLoading(true);

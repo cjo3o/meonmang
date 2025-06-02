@@ -29,235 +29,236 @@ function RealTimeMap({ selectOption, onOpenModal, setDataTime }) {
     const handleResize = () => {
       const width = window.innerWidth;
       const newLevel = width <= 1700 ? 14 : 13;
-
+  
       setMapLevel(newLevel);
-
-      if (map) {
-        const fixedCenter = new kakao.maps.LatLng(35.9, 127.7); // 초기 중심
-        map.relayout();
-        map.setLevel(newLevel);
-        map.setCenter(fixedCenter); // 항상 동일한 중심으로 고정
-      }
-    };
-
+  
+ if (map) {
+      const fixedCenter = new kakao.maps.LatLng(35.9, 127.7); // 초기 중심
+      map.relayout();
+      map.setLevel(newLevel);
+      map.setCenter(fixedCenter); // 항상 동일한 중심으로 고정
+    }
+  };
+  
     window.addEventListener("resize", handleResize);
-
+  
     // 초기 실행
     handleResize();
-
+  
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, [map]);
+  
 
-  const regionKeyMap = {
-    서울: "seoul",
-    부산: "busan",
-    대구: "daegu",
-    인천: "incheon",
-    광주: "gwangju",
-    대전: "daejeon",
-    울산: "ulsan",
-    세종: "sejong",
-    경기: "gyeonggi",
-    강원: "gangwon",
-    충북: "chungbuk",
-    충남: "chungnam",
-    전북: "jeonbuk",
-    전남: "jeonnam",
-    경북: "gyeongbuk",
-    경남: "gyeongnam",
-    제주: "jeju",
-  };
+    const regionKeyMap = {
+        서울: "seoul",
+        부산: "busan",
+        대구: "daegu",
+        인천: "incheon",
+        광주: "gwangju",
+        대전: "daejeon",
+        울산: "ulsan",
+        세종: "sejong",
+        경기: "gyeonggi",
+        강원: "gangwon",
+        충북: "chungbuk",
+        충남: "chungnam",
+        전북: "jeonbuk",
+        전남: "jeonnam",
+        경북: "gyeongbuk",
+        경남: "gyeongnam",
+        제주: "jeju",
+    };
 
-  useKakaoLoader({ appkey: KAKAO_API_KEY });
+    useKakaoLoader({appkey: KAKAO_API_KEY});
 
-  const handleMarkerClick = (name) => {
-    setOpenOverlay((prev) => (prev === name ? null : name));
-  };
+    const handleMarkerClick = (name) => {
+        setOpenOverlay((prev) => (prev === name ? null : name));
+    };
 
-  // 데이터 fetch는 map 없이도 실행 가능
-  useEffect(() => {
-    const fetchAvrData = async () => {
-      setLoading(true);
-      try {
-        const { data } = await axios.get(
-          `${AVR_URL}?returnType=json&numOfRows=25&pageNo=1&itemCode=${selectOption}&dataGubun=HOUR&serviceKey=${AVR_KEY}`
+    // 데이터 fetch는 map 없이도 실행 가능
+    useEffect(() => {
+        const fetchAvrData = async () => {
+            setLoading(true);
+            try {
+                const {data} = await axios.get(
+                    `${AVR_URL}?returnType=json&numOfRows=25&pageNo=1&itemCode=${selectOption}&dataGubun=HOUR&serviceKey=${AVR_KEY}`
+                );
+                setDataTime(data.response.body.items[0].dataTime);
+                setSidoAvr(data.response.body.items[0]);
+            } catch (err) {
+                console.log("API 호출 오류", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAvrData();
+    }, [selectOption]);
+
+    useEffect(() => {
+        if (!map) return;
+
+        const allowedBounds = new kakao.maps.LatLngBounds(
+            new kakao.maps.LatLng(33.0, 124.0),
+            new kakao.maps.LatLng(39.5, 132.0)
         );
-        setDataTime(data.response.body.items[0].dataTime);
-        setSidoAvr(data.response.body.items[0]);
-      } catch (err) {
-        console.log("API 호출 오류", err);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchAvrData();
-  }, [selectOption]);
+        const handleZoomChanged = () => {
+            const level = map.getLevel();
 
-  useEffect(() => {
-    if (!map) return;
+            const isZoomedIn = level <= 13;
+            map.setDraggable(isZoomedIn);
 
-    const allowedBounds = new kakao.maps.LatLngBounds(
-      new kakao.maps.LatLng(33.0, 124.0),
-      new kakao.maps.LatLng(39.5, 132.0)
-    );
+            if (level >= 13) {
+                // 📍 초기화 위치로 이동
+                map.setCenter(new kakao.maps.LatLng(35.9, 127.7));
+            }
+        };
 
-    const handleZoomChanged = () => {
-      const level = map.getLevel();
+        const handleCenterChanged = () => {
+            const level = map.getLevel();
+            if (level > 13) return;
 
-      const isZoomedIn = level <= 13;
-      map.setDraggable(isZoomedIn);
+            const center = map.getCenter();
+            if (!allowedBounds.contain(center)) {
+                const clampedLat = Math.min(Math.max(center.getLat(), 33.0), 39.5);
+                const clampedLng = Math.min(Math.max(center.getLng(), 124.0), 132.0);
+                const corrected = new kakao.maps.LatLng(clampedLat, clampedLng);
+                map.panTo(corrected);
+            }
+        };
 
-      if (level >= 13) {
-        // 📍 초기화 위치로 이동
-        map.setCenter(new kakao.maps.LatLng(35.9, 127.7));
-      }
-    };
+        kakao.maps.event.addListener(map, "zoom_changed", handleZoomChanged);
+        kakao.maps.event.addListener(map, "center_changed", handleCenterChanged);
+        handleZoomChanged();
 
-    const handleCenterChanged = () => {
-      const level = map.getLevel();
-      if (level > 13) return;
-
-      const center = map.getCenter();
-      if (!allowedBounds.contain(center)) {
-        const clampedLat = Math.min(Math.max(center.getLat(), 33.0), 39.5);
-        const clampedLng = Math.min(Math.max(center.getLng(), 124.0), 132.0);
-        const corrected = new kakao.maps.LatLng(clampedLat, clampedLng);
-        map.panTo(corrected);
-      }
-    };
-
-    kakao.maps.event.addListener(map, "zoom_changed", handleZoomChanged);
-    kakao.maps.event.addListener(map, "center_changed", handleCenterChanged);
-    handleZoomChanged();
-
-    return () => {
-      kakao.maps.event.removeListener(map, "zoom_changed", handleZoomChanged);
-      kakao.maps.event.removeListener(
-        map,
-        "center_changed",
-        handleCenterChanged
-      );
-    };
-  }, [map]);
-
-  useEffect(() => {
-    if (!map) return;
-
-    const handleMapClick = () => {
-      setOpenOverlay(null);
-    };
-
-    kakao.maps.event.addListener(map, "click", handleMapClick);
-
-    return () => {
-      kakao.maps.event.removeListener(map, "click", handleMapClick);
-    };
-  }, [map]);
-
-  // 폴리곤 그리기
-  useEffect(() => {
-    if (!map || !regionData) return;
-
-    regionData.features.forEach((feature) => {
-      const { coordinates, type } = feature.geometry;
-      const name = feature.properties.CTP_KOR_NM;
-      const paths = [];
-
-      if (type === "Polygon") {
-        coordinates.forEach((ring) => {
-          const path = ring.map(
-            ([lng, lat]) => new kakao.maps.LatLng(lat, lng)
-          );
-          paths.push(path);
-        });
-      } else if (type === "MultiPolygon") {
-        coordinates.forEach((polygon) => {
-          polygon.forEach((ring) => {
-            const path = ring.map(
-              ([lng, lat]) => new kakao.maps.LatLng(lat, lng)
+        return () => {
+            kakao.maps.event.removeListener(map, "zoom_changed", handleZoomChanged);
+            kakao.maps.event.removeListener(
+                map,
+                "center_changed",
+                handleCenterChanged
             );
-            paths.push(path);
-          });
+        };
+    }, [map]);
+
+    useEffect(() => {
+        if (!map) return;
+
+        const handleMapClick = () => {
+            setOpenOverlay(null);
+        };
+
+        kakao.maps.event.addListener(map, "click", handleMapClick);
+
+        return () => {
+            kakao.maps.event.removeListener(map, "click", handleMapClick);
+        };
+    }, [map]);
+
+    // 폴리곤 그리기
+    useEffect(() => {
+        if (!map || !regionData) return;
+
+        regionData.features.forEach((feature) => {
+            const {coordinates, type} = feature.geometry;
+            const name = feature.properties.CTP_KOR_NM;
+            const paths = [];
+
+            if (type === "Polygon") {
+                coordinates.forEach((ring) => {
+                    const path = ring.map(
+                        ([lng, lat]) => new kakao.maps.LatLng(lat, lng)
+                    );
+                    paths.push(path);
+                });
+            } else if (type === "MultiPolygon") {
+                coordinates.forEach((polygon) => {
+                    polygon.forEach((ring) => {
+                        const path = ring.map(
+                            ([lng, lat]) => new kakao.maps.LatLng(lat, lng)
+                        );
+                        paths.push(path);
+                    });
+                });
+            }
+
+            const polygon = new kakao.maps.Polygon({
+                path: paths,
+                strokeWeight: 2,
+                strokeColor: "#004c80",
+                strokeOpacity: 0.8,
+                fillColor: "#ff9b9b",
+                fillOpacity: 0.5,
+            });
+
+            polygon.setMap(map);
+
+            kakao.maps.event.addListener(polygon, "click", () => {
+                onOpenModal(name);
+            });
+
+            kakao.maps.event.addListener(polygon, "mouseover", () => {
+                polygon.setOptions({
+                    fillOpacity: 0.8,
+                    strokeWeight: 3,
+                });
+                map.getNode().style.cursor = "pointer";
+            });
+
+            kakao.maps.event.addListener(polygon, "mouseout", () => {
+                polygon.setOptions({
+                    fillOpacity: 0.5,
+                    strokeWeight: 2,
+                });
+                map.getNode().style.cursor = "default";
+            });
         });
-      }
+    }, [map]);
 
-      const polygon = new kakao.maps.Polygon({
-        path: paths,
-        strokeWeight: 2,
-        strokeColor: "#004c80",
-        strokeOpacity: 0.8,
-        fillColor: "#ff9b9b",
-        fillOpacity: 0.5,
-      });
+    const changeColor = (value) => {
+        if (selectOption === "PM25") {
+            if (value <= 15) return styles.good;
+            if (value <= 35) return styles.normal;
+            if (value <= 75) return styles.bad;
+            return styles.worst;
+        } else if (selectOption === "PM10") {
+            if (value <= 30) return styles.good;
+            if (value <= 80) return styles.normal;
+            if (value <= 150) return styles.bad;
+            return styles.worst;
+        } else if (selectOption === "O3") {
+            if (value <= 0.03) return styles.good;
+            if (value <= 0.09) return styles.normal;
+            if (value <= 0.15) return styles.bad;
+            return styles.worst;
+        } else if (selectOption === "NO2") {
+            if (value <= 0.03) return styles.good;
+            if (value <= 0.06) return styles.normal;
+            if (value <= 0.2) return styles.bad;
+            return styles.worst;
+        } else if (selectOption === "CO") {
+            if (value <= 2) return styles.good;
+            if (value <= 9) return styles.normal;
+            if (value <= 15) return styles.bad;
+            return styles.worst;
+        } else {
+            if (value <= 0.02) return styles.good;
+            if (value <= 0.05) return styles.normal;
+            if (value <= 0.15) return styles.bad;
+            return styles.worst;
+        }
+    };
 
-      polygon.setMap(map);
-
-      kakao.maps.event.addListener(polygon, "click", () => {
-        onOpenModal(name);
-      });
-
-      kakao.maps.event.addListener(polygon, "mouseover", () => {
-        polygon.setOptions({
-          fillOpacity: 0.8,
-          strokeWeight: 3,
-        });
-        map.getNode().style.cursor = "pointer";
-      });
-
-      kakao.maps.event.addListener(polygon, "mouseout", () => {
-        polygon.setOptions({
-          fillOpacity: 0.5,
-          strokeWeight: 2,
-        });
-        map.getNode().style.cursor = "default";
-      });
-    });
-  }, [map]);
-
-  const changeColor = (value) => {
-    if (selectOption === "PM25") {
-      if (value <= 15) return styles.good;
-      if (value <= 35) return styles.normal;
-      if (value <= 75) return styles.bad;
-      return styles.worst;
-    } else if (selectOption === "PM10") {
-      if (value <= 30) return styles.good;
-      if (value <= 80) return styles.normal;
-      if (value <= 150) return styles.bad;
-      return styles.worst;
-    } else if (selectOption === "O3") {
-      if (value <= 0.03) return styles.good;
-      if (value <= 0.09) return styles.normal;
-      if (value <= 0.15) return styles.bad;
-      return styles.worst;
-    } else if (selectOption === "NO2") {
-      if (value <= 0.03) return styles.good;
-      if (value <= 0.06) return styles.normal;
-      if (value <= 0.2) return styles.bad;
-      return styles.worst;
-    } else if (selectOption === "CO") {
-      if (value <= 2) return styles.good;
-      if (value <= 9) return styles.normal;
-      if (value <= 15) return styles.bad;
-      return styles.worst;
-    } else {
-      if (value <= 0.02) return styles.good;
-      if (value <= 0.05) return styles.normal;
-      if (value <= 0.15) return styles.bad;
-      return styles.worst;
+    if (loading) {
+        return (
+            <div className={styles.loadingContainer}>
+                <div className={styles.loadingText}>데이터 로딩중...</div>
+            </div>
+        );
     }
-  };
-
-  if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingText}>데이터 로딩중...</div>
-      </div>
-    );
-  }
 
   return (
     <Map
