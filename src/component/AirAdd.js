@@ -24,6 +24,15 @@ export const itemCodeMap = {
   SO2: "SO2",
 };
 
+export const itemkr = {
+  PM10: "미세먼지 (PM10)",
+  PM25: "초미세먼지 (PM2.5)",
+  O3: "오존 (O3)",
+  NO2: "이산화질소 (NO2)",
+  CO: "일산화탄소 (CO)",
+  SO2: "아황산가스 (SO2)",
+};
+
 export const REGION_KEYS = {
   서울: "seoul",
   인천: "incheon",

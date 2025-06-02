@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Button, Card, Form, Select, message, Radio} from "antd";
 import axios from "axios";
 import ClackStyle from "../../css/AirClack.module.css";
-import {REGION_KEYS, itemCodeMap} from "../../component/AirAdd.js";
+import {REGION_KEYS, itemkr} from "../../component/AirAdd.js";
 
 const {Option} = Select;
 const API_URL = import.meta.env.VITE_BACK_API_URL;
@@ -96,7 +96,7 @@ const AirClack = ({setOpenSidebar}) => {
                             label="항목"
                             rules={[{required: true}]}>
                             <Select placeholder="항목을 선택하세요">
-                                {Object.entries(itemCodeMap).map(([code, label]) => (
+                                {Object.entries(itemkr).map(([code, label]) => (
                                     <Option key={code} value={code}>{label}</Option>
                                 ))}
                             </Select>
