@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card } from "antd";
 import IntroStyle from "../../src/css/Intro.module.css";
 
-function Intro() {
+function Intro({setOpenSidebar}) {
+  useEffect (()=>{
+    setOpenSidebar(false);
+  },[])
+
   return (
     <div className={IntroStyle.content}>
       <div className={IntroStyle.center}>
@@ -19,7 +23,7 @@ function Intro() {
                 </span>
                 <span className={IntroStyle.intro2}>
                   {" "}
-                  먼망진창에 오신 것을 환영합니다!
+                  먼망진창에 오신 것을 <span className={IntroStyle.intro4}>환영합니다!</span>
                 </span>
               </h2>
             </div>
@@ -64,8 +68,8 @@ function Intro() {
               />
             </div>
           </div>
-          <div className={IntroStyle.intro3}>
-            <h2>먼망진창과 함께, 맑은 공기와 건강한 일상을 만들어보아요.</h2>
+          <div>
+            <h2 className={IntroStyle.intro3}><span className={IntroStyle.intro5}>먼망진창과 함께, 맑은 공기와</span><span> 건강한 일상을 만들어보아요.</span></h2>
           </div>
         </Card>
       </div>
