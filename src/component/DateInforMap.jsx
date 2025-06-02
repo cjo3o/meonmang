@@ -240,7 +240,11 @@ function DateInforMap({ dateOption, selectDate }) {
       }}
     >
       {regionMarkers.map((marker) => (
-        <div key={marker.name}>
+        <div
+          key={marker.name}
+          onMouseOver={() => setHoveredMarker(marker.name)}
+          onMouseOut={() => setHoveredMarker(null)}
+        >
           <MapMarker
             image={{
               src: markerIcon,
@@ -260,7 +264,7 @@ function DateInforMap({ dateOption, selectDate }) {
             onMouseOver={() => setHoveredMarker(marker.name)}
             onMouseOut={() => setHoveredMarker(null)}
           />
-          {openOverlay === marker.name && (
+          {(openOverlay === marker.name || hoveredMarker === marker.name) && (
             <CustomOverlayMap
               position={{ lat: marker.center[0], lng: marker.center[1] }}
             >
