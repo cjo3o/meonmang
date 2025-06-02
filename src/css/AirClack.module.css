@@ -1,5 +1,6 @@
 .content {
     background: linear-gradient(to bottom, #a7f7ff, #f3f3f3);
+    min-height: 77.8vh;
 }
 
 .center {
@@ -24,4 +25,11 @@
 .formtime {
     display: flex;
     gap: 10px;
+}
+
+@media (max-width:768px) {
+    .center {
+        width: 85%;
+        margin: 0 auto;
+    }
 }
