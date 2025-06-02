@@ -7,7 +7,7 @@ import AirAlertTable from "../../component/AirAlertTable.jsx";
 import Alertitems from "../../component/Alertitems.jsx";
 import dayjs from "dayjs";
 
-const AirAlert = () => {
+const AirAlert = ({setOpenSidebar}) => {
   const [region, setRegion] = useState("전체");
   const [itemCode, setItemCode] = useState("전체");
   const [pendingDateRange, setPendingDateRange] = useState([
@@ -24,6 +24,10 @@ const AirAlert = () => {
     setDateRange(pendingDateRange);         // 날짜 적용
     setSearchTrigger(prev => prev + 1);     // 테이블 갱신
   };
+
+  useEffect(() => {
+    setOpenSidebar(false);
+  }, []);
 
   // 지역/항목은 즉시 반영
   useEffect(() => {

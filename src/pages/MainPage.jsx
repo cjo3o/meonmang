@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styles from "/src/css/MainPage.module.css";
 import Map from "/src/component/Map.jsx";
 import AirInfo from "/src/component/AirInfo.jsx";
 import Sidebar from "../component/Sidebar.jsx";
 
-function MainPage(props) {
+function MainPage({setOpenSidebar}) {
+    useEffect(() => {
+        setOpenSidebar(false);
+    },[]);
+
     return (
         <>
             <div className={styles.Content}>
