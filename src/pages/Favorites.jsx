@@ -4,6 +4,10 @@ import {Button, Card, Select, TreeSelect} from "antd";
 import axios from "axios";
 import {CloseOutlined, MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import treeData from "/korea_region_tree.json";
+import good from "../images/Good.svg";
+import normal from "../images/normal.svg";
+import bad from "../images/bad.svg";
+import worst from "../images/worst.svg";
 
 const SIDO_AVR_URL = import.meta.env.VITE_SIDO_AVR_URL;
 
@@ -30,7 +34,7 @@ function Favorites({setOpenSidebar}) {
             setLoading(true);
             try {
                 const {data} = await axios.get(`${SIDO_AVR_URL}?serviceKey=${AVR_KEY}&returnType=json&numOfRows=100&pageNo=1&sidoName=${item.key}&searchCondition=HOUR`);
-                const regionData = data.response.body.items;
+                const regionData = data?.response?.body?.items;
                 const matched = regionData.find((rd) => rd.cityName === item.cityName);
                 setSelectData(prev => ({...prev, [`${item.key}-${item.cityName}`]: matched}));
             } catch (error) {
@@ -115,20 +119,466 @@ function Favorites({setOpenSidebar}) {
                                                 }
                                                 style={{"boxShadow": "0 0 4px rgba(0, 0, 0, 0.1)"}}
                                             >
-                                                {
-                                                    data ? (
-                                                        <>
-                                                            <p>초미세먼지 {data.pm25Value}</p>
-                                                            <p>미세먼지 {data.pm10Value}</p>
-                                                            <p>오존 {data.o3Value}</p>
-                                                            <p>이산화질소 {data.no2Value}</p>
-                                                            <p>일산화탄소 {data.coValue}</p>
-                                                            <p>아황산가스 {data.so2Value}</p>
-                                                        </>
-                                                    ) : (
-                                                        <p>데이터 로딩중...</p>
-                                                    )
-                                                }
+                                                <div className={styles.modalBody}>
+                                                    {
+                                                        data ? (
+                                                            <>
+                                                                <div className={styles.modalBodybox}>
+                                                                    <div className={styles.boxTitle}>
+                                                                        <p>초미세먼지</p>
+                                                                        <p>(PM-2.5)</p>
+                                                                    </div>
+                                                                    <div className={styles.boxBody}>
+                                                                        {
+                                                                            data.pm25Value === "" ? "데이터 없음" : (
+                                                                                <>
+                                                                                    <img src={(() => {
+                                                                                        if (data.pm25Value === "") {
+                                                                                            return null;
+                                                                                        }
+                                                                                        if (!isNaN(data.pm25Value)) {
+                                                                                            if (data.pm25Value <= 15) {
+                                                                                                return good;
+                                                                                            } else if (data.pm25Value <= 35) {
+                                                                                                return normal;
+                                                                                            } else if (data.pm25Value <= 75) {
+                                                                                                return bad;
+                                                                                            } else if (76 <= data.pm25Value) {
+                                                                                                return worst;
+                                                                                            }
+                                                                                        }
+                                                                                    })()} alt=""/>
+                                                                                    {
+                                                                                        (() => {
+                                                                                            if (!isNaN(data.pm25Value)) {
+                                                                                                if (data.pm25Value <= 15) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#0086FF"}}>{data.pm25Value}</div>;
+                                                                                                } else if (data.pm25Value <= 35) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#00DE86"}}>{data.pm25Value}</div>;
+                                                                                                } else if (data.pm25Value <= 75) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#FFC957"}}>{data.pm25Value}</div>;
+                                                                                                } else if (76 <= data.pm25Value) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#DE4F4F"}}>{data.pm25Value}</div>;
+                                                                                                }
+                                                                                            }
+                                                                                        })()
+                                                                                    }
+                                                                                    <p>㎍/㎥</p>
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                    <div className={styles.boxFooter}>
+                                                                        {
+                                                                            data.pm25Value === "" ? null : (
+                                                                                <>
+                                                                                    {(() => {
+                                                                                        if (!isNaN(data.pm25Value)) {
+                                                                                            if (data.pm25Value <= 15) {
+                                                                                                return <p
+                                                                                                    style={{color: "#0086FF"}}>좋음</p>;
+                                                                                            } else if (data.pm25Value <= 35) {
+                                                                                                return <p
+                                                                                                    style={{color: "#00DE86"}}>보통</p>;
+                                                                                            } else if (data.pm25Value <= 75) {
+                                                                                                return <p
+                                                                                                    style={{color: "#FFC957"}}>나쁨</p>;
+                                                                                            } else if (76 <= data.pm25Value) {
+                                                                                                return <p
+                                                                                                    style={{color: "#DE4F4F"}}>매우나쁨</p>;
+                                                                                            }
+                                                                                        }
+                                                                                    })()}
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                                <div className={styles.modalBodybox}>
+                                                                    <div className={styles.boxTitle}>
+                                                                        <p>미세먼지</p>
+                                                                        <p>(PM-10)</p>
+                                                                    </div>
+                                                                    <div className={styles.boxBody}>
+                                                                        {
+                                                                            data.pm10Value === "" ? "데이터 없음" : (
+                                                                                <>
+                                                                                    <img src={(() => {
+                                                                                        if (data.pm10Value === "") {
+                                                                                            return null;
+                                                                                        }
+                                                                                        if (!isNaN(data.pm10Value)) {
+                                                                                            if (data.pm10Value <= 30) {
+                                                                                                return good;
+                                                                                            } else if (data.pm10Value <= 80) {
+                                                                                                return normal;
+                                                                                            } else if (data.pm10Value <= 150) {
+                                                                                                return bad;
+                                                                                            } else if (151 <= data.pm10Value) {
+                                                                                                return worst;
+                                                                                            }
+                                                                                        }
+                                                                                    })()} alt=""/>
+                                                                                    {
+                                                                                        (() => {
+                                                                                            if (!isNaN(data.pm10Value)) {
+                                                                                                if (data.pm10Value <= 30) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#0086FF"}}>{data.pm10Value}</div>;
+                                                                                                } else if (data.pm10Value <= 80) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#00DE86"}}>{data.pm10Value}</div>;
+                                                                                                } else if (data.pm10Value <= 150) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#FFC957"}}>{data.pm10Value}</div>;
+                                                                                                } else if (151 <= data.pm10Value) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#DE4F4F"}}>{data.pm10Value}</div>;
+                                                                                                }
+                                                                                            }
+                                                                                        })()
+                                                                                    }
+                                                                                    <p>㎍/㎥</p>
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                    <div className={styles.boxFooter}>
+                                                                        {
+                                                                            data.pm10Value === "" ? null : (
+                                                                                <>
+                                                                                    {(() => {
+                                                                                        if (!isNaN(data.pm10Value)) {
+                                                                                            if (data.pm10Value <= 30) {
+                                                                                                return <p
+                                                                                                    style={{color: "#0086FF"}}>좋음</p>;
+                                                                                            } else if (data.pm10Value <= 80) {
+                                                                                                return <p
+                                                                                                    style={{color: "#00DE86"}}>보통</p>;
+                                                                                            } else if (data.pm10Value <= 150) {
+                                                                                                return <p
+                                                                                                    style={{color: "#FFC957"}}>나쁨</p>;
+                                                                                            } else if (151 <= data.pm10Value) {
+                                                                                                return <p
+                                                                                                    style={{color: "#DE4F4F"}}>매우나쁨</p>;
+                                                                                            }
+                                                                                        }
+                                                                                    })()}
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                                <div className={styles.modalBodybox}>
+                                                                    <div className={styles.boxTitle}>
+                                                                        <p>오존</p>
+                                                                        <p>(O₃)</p>
+                                                                    </div>
+                                                                    <div className={styles.boxBody}>
+                                                                        {
+                                                                            data.o3Value === "" ? "데이터 없음" : (
+                                                                                <>
+                                                                                    <img src={(() => {
+                                                                                        if (data.o3Value === "") {
+                                                                                            return null;
+                                                                                        }
+                                                                                        if (!isNaN(data.o3Value)) {
+                                                                                            if (data.o3Value <= 0.03) {
+                                                                                                return good;
+                                                                                            } else if (data.o3Value <= 0.09) {
+                                                                                                return normal;
+                                                                                            } else if (data.o3Value <= 0.15) {
+                                                                                                return bad;
+                                                                                            } else if (0.151 <= data.o3Value) {
+                                                                                                return worst;
+                                                                                            }
+                                                                                        }
+                                                                                    })()} alt=""/>
+                                                                                    {
+                                                                                        (() => {
+                                                                                            if (!isNaN(data.o3Value)) {
+                                                                                                if (data.o3Value <= 0.03) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#0086FF"}}>{data.o3Value}</div>;
+                                                                                                } else if (data.o3Value <= 0.09) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#00DE86"}}>{data.o3Value}</div>;
+                                                                                                } else if (data.o3Value <= 0.15) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#FFC957"}}>{data.o3Value}</div>;
+                                                                                                } else if (0.151 <= data.o3Value) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#DE4F4F"}}>{data.o3Value}</div>;
+                                                                                                }
+                                                                                            }
+                                                                                        })()
+                                                                                    }
+                                                                                    <p>ppm</p>
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                    <div className={styles.boxFooter}>
+                                                                        {
+                                                                            data.o3Value === "" ? null : (
+                                                                                <>
+                                                                                    {(() => {
+                                                                                        if (!isNaN(data.o3Value)) {
+                                                                                            if (data.o3Value <= 0.03) {
+                                                                                                return <p
+                                                                                                    style={{color: "#0086FF"}}>좋음</p>;
+                                                                                            } else if (data.o3Value <= 0.09) {
+                                                                                                return <p
+                                                                                                    style={{color: "#00DE86"}}>보통</p>;
+                                                                                            } else if (data.o3Value <= 0.15) {
+                                                                                                return <p
+                                                                                                    style={{color: "#FFC957"}}>나쁨</p>;
+                                                                                            } else if (0.151 <= data.o3Value) {
+                                                                                                return <p
+                                                                                                    style={{color: "#DE4F4F"}}>매우나쁨</p>;
+                                                                                            }
+                                                                                        }
+                                                                                    })()}
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                                <div className={styles.modalBodybox}>
+                                                                    <div className={styles.boxTitle}>
+                                                                        <p>이산화질소</p>
+                                                                        <p>(NO₂)</p>
+                                                                    </div>
+                                                                    <div className={styles.boxBody}>
+                                                                        {
+                                                                            data.no2Value === "" ? "데이터 없음" : (
+                                                                                <>
+                                                                                    <img src={(() => {
+                                                                                        if (data.no2Value === "") {
+                                                                                            return null;
+                                                                                        }
+                                                                                        if (!isNaN(data.no2Value)) {
+                                                                                            if (data.no2Value <= 0.03) {
+                                                                                                return good;
+                                                                                            } else if (data.no2Value <= 0.06) {
+                                                                                                return normal;
+                                                                                            } else if (data.no2Value <= 0.2) {
+                                                                                                return bad;
+                                                                                            } else if (0.201 <= data.no2Value) {
+                                                                                                return worst;
+                                                                                            }
+                                                                                        }
+                                                                                    })()} alt=""/>
+                                                                                    {
+                                                                                        (() => {
+                                                                                            if (!isNaN(data.no2Value)) {
+                                                                                                if (data.no2Value <= 0.03) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#0086FF"}}>{data.no2Value}</div>;
+                                                                                                } else if (data.no2Value <= 0.06) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#00DE86"}}>{data.no2Value}</div>;
+                                                                                                } else if (data.no2Value <= 0.2) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#FFC957"}}>{data.no2Value}</div>;
+                                                                                                } else if (0.201 <= data.no2Value) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#DE4F4F"}}>{data.no2Value}</div>;
+                                                                                                }
+                                                                                            }
+                                                                                        })()
+                                                                                    }
+                                                                                    <p>ppm</p>
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                    <div className={styles.boxFooter}>
+                                                                        {
+                                                                            data.no2Value === "" ? null : (
+                                                                                <>
+                                                                                    {(() => {
+                                                                                        if (!isNaN(data.no2Value)) {
+                                                                                            if (data.no2Value <= 0.03) {
+                                                                                                return <p
+                                                                                                    style={{color: "#0086FF"}}>좋음</p>;
+                                                                                            } else if (data.no2Value <= 0.06) {
+                                                                                                return <p
+                                                                                                    style={{color: "#00DE86"}}>보통</p>;
+                                                                                            } else if (data.no2Value <= 0.2) {
+                                                                                                return <p
+                                                                                                    style={{color: "#FFC957"}}>나쁨</p>;
+                                                                                            } else if (0.201 <= data.no2Value) {
+                                                                                                return <p
+                                                                                                    style={{color: "#DE4F4F"}}>매우나쁨</p>;
+                                                                                            }
+                                                                                        }
+                                                                                    })()}
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                                <div className={styles.modalBodybox}>
+                                                                    <div className={styles.boxTitle}>
+                                                                        <p>일산화탄소</p>
+                                                                        <p>(CO)</p>
+                                                                    </div>
+                                                                    <div className={styles.boxBody}>
+                                                                        {
+                                                                            data.coValue === "" ? "데이터 없음" : (
+                                                                                <>
+                                                                                    <img src={(() => {
+                                                                                        if (data.coValue === "") {
+                                                                                            return null;
+                                                                                        }
+                                                                                        if (!isNaN(data.coValue)) {
+                                                                                            if (data.coValue <= 2) {
+                                                                                                return good;
+                                                                                            } else if (data.coValue <= 9) {
+                                                                                                return normal;
+                                                                                            } else if (data.coValue <= 15) {
+                                                                                                return bad;
+                                                                                            } else if (15.1 <= data.coValue) {
+                                                                                                return worst;
+                                                                                            }
+                                                                                        }
+                                                                                    })()} alt=""/>
+                                                                                    {
+                                                                                        (() => {
+                                                                                            if (!isNaN(data.coValue)) {
+                                                                                                if (data.coValue <= 2) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#0086FF"}}>{data.coValue}</div>;
+                                                                                                } else if (data.coValue <= 9) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#00DE86"}}>{data.coValue}</div>;
+                                                                                                } else if (data.coValue <= 15) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#FFC957"}}>{data.coValue}</div>;
+                                                                                                } else if (15.1 <= data.coValue) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#DE4F4F"}}>{data.coValue}</div>;
+                                                                                                }
+                                                                                            }
+                                                                                        })()
+                                                                                    }
+                                                                                    <p>ppm</p>
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                    <div className={styles.boxFooter}>
+                                                                        {
+                                                                            data.coValue === "" ? null : (
+                                                                                <>
+                                                                                    {(() => {
+                                                                                        if (!isNaN(data.coValue)) {
+                                                                                            if (data.coValue <= 2) {
+                                                                                                return <p
+                                                                                                    style={{color: "#0086FF"}}>좋음</p>;
+                                                                                            } else if (data.coValue <= 9) {
+                                                                                                return <p
+                                                                                                    style={{color: "#00DE86"}}>보통</p>;
+                                                                                            } else if (data.coValue <= 15) {
+                                                                                                return <p
+                                                                                                    style={{color: "#FFC957"}}>나쁨</p>;
+                                                                                            } else if (15.1 <= data.coValue) {
+                                                                                                return <p
+                                                                                                    style={{color: "#DE4F4F"}}>매우나쁨</p>;
+                                                                                            }
+                                                                                        }
+                                                                                    })()}
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                                <div className={styles.modalBodybox}>
+                                                                    <div className={styles.boxTitle}>
+                                                                        <p>아황산가스</p>
+                                                                        <p>(SO₂)</p>
+                                                                    </div>
+                                                                    <div className={styles.boxBody}>
+                                                                        {
+                                                                            data.so2Value === "" ? "데이터 없음" : (
+                                                                                <>
+                                                                                    <img src={(() => {
+                                                                                        if (data.so2Value === "") {
+                                                                                            return null;
+                                                                                        }
+                                                                                        if (!isNaN(data.so2Value)) {
+                                                                                            if (data.so2Value <= 0.02) {
+                                                                                                return good;
+                                                                                            } else if (data.so2Value <= 0.05) {
+                                                                                                return normal;
+                                                                                            } else if (data.so2Value <= 0.15) {
+                                                                                                return bad;
+                                                                                            } else if (0.151 <= data.so2Value) {
+                                                                                                return worst;
+                                                                                            }
+                                                                                        }
+                                                                                    })()} alt=""/>
+                                                                                    {
+                                                                                        (() => {
+                                                                                            if (!isNaN(data.so2Value)) {
+                                                                                                if (data.so2Value <= 0.02) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#0086FF"}}>{data.so2Value}</div>;
+                                                                                                } else if (data.so2Value <= 0.05) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#00DE86"}}>{data.so2Value}</div>;
+                                                                                                } else if (data.so2Value <= 0.15) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#FFC957"}}>{data.so2Value}</div>;
+                                                                                                } else if (0.151 <= data.so2Value) {
+                                                                                                    return <div
+                                                                                                        style={{color: "#DE4F4F"}}>{data.so2Value}</div>;
+                                                                                                }
+                                                                                            }
+                                                                                        })()
+                                                                                    }
+                                                                                    <p>ppm</p>
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                    <div className={styles.boxFooter}>
+                                                                        {
+                                                                            data.so2Value === "" ? null : (
+                                                                                <>
+                                                                                    {(() => {
+                                                                                        if (!isNaN(data.so2Value)) {
+                                                                                            if (data.so2Value <= 0.02) {
+                                                                                                return <p
+                                                                                                    style={{color: "#0086FF"}}>좋음</p>;
+                                                                                            } else if (data.so2Value <= 0.05) {
+                                                                                                return <p
+                                                                                                    style={{color: "#00DE86"}}>보통</p>;
+                                                                                            } else if (data.so2Value <= 0.15) {
+                                                                                                return <p
+                                                                                                    style={{color: "#FFC957"}}>나쁨</p>;
+                                                                                            } else if (0.151 <= data.so2Value) {
+                                                                                                return <p
+                                                                                                    style={{color: "#DE4F4F"}}>매우나쁨</p>;
+                                                                                            }
+                                                                                        }
+                                                                                    })()}
+                                                                                </>
+                                                                            )
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <p>데이터 로딩중...</p>
+                                                        )
+                                                    }
+                                                </div>
                                             </Card>
                                         </div>
                                     )
