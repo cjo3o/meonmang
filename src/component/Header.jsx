@@ -7,11 +7,8 @@ import { DownSquareOutlined, UpSquareOutlined } from "@ant-design/icons";
 function Header({ openSidebar, setOpenSidebar }) {
   const [showSubmenu, setShowSubmenu] = useState(false);
 
-  // 메뉴(<ul>) 영역을 가리킬 ref
   const menuRef = useRef(null);
-  // 모바일 토글 버튼을 가리킬 ref
   const mobileRef = useRef(null);
-  // 외부 클릭 감지: 메뉴가 열려 있을 때, menuRef나 mobileRef 밖을 클릭하면 close
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
