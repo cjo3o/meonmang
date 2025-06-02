@@ -29,27 +29,26 @@ function RealTimeMap({ selectOption, onOpenModal, setDataTime }) {
     const handleResize = () => {
       const width = window.innerWidth;
       const newLevel = width <= 1700 ? 14 : 13;
-  
+
       setMapLevel(newLevel);
-  
- if (map) {
-      const fixedCenter = new kakao.maps.LatLng(35.9, 127.7); // 초기 중심
-      map.relayout();
-      map.setLevel(newLevel);
-      map.setCenter(fixedCenter); // 항상 동일한 중심으로 고정
-    }
-  };
-  
+
+      if (map) {
+        const fixedCenter = new kakao.maps.LatLng(35.9, 127.7); // 초기 중심
+        map.relayout();
+        map.setLevel(newLevel);
+        map.setCenter(fixedCenter); // 항상 동일한 중심으로 고정
+      }
+    };
+
     window.addEventListener("resize", handleResize);
-  
+
     // 초기 실행
     handleResize();
-  
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, [map]);
-  
 
   const regionKeyMap = {
     서울: "seoul",
@@ -274,7 +273,12 @@ function RealTimeMap({ selectOption, onOpenModal, setDataTime }) {
       }}
     >
       {regionCenters.map((marker) => (
-        <div key={marker.name} className={styles.mapMarker}>
+        <div
+          key={marker.name}
+          className={styles.mapMarker}
+          onMouseOver={() => setHoveredMarker(marker.name)}
+          onMouseOut={() => setHoveredMarker(null)}
+        >
           <MapMarker
             image={{
               src: markerIcon,
@@ -308,7 +312,7 @@ function RealTimeMap({ selectOption, onOpenModal, setDataTime }) {
               }
             }}
           />
-          {openOverlay === marker.name && (
+          {(openOverlay === marker.name || hoveredMarker === marker.name) && (
             <CustomOverlayMap
               position={{ lat: marker.center[0], lng: marker.center[1] }}
             >

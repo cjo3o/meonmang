@@ -40,7 +40,7 @@
     background-color: #fff;
     text-align: center;
     align-content: center;
-    font-size: clamp(16px, 1.5vw, 40px);
+    font-size: clamp(16px, 1.5vw, 1.5rem);
     font-weight: normal;
     color: #000;
     cursor: pointer;

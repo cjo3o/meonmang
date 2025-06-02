@@ -1,4 +1,3 @@
-// AirInfoForecast.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card } from "antd";
@@ -196,8 +195,8 @@ function AirInfoForecast({ stationInfo }) {
               <div className={Airfore.cen2}>내일</div>
             </div>
             {pollutants.map(({ label, sub, code }, i) => {
-              const todayGrade = forecastData[code]["오늘"];
-              const tomorrowGrade = forecastData[code]["내일"];
+              const todayGrade = forecastData[code]["오늘"] || "-";
+              const tomorrowGrade = forecastData[code]["내일"] || "-";
               const bodyClass =
                 label === "오존" ? Airfore.body3 : Airfore.body2; // 조건에 따라 class 분기
 
