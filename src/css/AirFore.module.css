@@ -38,8 +38,8 @@
 }
 
 .detailLink {
+  font-size: clamp(10px, 0.75vw, 18px);
   margin-top: 5px;
-  font-size: 0.9rem;
   color: #ffffff;
   text-decoration: underline;
 }
@@ -71,6 +71,7 @@
 .header,
 .cen1,
 .cen2 {
+  font-size: clamp(10px, 0.75vw, 18px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -169,11 +170,14 @@
     flex-direction: column;
   }
   .cardTitle {
-    font-size: clamp(20px, 3.3vw, 40px);
+    font-size: clamp(20px, 4vw, 40px);
   }
 
   .detailLink {
     margin-left: 20px;
-    font-size: clamp(13px, 2vw, 40px);
+    font-size: clamp(16px, 2.5vw, 40px);
+  }
+  .cen1, .cen2{
+    font-size: clamp(10px, 3.5vw, 21px);
   }
 }
