@@ -47,6 +47,7 @@ const AirAlertTable = ({ region, itemCode, dateRange, searchTrigger, setAvailabl
             onChange: setCurrentPage,
             showSizeChanger: false,
           }}
+          scroll={{ x: true }}
       />
   );
 };

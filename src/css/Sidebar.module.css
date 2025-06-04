@@ -24,6 +24,7 @@
 
 .sidebar > p {
     line-height: 1.1rem;
+    color: #000000;
 }
 
 @media (max-width: 768px) {

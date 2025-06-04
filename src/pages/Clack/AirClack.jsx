@@ -45,7 +45,7 @@ const AirClack = ({setOpenSidebar}) => {
             const res = await axios.post(`${API_URL}/subscribe`, payload);
 
             if (res.status === 200) {
-                message.success("알림 신청 완료! 알림은 정각마다 울립니다.");
+                message.success("알림 신청 완료!");
             } else {
                 message.error("신청 실패 😥");
             }
