@@ -39,3 +39,10 @@
         align-items: stretch;
     }
 }
+
+@media (max-width:768px) {
+    .center {
+        width: 85%;
+        margin: 0 auto;
+    }
+}
