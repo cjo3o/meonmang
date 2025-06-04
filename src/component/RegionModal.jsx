@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Card, message, notification, Select} from "antd";
+import '@ant-design/v5-patch-for-react-19';
 import axios from "axios";
 import styles from "/src/css/RegionModal.module.css";
 import good from "/src/images/Good.svg";
@@ -86,14 +87,14 @@ function RegionModal({region, onClose}) {
         if (list.some(item => item.key === key && item.cityName === findItem.cityName)) {
             const newList = list.filter((item) => !(item.key === key && item.cityName === findItem.cityName));
             localStorage.setItem("favorites", JSON.stringify(newList));
-            alert("즐겨찾기에 해제되었습니다.");
+            message.success("즐겨찾기에 해제되었습니다.");
             console.log(list);
             checkFavorite();
 
         } else {
             const newList = [...list, {key, cityName: findItem.cityName}];
             localStorage.setItem("favorites", JSON.stringify(newList));
-            alert("즐겨찾기에 등록되었습니다.");
+            message.success("즐겨찾기에 등록되었습니다.");
             checkFavorite();
         }
     }
