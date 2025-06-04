@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styles from '/src/css/Favorites.module.css';
-import {Button, Card, Select, TreeSelect} from "antd";
+import {Button, Card, message, Select, TreeSelect} from "antd";
+import '@ant-design/v5-patch-for-react-19';
 import axios from "axios";
 import {CloseOutlined, MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import treeData from "/korea_region_tree.json";
@@ -52,7 +53,7 @@ function Favorites({setOpenSidebar}) {
 
     const plusFav = () => {
         if (!value) {
-            return alert("지역을 선택해주세요");
+            return message.error("지역을 선택해주세요");
         }
         const list = JSON.parse(localStorage.getItem("favorites") || "[]");
         const matched = list.find((item) => {
@@ -60,11 +61,11 @@ function Favorites({setOpenSidebar}) {
         });
 
         if (matched) {
-            alert("이미 등록된 지역입니다.");
+           message.error("이미 등록된 지역입니다.");
         } else {
             const newlist = [...list, {key: value?.split("-")[0], cityName: value?.split("-")[1]}]
             localStorage.setItem("favorites", JSON.stringify(newlist));
-            alert("즐겨찾기에 등록되었습니다.");
+            message.success("즐겨찾기에 등록되었습니다.");
             setOpenModal(false);
             setValue(null);
             fetchFavorites();
@@ -77,7 +78,7 @@ function Favorites({setOpenSidebar}) {
             return item.key !== mdKey || item.cityName !== mdCityName;
         });
         localStorage.setItem("favorites", JSON.stringify(newList));
-        alert("즐겨찾기에서 해제되었습니다.");
+        message.success("즐겨찾기에서 해제되었습니다.");
         fetchFavorites();
         setLoading(true);
     }
@@ -587,7 +588,7 @@ function Favorites({setOpenSidebar}) {
                         <div className={styles.plusBox} onClick={() => {
                             const list = JSON.parse(localStorage.getItem("favorites") || "[]");
                             if (list.length >= 5) {
-                                alert("즐겨찾기는 최대 5개까지 등록가능합니다.");
+                                message.error("즐겨찾기는 최대 5개까지 등록가능합니다.");
                             } else {
                                 setOpenModal(true);
                             }
