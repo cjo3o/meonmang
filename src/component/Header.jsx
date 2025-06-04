@@ -6,6 +6,7 @@ import {
   DownSquareOutlined,
   StarFilled,
   UpSquareOutlined,
+  HomeOutlined
 } from "@ant-design/icons";
 
 function Header({ openSidebar, setOpenSidebar }) {
@@ -55,20 +56,28 @@ function Header({ openSidebar, setOpenSidebar }) {
               <li>
                 <Link to="/airclack">대기오염 알림</Link>
               </li>
+              <li>
+                <Link to="/favorites">즐겨찾기</Link>
+              </li>
             </ul>
           </div>
           {/*<div className={styles.kakao}>*/}
           {/*    <h3>카카오 로그인</h3>*/}
           {/*</div>*/}
-          <Link to={"/favorites"} className={styles.favor}>
-            <StarFilled />
-          </Link>
-          <div
-            className={styles.mobileMenu}
-            onClick={() => setOpenSidebar(!openSidebar)}
-            ref={mobileRef}
-          >
-            {openSidebar ? <UpSquareOutlined /> : <DownSquareOutlined />}
+          <div className={styles.group}>
+            <Link to={"/"} className={styles.home}>
+            <HomeOutlined/>
+            </Link>
+            <Link to={"/favorites"} className={styles.favor}>
+              <StarFilled />
+            </Link>
+            <div
+              className={styles.mobileMenu}
+              onClick={() => setOpenSidebar(!openSidebar)}
+              ref={mobileRef}
+            >
+              {openSidebar ? <UpSquareOutlined /> : <DownSquareOutlined />}
+            </div>
           </div>
         </div>
       </div>

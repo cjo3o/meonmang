@@ -26,9 +26,14 @@
   display: none;
 }
 
+.home {
+  display: none;
+}
+
 .nav {
   align-content: center;
-  width: 70%;
+  flex: 1;              /* 로고와 그룹 사이의 남은 공간만 차지 */
+  text-align: right;
 }
 
 .nav > ul {
@@ -98,16 +103,28 @@
   transition: background-color 0.3s;
 }
 
-@media (max-width: 874px) {
+@media (max-width: 1015px) {
+  .group {
+    display: flex;
+    align-items: center;
+  }
+
   .favor {
+    justify-content: center;
     color: #faed27;
-    display: unset;
+    display: flex;
     font-size: 2rem;
     margin-right: 10px;
-    margin-bottom: 5px;
     transition: all 0.3s;
   }
 
+  .home {
+    color: #000;
+    display: flex;
+    font-size: 2rem;
+    margin-right: 20px;
+    transition: all 0.3s;
+  }
 
   .nav > ul {
     display: none;

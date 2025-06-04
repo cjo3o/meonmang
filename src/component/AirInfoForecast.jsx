@@ -119,8 +119,8 @@ function AirInfoForecast({ stationInfo }) {
             "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth",
             {
               params: {
-                // serviceKey:
-                //   "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
+                serviceKey:
+                  "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
                 returnType: "json",
                 numOfRows: 100,
                 pageNo: 1,
