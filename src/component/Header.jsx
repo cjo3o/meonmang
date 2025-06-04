@@ -2,7 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "/src/css/Header.module.css";
 import logo from "/src/images/Logo.svg";
 import { Link } from "react-router-dom";
-import { DownSquareOutlined, UpSquareOutlined } from "@ant-design/icons";
+import {
+  DownSquareOutlined,
+  StarFilled,
+  UpSquareOutlined,
+} from "@ant-design/icons";
 
 function Header({ openSidebar, setOpenSidebar }) {
   const [showSubmenu, setShowSubmenu] = useState(false);
@@ -45,31 +49,20 @@ function Header({ openSidebar, setOpenSidebar }) {
               <li>
                 <Link to="/airdata">대기 정보</Link>
               </li>
-              <li
-                onMouseEnter={() => setShowSubmenu(true)}
-                onMouseLeave={() => setShowSubmenu(false)}
-                className={styles.hasSubmenu}
-              >
-                <Link to="/airalert">대기오염 알림</Link>
-                {showSubmenu && (
-                  <ul className={styles.submenu}>
-                    <li>
-                      <Link to="/airalert">경보</Link>
-                    </li>
-                    <li>
-                      <Link to="/airclack">알림</Link>
-                    </li>
-                  </ul>
-                )}
+              <li>
+                <Link to="/airalert">대기오염 경보</Link>
               </li>
               <li>
-                <Link to="/favorites">즐겨찾기</Link>
+                <Link to="/airclack">대기오염 알림</Link>
               </li>
             </ul>
           </div>
           {/*<div className={styles.kakao}>*/}
           {/*    <h3>카카오 로그인</h3>*/}
           {/*</div>*/}
+          <Link to={"/favorites"} className={styles.favor}>
+            <StarFilled />
+          </Link>
           <div
             className={styles.mobileMenu}
             onClick={() => setOpenSidebar(!openSidebar)}
