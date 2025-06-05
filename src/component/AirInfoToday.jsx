@@ -116,7 +116,7 @@ function AirInfoToday({ setStationInfo }) {
               serviceKey: "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
               returnType: "json",
               addr: sido,
-              numOfRows: 100,
+              numOfRows: 2000,
               pageNo: 1,
             },
           }
