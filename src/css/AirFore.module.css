@@ -94,10 +94,8 @@
 
 .body1 .cen1,
 .body1 .cen2,
-.body2 .header,
 .body2 .cen1,
 .body2 .cen2,
-.body3 .header,
 .body3 .cen1,
 .body3 .cen2 {
   flex: 1;
@@ -108,7 +106,10 @@
 }
 
 .cen1 {
-  margin: 10px 0;
+  padding: 10px 0;
+}
+.cen2 {
+  padding: 10px 0;
 }
 
 .status1 {
@@ -157,10 +158,8 @@
 
   .body1 .cen1,
   .body1 .cen2,
-  .body2 .header,
   .body2 .cen1,
   .body2 .cen2,
-  .body3 .header,
   .body3 .cen1,
   .body3 .cen2 {
     flex: 1;
@@ -169,6 +168,7 @@
     justify-content: center;
     flex-direction: column;
   }
+  
   .cardTitle {
     font-size: clamp(20px, 4vw, 40px);
   }
