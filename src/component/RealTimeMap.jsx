@@ -22,13 +22,27 @@ function RealTimeMap({ selectOption, onOpenModal, setDataTime }) {
   const [hoveredMarker, setHoveredMarker] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mapLevel, setMapLevel] = useState(() => {
-    return window.innerWidth <= 1780 ? 14 : 13;
+    const width = window.innerWidth;
+    if (width <= 700) {
+      return 14;
+    }
+    if (width <= 768) {
+      return 13;            // 768px 이하인 경우 13레벨 고정
+    }
+    return width <= 1780 ? 14 : 13;
   });
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      const newLevel = width <= 1700 ? 14 : 13;
+       let newLevel;
+       if (width <= 700) {
+        newLevel = 14;
+       }else if (width <= 768) {
+     newLevel = 13;          // 768px 이하인 경우 13레벨
+   } else {
+     newLevel = width <= 1700 ? 14 : 13;
+   }
   
       setMapLevel(newLevel);
   
