@@ -120,7 +120,7 @@ function AirInfoForecast({ stationInfo }) {
             {
               params: {
                 serviceKey:
-                  "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
+                  "6MS6d4/7oderkazWnyA2+5XBYjmhv86nH/3S27RgytjKuDazJrdwa6EjRztXPJJd3IUs5Za7mFPyorRlwh6g6A==",
                 returnType: "json",
                 numOfRows: 100,
                 pageNo: 1,
