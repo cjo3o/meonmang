@@ -22,10 +22,6 @@
   cursor: pointer;
 }
 
-.favor {
-  display: none;
-}
-
 .home {
   display: none;
 }
@@ -107,15 +103,6 @@
   .group {
     display: flex;
     align-items: center;
-  }
-
-  .favor {
-    justify-content: center;
-    color: #faed27;
-    display: flex;
-    font-size: 2rem;
-    margin-right: 10px;
-    transition: all 0.3s;
   }
 
   .home {

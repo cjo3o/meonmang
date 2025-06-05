@@ -68,9 +68,6 @@ function Header({ openSidebar, setOpenSidebar }) {
             <Link to={"/"} className={styles.home}>
             <HomeOutlined/>
             </Link>
-            <Link to={"/favorites"} className={styles.favor}>
-              <StarFilled />
-            </Link>
             <div
               className={styles.mobileMenu}
               onClick={() => setOpenSidebar(!openSidebar)}
