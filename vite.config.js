@@ -19,7 +19,7 @@ export default defineConfig({
           },
           manifest: {
             name: '먼망진창',
-            short_name: '알림앱',
+            short_name: '먼망진창',
             description: '실시간 대기 알림 서비스',
             theme_color: '#4ED7F1',
             background_color: '#4ED7F1',
