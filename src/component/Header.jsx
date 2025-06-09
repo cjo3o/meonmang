@@ -51,10 +51,10 @@ function Header({ openSidebar, setOpenSidebar }) {
                 <Link to="/airdata">대기 정보</Link>
               </li>
               <li>
-                <Link to="/airalert">대기오염 경보</Link>
+                <Link to="/airalert">대기경보 내역</Link>
               </li>
               <li>
-                <Link to="/airclack">대기오염 알림</Link>
+                <Link to="/airclack">대기알림 신청</Link>
               </li>
               <li>
                 <Link to="/favorites">즐겨찾기</Link>
