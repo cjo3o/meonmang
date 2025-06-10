@@ -113,7 +113,7 @@ function AirInfoToday({ setStationInfo }) {
           "https://apis.data.go.kr/B552584/MsrstnInfoInqireSvc/getMsrstnList",
           {
             params: {
-              serviceKey: "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
+              serviceKey: "kMdrdGiN5P2ToX37YIYqFgVMkJ8Hv7nRR6vOT2q0M4PtrRcof0RJeI9AJbG3REfmylq5R9HaI8FVoGdXloeL/A==",
               returnType: "json",
               addr: sido,
               numOfRows: 2000,
@@ -200,7 +200,7 @@ function AirInfoToday({ setStationInfo }) {
           "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty",
           {
             params: {
-              serviceKey: "2PSpYwMICbNeYwm1V8u6Ubg48EhrKtBDi6x12jsPDh5tuABhb7/kDs34IsiMbqgJXFtziM2MFzdWoAK60jgSzQ==",
+              serviceKey: "kMdrdGiN5P2ToX37YIYqFgVMkJ8Hv7nRR6vOT2q0M4PtrRcof0RJeI9AJbG3REfmylq5R9HaI8FVoGdXloeL/A==",
               returnType: "json",
               numOfRows: 1,
               pageNo: 1,
